@@ -4,6 +4,13 @@
 ## 项目介绍
 塔防精灵H5版本，前端使用JavaScript，后端使用golang，数据库使用MongoDB，使用Websocket通信。前端源码来自于官方，后端源码由本人开发。
 
+## 项目演示
+[塔防精灵H5](http://xiaeer.top/tfjlh5/)
+账号：tfjl1
+密码：tfjl666
+账号：tfjl2
+密码：tfjl666
+
 ## 本地搭建
 1. 安装MongoDB，创建数据库`tfjl`，配置好数据库的账号密码，并使用mongorestore相关命令导入`dump`文件夹下的游戏数据，然后在`db文件夹`下的`dbconnection.go`文件中的InitDatabase方法中配置好数据库账号密码
 2. 将本仓库下载到本地，打开仓库所在目录的命令行，执行`go mod tidy`下载相关依赖，执行`go run main.go`，启动后端服务
