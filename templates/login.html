@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>网页登录界面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #008CBA;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #006d9c;
+        }
+
+        .cancel-button {
+            background-color: #f44336;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+
+        /* 添加一个红色边框来标识必填字段 */
+        input[type=text].required,
+        input[type=password].required {
+            border: 1px solid red;
+        }
+
+        /* 显示表单验证错误消息 */
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="jquery-3.4.0.min.js"></script>
+
+    <div class="login-box">
+        <h2>登录</h2>
+        <div class="container">
+            <label for="uname"><b>账号*</b></label>
+            <input type="text" placeholder="输入账号" name="uname" id="uname" class="required">
+            <label></label><br />
+
+            <label for="psw"><b>密码*</b></label>
+            <input type="password" placeholder="输入密码" name="psw" id="psw" class="required">
+            <label></label><br />
+
+            <button id="login-button" onclikc="login">登录</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // 为登录按钮添加点击事件
+            $("#login-button").click(function (e) {
+                // 阻止表单提交
+                e.preventDefault();
+
+                // 获取表单中的用户名和密码
+                var uname = $("#uname");
+                var psw = $("#psw");
+
+                // 验证用户名和密码是否为空
+                if (uname.val().trim() == "") {
+                    e.preventDefault();
+                    uname.addClass("required");
+                    uname.next().html("请输入您的账号！");
+                    return;
+                }
+                else {
+                    uname.removeClass("required");
+                    uname.next().html("");
+                }
+
+                if (psw.val().trim() == "") {
+                    e.preventDefault();
+                    psw.addClass("required");
+                    psw.next().html("请输入您的密码！");
+                    return;
+                }
+                else {
+                    psw.removeClass("required");
+                    psw.next().html("");
+                }
+
+                // 准备请求数据
+                var requestData = {
+                    username: uname.val(),
+                    password: psw.val()
+                };
+
+                // 使用$.post方法发起POST请求
+                $.post("http://127.0.0.1:8080/tfjlh5/login", requestData, function (response) {
+                    // 处理响应数据
+                    if (response["redirect"] != undefined) {
+                        // 重定向到新页面
+                        window.location.href = response["redirect"] + "?=" + new Date().getTime();
+                    } else if (response["info"] != undefined) {
+                        alert(response["info"]);
+                    }
+                })
+                    .fail(function (error) {
+                        // 处理错误
+                    });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

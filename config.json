@@ -1,0 +1,9 @@
+{
+  "ip": "127.0.0.1",
+  "port": 8080,
+  "heartBeatTime": 30,
+  "inChanSize": 1000,
+  "outChanSize": 1000,
+  "workerPoolSize": 5,
+  "MaxWorkTaskLen": 1024
+}

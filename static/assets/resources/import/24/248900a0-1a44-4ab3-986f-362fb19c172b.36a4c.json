@@ -1,0 +1,1 @@
+[1,0,0,[["cc.TextAsset",["_name","text"],1]],[[0,0,1,3]],[[0,"ObstacleTableData","id,name,res_id,attackFram,buffId,bFixPointX,pointX,bFixPointY,pointY\r\nNUMBER,STRING,NUMBER,STRING,NUMBER,NUMBER,NUMBER,NUMBER,NUMBER\r\nid,描述,资源id,攻击范围,附加buffid,是否锁定x坐标,初始位置,是否锁定y坐标,初始位置\r\n1,剑圣-剑圣风暴,107,1500|200,0,1,100,1,100\r\n"]],0,0,[],[],[]]

@@ -1,0 +1,1 @@
+[1,0,0,[["cc.TextAsset",["_name","text"],1]],[[0,0,1,3]],[[0,"SociatyCourageMedalGainWayTableData","int,int,string\r\n途径ID,每日上线,途径描述描述(word表)\r\nid,dayMedal,info\r\n1,100,courage_medal_gain_way_1\r\n2,40,courage_medal_gain_way_2\r\n3,60,courage_medal_gain_way_3\r\n"]],0,0,[],[],[]]

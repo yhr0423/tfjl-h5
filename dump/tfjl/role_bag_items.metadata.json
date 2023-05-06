@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"762d5ffc26af4e25a7536869527bc8c4","collectionName":"role_bag_items","type":"collection"}

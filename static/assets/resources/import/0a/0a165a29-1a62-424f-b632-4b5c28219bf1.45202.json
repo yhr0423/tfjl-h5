@@ -1,0 +1,1 @@
+[1,0,0,[["cc.TextAsset",["_name","text"],1]],[[0,0,1,3]],[[0,"SociatyDonateNumTableData","\"int\",\"int\",\"int\",\"int\",\"vector<DropItem>\"\r\n\"捐献类型\",\"捐献次数\",\"增加经验\",\"增加贡献\",\"奖励\"\r\n\"donateType\",\"donateNum\",\"addSociatyExp\",\"addContribution\",\"prize\"\r\n1,0,20,0,\"1,1008,40\n1,1009,20\"\r\n2,0,20,0,\"1,1008,20\n1,1009,20\"\r\n"]],0,0,[],[],[]]
