@@ -220,7 +220,7 @@ func main() {
 			return
 		}
 
-		c.Redirect(http.StatusMovedPermanently, "/tfjlh5/index")
+		c.Redirect(http.StatusMovedPermanently, fmt.Sprintf("/tfjlh5/index?_=%d", time.Now().Unix()))
 	})
 	router.POST("/tfjlh5/login", func(c *gin.Context) {
 		username := c.PostForm("username")

@@ -126,7 +126,7 @@
                     // 处理响应数据
                     if (response["redirect"] != undefined) {
                         // 重定向到新页面
-                        window.location.href = response["redirect"] + "?=" + new Date().getTime();
+                        window.location.href = response["redirect"] + "?_=" + new Date().getTime();
                     } else if (response["info"] != undefined) {
                         alert(response["info"]);
                     }

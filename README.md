@@ -12,7 +12,7 @@
 密码：tfjl666
 
 ## 本地搭建
-1. 安装MongoDB，创建数据库`tfjl`，配置好数据库的账号密码，并使用mongorestore相关命令导入`dump`文件夹下的游戏数据，然后在`db文件夹`下的`dbconnection.go`文件中的InitDatabase方法中配置好数据库账号密码
+1. 安装MongoDB，创建数据库`tfjl`，配置好数据库的账号密码，并使用mongorestore相关命令导入`dump`文件夹下的游戏数据（若没有mongorestore命令，可以直接使用根目录下的`json_import.py`导入，需要安装python环境，运行`python json_import.py`命令），然后在`db文件夹`下的`dbconnection.go`文件中的InitDatabase方法中配置好数据库账号密码
 2. 将本仓库下载到本地，打开仓库所在目录的命令行，执行`go mod tidy`下载相关依赖，执行`go run main.go`，启动后端服务
 3. 访问`http://localhost:8080/tfjlh5/`，输入账号密码即可进入游戏
 4. 双开小号开房间，需要搭建对战服务器，参考[tfjl-h5-fight](https://github.com/Xiaeer/tfjl-h5-fight)
