@@ -1,3 +1,4 @@
 tmp/
 db/dbconnection.go
 tfjl-h5
+static/assets/resources
