@@ -67,3 +67,7 @@ func (manager *dbManager) DeleteRoleByAccount(account string) (int64, error) {
 	}
 	return result.DeletedCount, nil
 }
+
+func (manager *dbManager) CountRoles(filter interface{}) (int64, error) {
+	return manager.RoleCollection.CountDocuments(context.Background(), filter)
+}

@@ -976,10 +976,16 @@ func create(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "创建角色失败！"})
 		return
 	}
+	count, err := db.DbManager.CountRoles(bson.M{})
+	if err != nil {
+		logrus.Error("db.DbManager.CountRoles: ", err)
+		c.JSON(http.StatusOK, gin.H{"data": "创建角色失败！"})
+		return
+	}
 	if role != (models.Role{}) {
 		roleID := role.RoleID
 		role.ID_ = primitive.NewObjectID()
-		role.RoleID = role.RoleID + 1
+		role.RoleID = role.RoleID + count
 		role.Account = account
 		role.StrID = utils.GetShowID(role.RoleID)
 		role.RoleName = utils.GetRoleName(role.RoleID % 10000)
