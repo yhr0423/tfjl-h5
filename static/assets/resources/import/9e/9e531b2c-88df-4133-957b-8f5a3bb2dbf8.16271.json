@@ -1,1 +1,0 @@
-[1,0,0,[["cc.TextAsset",["_name","text"],1]],[[0,0,1,3]],[[0,"GreatSailingReliveTableData","int,int,vector<DropItem>\r\nID,复活次数,复活需要消耗的物品\r\nid,reliveNum,reliveCost\r\n1,1,\"1,1002,200\"\r\n"]],0,0,[],[],[]]

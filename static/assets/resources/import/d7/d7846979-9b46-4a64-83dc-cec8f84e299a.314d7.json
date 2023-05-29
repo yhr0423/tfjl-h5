@@ -1,1 +1,0 @@
-[1,0,0,[["cc.TextAsset",["_name","text"],1]],[[0,0,1,3]],[[0,"ActivityDayPrizeTableData","int,int,vector<DropItem>\r\n活动ID,第几天（从1开始）,奖励\r\nactivityID,day,prize\r\n1,1,\"1,36,1\n1,1002,120\"\r\n1,2,\"1,7,1\n1,1002,120\"\r\n1,3,\"1,3030,1\n1,1002,240\"\r\n"]],0,0,[],[],[]]

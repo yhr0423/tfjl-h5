@@ -1,1 +1,0 @@
-[1,0,0,[["cc.TextAsset",["_name","text"],1]],[[0,0,1,3]],[[0,"SoundTableData","int,string,string\r\nId,资源,描述（策划用）\r\nid,res,describe\r\n1,sound/1,按钮点击音效\r\n2,sound/2,通用获得道具界面音效\r\n3,sound/2,解锁新卡自动弹出卡牌详情界面音效\r\n4,sound/4,卡牌升级时音效\r\n5,sound/5,pvp战斗胜利/合作模式结算界面音效\r\n6,sound/6,pvp战斗失败结算界面音效\r\n7,sound/7,卡牌抽取时音效\r\n"]],0,0,[],[],[]]

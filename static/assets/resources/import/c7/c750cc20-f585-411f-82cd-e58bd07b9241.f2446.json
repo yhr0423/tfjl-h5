@@ -1,1 +1,0 @@
-[1,0,0,[["cc.TextAsset",["_name","text"],1]],[[0,0,1,3]],[[0,"TotalWatchADBoxInfoClientTableData","int,int,string\r\n广告,conf表里广告最大的次数,广告描述(word表)\r\nid,admax,info\r\n1,3,total_watch1\r\n2,3,total_watch2\r\n3,3,total_watch3\r\n4,3,total_watch4\r\n5,3,total_watch5\r\n6,10,total_watch6\r\n7,10,total_watch7\r\n"]],0,0,[],[],[]]

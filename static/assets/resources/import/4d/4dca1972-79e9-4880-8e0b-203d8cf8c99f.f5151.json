@@ -1,1 +1,0 @@
-[1,0,0,[["cc.TextAsset",["_name","text"],1]],[[0,0,1,3]],[[0,"WeekCooperationReliveTableData","int,int,vector<DropItem>\r\nID,复活次数,复活需要消耗的物品\r\nid,reliveNum,reliveCost\r\n1,1,\"1,1002,1000\"\r\n2,2,\"1,1002,2000\"\r\n3,3,\"1,1002,5000\"\r\n"]],0,0,[],[],[]]
