@@ -40,14 +40,14 @@ type dbManager struct {
 
 // InitDatabase ...
 func (manager *dbManager) InitDatabase() {
-	credential := options.Credential{
-		AuthSource: "admin",
-		Username:   "",
-		Password:   "",
-	}
-	// 设置客户端连接配置
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017").SetAuth(credential)
-	// clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	// credential := options.Credential{
+	// 	AuthSource: "admin",
+	// 	Username:   "",
+	// 	Password:   "",
+	// }
+	// // 设置客户端连接配置
+	// clientOptions := options.Client().ApplyURI("mongodb://localhost:27017").SetAuth(credential)
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	clientOptions.SetMinPoolSize(10)
 	clientOptions.SetMaxPoolSize(20)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
