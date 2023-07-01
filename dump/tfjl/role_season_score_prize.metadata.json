@@ -1,1 +1,1 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"519b318d25d1463096f90a4c783efba8","collectionName":"role_season_score_prize","type":"collection"}
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"399b6edd69934f44abc2ba6757eabd64","collectionName":"role_season_score_prize","type":"collection"}
