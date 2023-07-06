@@ -138,6 +138,7 @@ func main() {
 	net.GWServer.AddRouter(protocols.P_Role_HeroChangeSkin, &apis.RoleHeroChangeSkinRouter{})
 	// 角色获取简要信息（头像框点击）
 	net.GWServer.AddRouter(protocols.P_Role_GetRoleSimpleInfo, &apis.RoleGetRoleSimpleInfoRouter{})
+	net.GWServer.AddRouter(protocols.P_Role_SetGuide, &apis.RoleSetGuideRouter{})
 
 	// 活动-大航海数据获得
 	net.GWServer.AddRouter(protocols.P_Activity_GetGreatSailingData, &apis.ActivityGetGreatSailingDataRouter{})
@@ -362,12 +363,6 @@ func downloadFile(url string) error {
 
 // 解密抓包数据接口（测试用）
 func decode(c *gin.Context) {
-	token := c.GetString("token")
-	curUser := db.DbManager.FindUserByToken(token)
-	if curUser == (models.User{}) && curUser.Account != "test" {
-		c.JSON(http.StatusOK, gin.H{"error": 1})
-		return
-	}
 	var websocketDataDecode models.WebsocketDataDecode
 	if err := c.ShouldBindJSON(&websocketDataDecode); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
@@ -437,9 +432,88 @@ func decode(c *gin.Context) {
 		}
 	case protocols.P_Role_SynRoleData:
 		if websocketDataDecode.ClientType == 1 {
-
+			message := protocols.C_Role_SynRoleData{}
+			err = message.Decode(buffer, apis.KEY)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
 		} else if websocketDataDecode.ClientType == 2 {
 			message := protocols.S_Role_SynRoleData{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Role_SynChapterData:
+		if websocketDataDecode.ClientType == 1 {
+
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_SynChapterData{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Role_SyncCostGet:
+		if websocketDataDecode.ClientType == 1 {
+
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_SyncCostGet{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Role_OnOffDataInfo:
+		// 开关数据
+		if websocketDataDecode.ClientType == 1 {
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_OnOffDataInfo{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Role_SetGuide:
+		if websocketDataDecode.ClientType == 1 {
+			message := protocols.C_Role_SetGuide{}
+			err = message.Decode(buffer, apis.KEY)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_SetGuide{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Activity_SynAllActivityData:
+		if websocketDataDecode.ClientType == 1 {
+
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Activity_SynAllActivityData{}
 			err = message.Decode(buffer)
 			if err != nil {
 				logrus.Error(err)
@@ -500,11 +574,11 @@ func decode(c *gin.Context) {
 			}
 			res = message
 		}
-	case protocols.P_Role_OnOffDataInfo:
-		// 开关数据
+	case protocols.P_Activity_SyncFogHiddenData:
+		// 机械迷城数据
 		if websocketDataDecode.ClientType == 1 {
 		} else if websocketDataDecode.ClientType == 2 {
-			message := protocols.S_Role_OnOffDataInfo{}
+			message := protocols.S_Activity_SyncFogHiddenData{}
 			err = message.Decode(buffer)
 			if err != nil {
 				logrus.Error(err)
@@ -958,7 +1032,10 @@ func create(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"error": 1})
 		return
 	}
-	account := utils.GetRandomString(6)
+	account := c.Query("account")
+	if account == "" {
+		account = utils.GetRandomString(6)
+	}
 	var user = models.User{
 		ID_:                primitive.NewObjectID(),
 		Account:            account,
@@ -1159,7 +1236,7 @@ func create(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusOK, gin.H{"data": "复制成功！"})
+		c.JSON(http.StatusOK, gin.H{"data": fmt.Sprintf("复制成功！新账号：%s", account)})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": "复制失败！"})

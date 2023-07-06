@@ -2798,6 +2798,29 @@ func (p *C_Role_GetRoleSimpleInfo) Decode(buffer *bytes.Buffer, key uint8) error
 	return nil
 }
 
+type C_Role_SetGuide struct {
+	Guide int32
+}
+
+func (p *C_Role_SetGuide) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Guide)
+	return buffer.Bytes()
+}
+
+func (p *C_Role_SetGuide) Decode(buffer *bytes.Buffer, key uint8) error {
+	if key != 0 {
+		for i := 0; i < buffer.Len(); i++ {
+			buffer.Bytes()[i] ^= byte(key)
+		}
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Guide)
+	return nil
+}
+
 /************************************  服务端  *********************************/
 
 type S_Role_SynRoleAttrValue struct {
@@ -3368,5 +3391,40 @@ func (p *S_Role_GetRoleSimpleInfo) Decode(buffer *bytes.Buffer) error {
 	binary.Read(buffer, binary.LittleEndian, &p.Errorcode)
 	p.RoleAbstract.Decode(buffer)
 	p.RoleProficiency.Decode(buffer)
+	return nil
+}
+
+type S_Role_SynChapterData struct {
+	ScoreFundData T_Role_ChapterData
+}
+
+func (p *S_Role_SynChapterData) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	buffer.Write(p.ScoreFundData.Encode())
+	return buffer.Bytes()
+}
+
+func (p *S_Role_SynChapterData) Decode(buffer *bytes.Buffer) error {
+	if err := p.ScoreFundData.Decode(buffer); err != nil {
+		return err
+	}
+	return nil
+}
+
+type S_Role_SetGuide struct {
+	Errorcode int32
+}
+
+func (p *S_Role_SetGuide) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
+	return buffer.Bytes()
+}
+
+func (p *S_Role_SetGuide) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Errorcode)
 	return nil
 }

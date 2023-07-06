@@ -17,82 +17,110 @@ const (
 	P_Login_Ping = 1000006
 
 	/**********************  角色  **********************/
-	// 角色进入游戏
+	// 角色-角色进入游戏
 	P_Role_RoleEnterLogic = 2000001
-	// 同步角色数据
+
+	// 角色-同步角色数据
 	P_Role_SynRoleData = 2000002
-	// 同步角色属性
+
+	// 角色-同步角色属性
 	P_Role_SynRoleAttrValue = 2000003
-	// 同步角色信息
+
+	// 角色-同步角色信息
 	P_Role_SynRoleInformationData = 2000004
-	// 同步角色任务数据
+
+	// 角色-同步角色邮件数据
+	P_Role_SynMailData = 2000007
+
+	// 角色-同步角色任务数据
 	P_Role_SynTaskData = 2000009
-	// 同步战斗数据
+
+	// 角色-同步战斗数据
 	P_Role_SynBattleArrayData = 2000011
-	// 设置默认战斗阵容
+
+	// 角色-设置默认战斗阵容
 	P_Role_BattleArraySetDefine = 2000025
-	// 设置战斗阵容
+
+	// 角色-设置战斗阵容
 	P_Role_BattleArrayUp = 2000026
-	// 角色对战结算数据
+
+	// 角色-角色对战结算数据
 	P_Role_FightBalance = 2000030
-	// 角色简要信息
+
+	// 角色-设置引导步骤
+	P_Role_SetGuide = 2000034
+
+	// 角色-角色简要信息
 	P_Role_GetRoleSimpleInfo = 2000039
-	// 同步外挂数据
+
+	// 角色-同步外挂数据
 	P_Role_SynIndulge = 2000052
 
-	// 角色总看广告数据
+	// 角色-角色总看广告数据
 	P_Role_TotalWatchADBoxData = 2000054
+	
 	// 同步角色任务额外数据
 	P_Role_SynTaskExtraData = 2000071
 
 	// 同步角色条件数据
 	P_Role_SynCondShareData = 2000105
 
-	// 同步角色开关数据
+	// 角色-同步角色开关数据
 	P_Role_OnOffDataInfo = 2000121
 
-	// 同步角色消耗数据
+	// 角色-同步角色消耗数据
 	P_Role_SyncCostGet = 2000131
-	// 修改角色战车皮肤
+
+	// 角色-修改角色战车皮肤
 	P_Role_Car_Skin_Change = 2000138
-	// 修改角色英雄皮肤
+
+	// 角色-修改角色英雄皮肤
 	P_Role_HeroChangeSkin = 2000151
 
+	// 角色-同步角色章节数据
+	P_Role_SynChapterData = 2000155
+
 	/**********************  活动  **********************/
-	// 同步角色活动数据
+	// 活动-同步角色所有活动数据
 	P_Activity_SynAllActivityData = 4000001
 
-	// 同步角色试炼场数据
+	// 活动-获取颁奖日数据
+	P_Activity_GetDayPrizeData = 4000014
+
+	// 活动-获取黄金联赛数据
+	P_Activity_GetGoldenLeagueData = 4000016
+
+	// 活动-同步角色试炼场数据
 	P_Activity_SyncEatChickenData = 4000047
 
-	// 同步角色公会战数据
+	// 活动-同步角色公会战数据
 	P_Activity_SyncSociatyWarData = 4000050
 
-	// 获取角色航海数据
+	// 活动-获取角色大航海数据
 	P_Activity_GetGreatSailingData = 4000052
 
-	// 同步角色航海数据
+	// 活动-同步角色大航海数据
 	P_Activity_SyncGreatSailingData = 4000053
 
-	// 大航海刷新卡组
+	// 活动-大航海刷新卡组
 	P_Activity_GreatSailingRefleshCard = 4000055
 
-	// 同步角色天空之城数据
+	// 活动-同步角色天空之城数据
 	P_Activity_SyncSkyCastleData = 4000057
 
-	// 同步角色寒冰堡数据
+	// 活动-同步角色寒冰堡数据
 	P_Activity_SyncWeekCooperationData = 4000060
 
-	// 同步角色周年庆数据
+	// 活动-同步角色周年庆数据
 	P_Activity_SyncAnniversaryTrialData = 4000063
 
-	// 同步角色回归数据
+	// 活动-同步角色回归数据
 	P_Activity_SyncReturnBackData = 4000065
 
-	// 同步角色迷雾数据
+	// 活动-同步角色雾隐数据
 	P_Activity_SyncFogHiddenData = 4000067
 
-	// 机械迷城数据
+	// 活动-机械迷城数据
 	P_Activity_SyncMachinariumData = 4000069
 
 	/**********************  聊天  **********************/

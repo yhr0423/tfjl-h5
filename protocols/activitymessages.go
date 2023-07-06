@@ -107,8 +107,8 @@ func (p *S_Activity_SynAllActivityData) Decode(buffer *bytes.Buffer) error {
 	p.ActivityData = make(map[int32]T_Activity_Data, ActivityDataLen)
 	for i := uint32(0); i < ActivityDataLen; i++ {
 		var k int32
-		binary.Read(buffer, binary.LittleEndian, &k)
 		var v T_Activity_Data
+		binary.Read(buffer, binary.LittleEndian, &k)
 		if err := v.Decode(buffer); err != nil {
 			return err
 		}
@@ -117,6 +117,7 @@ func (p *S_Activity_SynAllActivityData) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
+// 吃鸡-试炼场
 type S_Activity_SyncEatChickenData struct {
 	Error        int32
 	ActivityID   int32
@@ -176,8 +177,8 @@ func (p *S_Activity_SyncEatChickenData) Decode(buffer *bytes.Buffer) error {
 	p.NormalPrize = make(map[int32]bool, NormalPrizeLen)
 	for i := uint32(0); i < NormalPrizeLen; i++ {
 		var k int32
-		binary.Read(buffer, binary.LittleEndian, &k)
 		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
 		binary.Read(buffer, binary.LittleEndian, &v)
 		p.NormalPrize[k] = v
 	}
@@ -192,14 +193,15 @@ func (p *S_Activity_SyncEatChickenData) Decode(buffer *bytes.Buffer) error {
 	p.Superprize = make(map[int32]bool, SuperprizeLen)
 	for i := uint32(0); i < SuperprizeLen; i++ {
 		var k int32
-		binary.Read(buffer, binary.LittleEndian, &k)
 		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
 		binary.Read(buffer, binary.LittleEndian, &v)
 		p.Superprize[k] = v
 	}
 	return nil
 }
 
+// 大航海
 type S_Activity_SyncGreatSailingData struct {
 	Error               int32
 	ActivityID          int32
@@ -270,8 +272,8 @@ func (p *S_Activity_SyncGreatSailingData) Decode(buffer *bytes.Buffer) error {
 	p.PrizeReward = make(map[int32]bool, PrizeRewardLen)
 	for i := uint32(0); i < PrizeRewardLen; i++ {
 		var k int32
-		binary.Read(buffer, binary.LittleEndian, &k)
 		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
 		binary.Read(buffer, binary.LittleEndian, &v)
 		p.PrizeReward[k] = v
 	}
@@ -279,6 +281,7 @@ func (p *S_Activity_SyncGreatSailingData) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
+// 每周合作-寒冰堡
 type S_Activity_SyncWeekCooperationData struct {
 	Error               int32
 	ActivityID          int32
@@ -347,14 +350,15 @@ func (p *S_Activity_SyncWeekCooperationData) Decode(buffer *bytes.Buffer) error 
 	p.Prize = make(map[int32]bool, PrizeLen)
 	for i := uint32(0); i < PrizeLen; i++ {
 		var k int32
-		binary.Read(buffer, binary.LittleEndian, &k)
 		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
 		binary.Read(buffer, binary.LittleEndian, &v)
 		p.Prize[k] = v
 	}
 	return nil
 }
 
+// 机械迷城
 type S_Activity_SyncMachinariumData struct {
 	Error               int32
 	ActivityID          int32
@@ -435,10 +439,13 @@ func (p *S_Activity_SyncMachinariumData) Decode(buffer *bytes.Buffer) error {
 	p.Prize = make(map[int32]bool, PrizeLen)
 	for i := uint32(0); i < PrizeLen; i++ {
 		var k int32
-		binary.Read(buffer, binary.LittleEndian, &k)
 		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
 		binary.Read(buffer, binary.LittleEndian, &v)
 		p.Prize[k] = v
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
 	}
 	var NormalPrizeLen uint32
 	binary.Read(buffer, binary.LittleEndian, &NormalPrizeLen)
@@ -448,10 +455,13 @@ func (p *S_Activity_SyncMachinariumData) Decode(buffer *bytes.Buffer) error {
 	p.Prize = make(map[int32]bool, NormalPrizeLen)
 	for i := uint32(0); i < NormalPrizeLen; i++ {
 		var k int32
-		binary.Read(buffer, binary.LittleEndian, &k)
 		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
 		binary.Read(buffer, binary.LittleEndian, &v)
 		p.Prize[k] = v
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
 	}
 	var SuperprizeLen uint32
 	binary.Read(buffer, binary.LittleEndian, &SuperprizeLen)
@@ -461,8 +471,126 @@ func (p *S_Activity_SyncMachinariumData) Decode(buffer *bytes.Buffer) error {
 	p.Prize = make(map[int32]bool, SuperprizeLen)
 	for i := uint32(0); i < SuperprizeLen; i++ {
 		var k int32
-		binary.Read(buffer, binary.LittleEndian, &k)
 		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
+		binary.Read(buffer, binary.LittleEndian, &v)
+		p.Prize[k] = v
+	}
+	return nil
+}
+
+// 雾隐
+type S_Activity_SyncFogHiddenData struct {
+	Error               int32
+	ActivityID          int32
+	IsOpen              bool
+	FailCount           int32
+	Score               int32
+	DayFailNum          int32
+	DayMatchNum         int32
+	ContinuousWinNum    int32
+	ContinuousFailNum   int32
+	WinNum              int32
+	ReliveNum           int32
+	MaxContinuousWinNum int32
+	RefleshId           int32
+	Prize               map[int32]bool
+	NormalPrize         map[int32]bool
+	Superprize          map[int32]bool
+}
+
+func (p *S_Activity_SyncFogHiddenData) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Error)
+	binary.Write(buffer, binary.LittleEndian, p.ActivityID)
+	binary.Write(buffer, binary.LittleEndian, p.IsOpen)
+	binary.Write(buffer, binary.LittleEndian, p.FailCount)
+	binary.Write(buffer, binary.LittleEndian, p.Score)
+	binary.Write(buffer, binary.LittleEndian, p.DayFailNum)
+	binary.Write(buffer, binary.LittleEndian, p.DayMatchNum)
+	binary.Write(buffer, binary.LittleEndian, p.ContinuousWinNum)
+	binary.Write(buffer, binary.LittleEndian, p.ContinuousFailNum)
+	binary.Write(buffer, binary.LittleEndian, p.WinNum)
+	binary.Write(buffer, binary.LittleEndian, p.ReliveNum)
+	binary.Write(buffer, binary.LittleEndian, p.MaxContinuousWinNum)
+	binary.Write(buffer, binary.LittleEndian, p.RefleshId)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.Prize)))
+	for k, v := range p.Prize {
+		binary.Write(buffer, binary.LittleEndian, k)
+		binary.Write(buffer, binary.LittleEndian, v)
+	}
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.NormalPrize)))
+	for k, v := range p.NormalPrize {
+		binary.Write(buffer, binary.LittleEndian, k)
+		binary.Write(buffer, binary.LittleEndian, v)
+	}
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.Superprize)))
+	for k, v := range p.Superprize {
+		binary.Write(buffer, binary.LittleEndian, k)
+		binary.Write(buffer, binary.LittleEndian, v)
+	}
+	return buffer.Bytes()
+}
+
+func (p *S_Activity_SyncFogHiddenData) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 53 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Error)
+	binary.Read(buffer, binary.LittleEndian, &p.ActivityID)
+	binary.Read(buffer, binary.LittleEndian, &p.IsOpen)
+	binary.Read(buffer, binary.LittleEndian, &p.FailCount)
+	binary.Read(buffer, binary.LittleEndian, &p.Score)
+	binary.Read(buffer, binary.LittleEndian, &p.DayFailNum)
+	binary.Read(buffer, binary.LittleEndian, &p.DayMatchNum)
+	binary.Read(buffer, binary.LittleEndian, &p.ContinuousWinNum)
+	binary.Read(buffer, binary.LittleEndian, &p.ContinuousFailNum)
+	binary.Read(buffer, binary.LittleEndian, &p.WinNum)
+	binary.Read(buffer, binary.LittleEndian, &p.ReliveNum)
+	binary.Read(buffer, binary.LittleEndian, &p.MaxContinuousWinNum)
+	binary.Read(buffer, binary.LittleEndian, &p.RefleshId)
+	var PrizeLen uint32
+	binary.Read(buffer, binary.LittleEndian, &PrizeLen)
+	if uint32(buffer.Len()) < PrizeLen*5 {
+		return errors.New("message length error")
+	}
+	p.Prize = make(map[int32]bool, PrizeLen)
+	for i := uint32(0); i < PrizeLen; i++ {
+		var k int32
+		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
+		binary.Read(buffer, binary.LittleEndian, &v)
+		p.Prize[k] = v
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	var NormalPrizeLen uint32
+	binary.Read(buffer, binary.LittleEndian, &NormalPrizeLen)
+	if uint32(buffer.Len()) < NormalPrizeLen*5 {
+		return errors.New("message length error")
+	}
+	p.Prize = make(map[int32]bool, NormalPrizeLen)
+	for i := uint32(0); i < NormalPrizeLen; i++ {
+		var k int32
+		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
+		binary.Read(buffer, binary.LittleEndian, &v)
+		p.Prize[k] = v
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	var SuperprizeLen uint32
+	binary.Read(buffer, binary.LittleEndian, &SuperprizeLen)
+	if uint32(buffer.Len()) < SuperprizeLen*5 {
+		return errors.New("message length error")
+	}
+	p.Prize = make(map[int32]bool, SuperprizeLen)
+	for i := uint32(0); i < SuperprizeLen; i++ {
+		var k int32
+		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
 		binary.Read(buffer, binary.LittleEndian, &v)
 		p.Prize[k] = v
 	}

@@ -2,20 +2,22 @@ package apis
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"math/rand"
 	"tfjl-h5/core"
 	"tfjl-h5/db"
 	"tfjl-h5/iface"
 	"tfjl-h5/models"
-	"tfjl-h5/protocols"
 	"tfjl-h5/net"
+	"tfjl-h5/protocols"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 )
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 const (
 	HEAD_LENGTH = 8
@@ -114,6 +116,17 @@ func (p *LoginChooseRoleRouter) Handle(request iface.IRequest) {
 	for _, v := range roleAttr {
 		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynRoleAttrValue, v.Encode())
 	}
+
+	// 同步角色章节数据
+	jsonData := []byte(`{"ScoreFundData":{"CurrentChapterId":1,"ChapterInfoMap":{"1":{"ChapterId":1,"ChapterProgress":0,"RewardBoxStateMap":{}},"10":{"ChapterId":10,"ChapterProgress":0,"RewardBoxStateMap":{}},"101":{"ChapterId":101,"ChapterProgress":0,"RewardBoxStateMap":{}},"102":{"ChapterId":102,"ChapterProgress":0,"RewardBoxStateMap":{}},"103":{"ChapterId":103,"ChapterProgress":0,"RewardBoxStateMap":{}},"104":{"ChapterId":104,"ChapterProgress":0,"RewardBoxStateMap":{}},"105":{"ChapterId":105,"ChapterProgress":0,"RewardBoxStateMap":{}},"106":{"ChapterId":106,"ChapterProgress":0,"RewardBoxStateMap":{}},"107":{"ChapterId":107,"ChapterProgress":0,"RewardBoxStateMap":{}},"108":{"ChapterId":108,"ChapterProgress":0,"RewardBoxStateMap":{}},"109":{"ChapterId":109,"ChapterProgress":0,"RewardBoxStateMap":{}},"11":{"ChapterId":11,"ChapterProgress":0,"RewardBoxStateMap":{}},"110":{"ChapterId":110,"ChapterProgress":0,"RewardBoxStateMap":{}},"111":{"ChapterId":111,"ChapterProgress":0,"RewardBoxStateMap":{}},"12":{"ChapterId":12,"ChapterProgress":0,"RewardBoxStateMap":{}},"13":{"ChapterId":13,"ChapterProgress":0,"RewardBoxStateMap":{}},"14":{"ChapterId":14,"ChapterProgress":0,"RewardBoxStateMap":{}},"15":{"ChapterId":15,"ChapterProgress":0,"RewardBoxStateMap":{}},"16":{"ChapterId":16,"ChapterProgress":0,"RewardBoxStateMap":{}},"17":{"ChapterId":17,"ChapterProgress":0,"RewardBoxStateMap":{}},"18":{"ChapterId":18,"ChapterProgress":0,"RewardBoxStateMap":{}},"19":{"ChapterId":19,"ChapterProgress":0,"RewardBoxStateMap":{}},"2":{"ChapterId":2,"ChapterProgress":0,"RewardBoxStateMap":{}},"3":{"ChapterId":3,"ChapterProgress":0,"RewardBoxStateMap":{}},"4":{"ChapterId":4,"ChapterProgress":0,"RewardBoxStateMap":{}},"5":{"ChapterId":5,"ChapterProgress":0,"RewardBoxStateMap":{}},"6":{"ChapterId":6,"ChapterProgress":0,"RewardBoxStateMap":{}},"7":{"ChapterId":7,"ChapterProgress":0,"RewardBoxStateMap":{}},"88888":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"0":0,"100":1,"1000":1,"10000":0,"1200":1,"12000":0,"14000":0,"1600":1,"16000":0,"18000":0,"200":1,"2000":1,"20000":0,"22000":0,"2500":1,"2800":1,"300":1,"3000":1,"400":1,"4000":0,"50":1,"500":1,"5000":0,"600":1,"6000":0,"800":1,"8000":0}},"88889":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"1000":1,"10000":1,"1500":1,"2000":1,"3000":1,"4000":1,"500":1,"5000":1,"6000":1,"8000":1}},"88890":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"1000":0,"10000":0,"1500":0,"2000":0,"3000":0,"4000":0,"500":0,"5000":0,"6000":0,"8000":0}},"88989":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"10500":0,"11000":0,"11500":0,"12000":0,"13000":0,"14000":0,"15000":0,"16000":0,"18000":0,"20000":0}},"88990":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"10500":0,"11000":0,"11500":0,"12000":0,"13000":0,"14000":0,"15000":0,"16000":0,"18000":0,"20000":0}},"98889":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"0":0,"100000":0,"1000000":0,"20000":0,"200000":0,"2000000":0,"5000":0,"50000":0,"500000":0}}}}}`)
+	var sRoleSynChapterData protocols.S_Role_SynChapterData
+	err = json.Unmarshal(jsonData, &sRoleSynChapterData)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynChapterData, sRoleSynChapterData.Encode())
+
 	// 同步角色信息
 	var tInformationData = protocols.T_Information_Data{
 		FightData: protocols.T_Information_FightData{
@@ -223,7 +236,7 @@ func (p *LoginChooseRoleRouter) Handle(request iface.IRequest) {
 
 	// 同步活动数据
 	// 试炼场
-	jsonData := []byte(`{"Error":0,"ActivityID":3000,"Status":1,"Count":0,"RemainingNum":0,"AssembleNum":0,"IsLive":true,"Rank":0,"NormalPrize":{"1":true,"10":true,"11":true,"12":true,"13":true,"14":true,"15":true,"16":true,"17":true,"18":true,"19":true,"2":true,"20":true,"21":true,"22":true,"23":true,"24":true,"25":true,"26":true,"27":true,"28":true,"29":true,"3":true,"30":true,"31":true,"32":true,"33":true,"34":true,"35":true,"36":true,"37":true,"38":true,"39":true,"4":true,"40":true,"41":true,"42":true,"43":true,"44":true,"45":true,"5":true,"6":true,"7":true,"8":true,"9":true},"Superprize":{"1":true,"10":true,"11":true,"12":true,"13":true,"14":true,"15":true,"16":true,"17":true,"18":true,"19":true,"2":true,"20":true,"21":true,"22":true,"23":true,"24":true,"25":true,"26":true,"27":true,"28":true,"29":true,"3":true,"30":true,"31":true,"32":true,"33":true,"34":true,"35":true,"36":true,"37":true,"38":true,"39":true,"4":true,"40":true,"41":true,"42":true,"43":true,"44":true,"45":true,"5":true,"6":true,"7":true,"8":true,"9":true}}`)
+	jsonData = []byte(`{"Error":0,"ActivityID":3000,"Status":1,"Count":0,"RemainingNum":0,"AssembleNum":0,"IsLive":true,"Rank":0,"NormalPrize":{"1":true,"10":true,"11":true,"12":true,"13":true,"14":true,"15":true,"16":true,"17":true,"18":true,"19":true,"2":true,"20":true,"21":true,"22":true,"23":true,"24":true,"25":true,"26":true,"27":true,"28":true,"29":true,"3":true,"30":true,"31":true,"32":true,"33":true,"34":true,"35":true,"36":true,"37":true,"38":true,"39":true,"4":true,"40":true,"41":true,"42":true,"43":true,"44":true,"45":true,"5":true,"6":true,"7":true,"8":true,"9":true},"Superprize":{"1":true,"10":true,"11":true,"12":true,"13":true,"14":true,"15":true,"16":true,"17":true,"18":true,"19":true,"2":true,"20":true,"21":true,"22":true,"23":true,"24":true,"25":true,"26":true,"27":true,"28":true,"29":true,"3":true,"30":true,"31":true,"32":true,"33":true,"34":true,"35":true,"36":true,"37":true,"38":true,"39":true,"4":true,"40":true,"41":true,"42":true,"43":true,"44":true,"45":true,"5":true,"6":true,"7":true,"8":true,"9":true}}`)
 	var sActivitySyncEatChickenData protocols.S_Activity_SyncEatChickenData
 	err = json.Unmarshal(jsonData, &sActivitySyncEatChickenData)
 	if err != nil {
@@ -254,8 +267,18 @@ func (p *LoginChooseRoleRouter) Handle(request iface.IRequest) {
 	}
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Activity_SyncWeekCooperationData, sActivitySyncWeekCooperationData.Encode())
 
+	// 雾隐
+	jsonData = []byte(`{"Error":0,"ActivityID":10000,"IsOpen":true,"FailCount":0,"Score":0,"DayFailNum":0,"DayMatchNum":0,"ContinuousWinNum":0,"ContinuousFailNum":0,"WinNum":26,"ReliveNum":5,"MaxContinuousWinNum":0,"RefleshId":0,"Prize":{},"NormalPrize":null,"Superprize":null}`)
+	var sActivitySyncFogHiddenData protocols.S_Activity_SyncFogHiddenData
+	err = json.Unmarshal(jsonData, &sActivitySyncFogHiddenData)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Activity_SyncFogHiddenData, sActivitySyncFogHiddenData.Encode())
+
 	// 机械迷城数据
-	jsonData = []byte(`{"Error":0,"ActivityID":11000,"IsOpen":true,"FailCount":0,"Score":0,"DayFailNum":0,"DayMatchNum":0,"ContinuousWinNum":0,"ContinuousFailNum":0,"WinNum":999,"ReliveNum":0,"MaxContinuousWinNum":0,"RefleshId":1,"DayMaxRound":0,"Prize":{},"NormalPrize":null,"Superprize":null}`)
+	jsonData = []byte(`{"Error":0,"ActivityID":11000,"IsOpen":false,"FailCount":0,"Score":0,"DayFailNum":0,"DayMatchNum":0,"ContinuousWinNum":0,"ContinuousFailNum":0,"WinNum":999,"ReliveNum":0,"MaxContinuousWinNum":0,"RefleshId":1,"DayMaxRound":0,"Prize":{},"NormalPrize":null,"Superprize":null}`)
 	var sActivitySyncMachinariumData protocols.S_Activity_SyncMachinariumData
 	err = json.Unmarshal(jsonData, &sActivitySyncMachinariumData)
 	if err != nil {
@@ -267,7 +290,7 @@ func (p *LoginChooseRoleRouter) Handle(request iface.IRequest) {
 	var sRoleRoleEnterLogic = protocols.S_Role_RoleEnterLogic{}
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_RoleEnterLogic, sRoleRoleEnterLogic.Encode())
 
-	// 机械迷城数据
+	// 联盟数据
 	jsonData = []byte(`{"PlayerData":{"ActiveLeaveSociaty":1,"PassiveLeaveSociaty":1,"SeriesSignInNum":0,"DaySignInSociatyID":"","DayReceivePrizeNum":0,"SociatyID":"12345","SociatyName":"塔防精灵联盟","SociatyLevel":10,"SociatyFlag":1,"Job":1,"Contribution":99999,"Donate":{"1":{"DayNum":0},"2":{"DayNum":0}},"DayConvertSociatyMedal":0,"RedEnvelopes":[],"DurationTimes":[]}}`)
 	var sSociatySynData protocols.S_Sociaty_SynData
 	err = json.Unmarshal(jsonData, &sSociatySynData)

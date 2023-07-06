@@ -2,6 +2,7 @@ package apis
 
 import (
 	"bytes"
+	"tfjl-h5/constants"
 	"tfjl-h5/core"
 	"tfjl-h5/iface"
 	"tfjl-h5/net"
@@ -16,6 +17,7 @@ type FightReportResultToLogicRouter struct {
 }
 
 func (p *FightReportResultToLogicRouter) Handle(request iface.IRequest) {
+	logrus.Info("*************************** 对战-提交结束结果到主逻辑服务器（单人） ***************************")
 	roleID, err := request.GetConnection().GetProperty("roleID")
 	if err != nil {
 		logrus.Error("GetProperty error:", err)
@@ -60,15 +62,15 @@ func (p *FightReportResultToLogicRouter) Handle(request iface.IRequest) {
 		ActivityCoopration: map[int32]protocols.T_FightBalance_Activity_CoopRation{},
 		ExtraData:          map[int32]protocols.T_FightBalance_ExtraData{},
 	}
-	if cFightReportResultToLogic.ReportData.FightType == 1 {
+	if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_BATTLE {
 		// 对战结算数据
-	} else if cFightReportResultToLogic.ReportData.FightType == 2 {
+	} else if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_COOPERATION {
 		// 合作
-	} else if cFightReportResultToLogic.ReportData.FightType == 10 {
+	} else if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_BATTLE_GREAT_SAILING {
 		// 大航海
 		var sFightReportPhaseResultToLogic = protocols.S_Fight_Report_Result_To_Logic{Errorcode: 0}
 		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Fight_Report_Phase_Result_To_Logic, sFightReportPhaseResultToLogic.Encode())
-	} else if cFightReportResultToLogic.ReportData.FightType == 12 {
+	} else if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_WEEK_COOPERATION {
 		// 寒冰堡
 	}
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_FightBalance, sRoleFightBalance.Encode())
@@ -80,6 +82,7 @@ type FightReportPhaseResultToLogicRouter struct {
 }
 
 func (p *FightReportPhaseResultToLogicRouter) Handle(request iface.IRequest) {
+	logrus.Info("*************************** 对战-每阶段结果提交到主逻辑服务器（单人） ***************************")
 	roleID, err := request.GetConnection().GetProperty("roleID")
 	if err != nil {
 		logrus.Error("GetProperty error:", err)
@@ -91,13 +94,16 @@ func (p *FightReportPhaseResultToLogicRouter) Handle(request iface.IRequest) {
 	cFightReportResultToLogic.Decode(bytes.NewBuffer(request.GetData()), player.Key)
 	logrus.Infof("%#v", cFightReportResultToLogic)
 
-	if cFightReportResultToLogic.ReportData.FightType == 1 {
+	if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_BATTLE {
+		// 对战
 		var sFightReportPhaseResultToLogic = protocols.S_Fight_Report_Result_To_Logic{Errorcode: 0}
 		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Fight_Report_Phase_Result_To_Logic, sFightReportPhaseResultToLogic.Encode())
-	} else if cFightReportResultToLogic.ReportData.FightType == 2 {
+	} else if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_COOPERATION {
+		// 合作
 		var sFightReportPhaseResultToLogic = protocols.S_Fight_Report_Result_To_Logic{Errorcode: 0}
 		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Fight_Report_Phase_Result_To_Logic, sFightReportPhaseResultToLogic.Encode())
-	} else if cFightReportResultToLogic.ReportData.FightType == 10 {
+	} else if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_BATTLE_GREAT_SAILING {
+		// 大航海
 		var sFightReportPhaseResultToLogic = protocols.S_Fight_Report_Result_To_Logic{Errorcode: 0}
 		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Fight_Report_Phase_Result_To_Logic, sFightReportPhaseResultToLogic.Encode())
 	}

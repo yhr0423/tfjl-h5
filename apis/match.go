@@ -3,6 +3,7 @@ package apis
 import (
 	"bytes"
 	"fmt"
+	"tfjl-h5/constants"
 	"tfjl-h5/core"
 	"tfjl-h5/db"
 	"tfjl-h5/iface"
@@ -23,7 +24,7 @@ type MatchFightRouter struct {
 }
 
 func (p *MatchFightRouter) Handle(request iface.IRequest) {
-	logrus.Info("*************************快速匹配*************************")
+	logrus.Info("************************* 快速匹配 *************************")
 	roleID, err := request.GetConnection().GetProperty("roleID")
 	if err != nil {
 		logrus.Error("GetProperty error:", err)
@@ -140,26 +141,26 @@ func (p *MatchFightRouter) Handle(request iface.IRequest) {
 		FightToken:         "",
 	}
 
-	if fightData.FightType == 1 {
+	if fightData.FightType == constants.FIGHT_TYPE_BATTLE {
 		// 对战
 		matchResult.SeedId = []int32{625, 867, 296, 299, 75, 115, 294, 268, 235, 775, 346, 588, 849, 223, 161, 987, 158, 917, 509, 498, 604, 529, 162, 419, 636, 730, 844, 659, 783, 312, 265, 987, 315, 724, 184, 390, 448, 982, 327, 709, 280, 696, 932, 821, 400, 567, 380, 63, 593, 504, 69, 741, 206, 708, 724, 227, 576, 859, 201, 710, 844, 556, 424, 22, 545, 526, 528, 717, 186, 143, 82, 813, 465, 656, 31, 575, 435, 343, 558, 640, 639, 83, 35, 471, 710, 142, 170, 658, 594, 390, 609, 949, 773, 965, 57, 852, 855, 288, 385, 81}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
 		matchResult.BossIdIndexs = []int32{625, 867, 296, 299, 75, 115, 294, 268, 235, 775, 346, 588, 849, 223, 161, 987, 158, 917, 509, 498, 604, 529, 162, 419, 636, 730, 844, 659, 783, 312, 265, 987, 315, 724, 184, 390, 448, 982, 327, 709, 280, 696, 932, 821, 400, 567, 380, 63, 593, 504, 69, 741, 206, 708, 724, 227, 576, 859, 201, 710, 844, 556, 424, 22, 545, 526, 528, 717, 186, 143, 82, 813, 465, 656, 31, 575, 435, 343, 558, 640, 639, 83, 35, 471, 710, 142, 170, 658, 594, 390, 609, 949, 773, 965, 57, 852, 855, 288, 385, 81}
-	} else if fightData.FightType == 2 {
+	} else if fightData.FightType == constants.FIGHT_TYPE_COOPERATION {
 		// 合作
-		matchResult.SeedId = []int32{6, 7, 5, 4, 1, 5, 7, 2, 4, 5, 6, 2, 1, 4, 5, 8, 4, 2, 8, 9, 3, 9, 6, 4, 3, 9, 4, 6, 9, 9, 8}
+		matchResult.SeedId = []int32{3, 2, 1, 3, 7, 4, 6, 3, 2, 3, 3, 9, 4, 2, 6, 8, 6, 9, 3, 1, 9, 2, 8, 5, 3, 5, 6, 2, 7, 6, 4}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-		matchResult.BossIdIndexs = []int32{6, 7, 5, 4, 1, 5, 7, 2, 4, 5, 6, 2, 1, 4, 5, 8, 4, 2, 8, 9, 3, 9, 6, 4, 3, 9, 4, 6, 9, 9, 8}
-	} else if fightData.FightType == 10 {
+		matchResult.BossIdIndexs = []int32{3, 2, 1, 3, 7, 4, 6, 3, 2, 3, 3, 9, 4, 2, 6, 8, 6, 9, 3, 1, 9, 2, 8, 5, 3, 5, 6, 2, 7, 6, 4}
+	} else if fightData.FightType == constants.FIGHT_TYPE_BATTLE_GREAT_SAILING {
 		// 大航海
-		matchResult.SeedId = []int32{7, 8, 9, 4, 5, 5, 5, 2, 9, 6, 6, 4, 1, 4, 9, 8, 2, 3, 5, 2, 4, 1, 7, 1, 7, 6, 8, 7, 8, 6, 9}
+		matchResult.SeedId = []int32{3, 5, 6, 2, 5, 1, 7, 5, 9, 1, 4, 2, 1, 1, 6, 4, 7, 1, 4, 9, 1, 4, 7, 6, 1, 9, 6, 2, 3, 8, 3}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-		matchResult.BossIdIndexs = []int32{7, 8, 9, 4, 5, 5, 5, 2, 9, 6, 6, 4, 1, 4, 9, 8, 2, 3, 5, 2, 4, 1, 7, 1, 7, 6, 8, 7, 8, 6, 9}
-	} else if fightData.FightType == 12 {
+		matchResult.BossIdIndexs = []int32{3, 5, 6, 2, 5, 1, 7, 5, 9, 1, 4, 2, 1, 1, 6, 4, 7, 1, 4, 9, 1, 4, 7, 6, 1, 9, 6, 2, 3, 8, 3}
+	} else if fightData.FightType == constants.FIGHT_TYPE_WEEK_COOPERATION {
 		// 寒冰堡
-		matchResult.SeedId = []int32{5, 3, 5, 6, 4, 4, 7, 7, 8, 8, 8, 5, 4, 2, 8, 1, 4, 8, 1, 4, 7, 8, 3, 4, 7, 6, 6, 1, 6, 1, 5}
+		matchResult.SeedId = []int32{7, 2, 4, 2, 3, 8, 4, 8, 8, 9, 3, 2, 8, 1, 8, 7, 5, 2, 7, 8, 1, 5, 1, 3, 5, 7, 8, 1, 6, 1, 2}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-		matchResult.BossIdIndexs = []int32{5, 3, 5, 6, 4, 4, 7, 7, 8, 8, 8, 5, 4, 2, 8, 1, 4, 8, 1, 4, 7, 8, 3, 4, 7, 6, 6, 1, 6, 1, 5}
+		matchResult.BossIdIndexs = []int32{7, 2, 4, 2, 3, 8, 4, 8, 8, 9, 3, 2, 8, 1, 8, 7, 5, 2, 7, 8, 1, 5, 1, 3, 5, 7, 8, 1, 6, 1, 2}
 	}
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Match_Result, matchResult.Encode())
 }
@@ -170,7 +171,7 @@ type MatchDuelFightRouter struct {
 }
 
 func (p *MatchDuelFightRouter) Handle(request iface.IRequest) {
-	logrus.Info("*****************************房间匹配*******************************")
+	logrus.Info("***************************** 房间匹配 *******************************")
 	roleID, err := request.GetConnection().GetProperty("roleID")
 	if err != nil {
 		logrus.Error("GetProperty error:", err)
@@ -347,17 +348,22 @@ func (p *MatchDuelFightRouter) Handle(request iface.IRequest) {
 			FightServerPortSSL: 443,
 			FightToken:         fightToken,
 		}
-		if cMatchDuelFight.FightType == 2 {
+		if cMatchDuelFight.FightType == constants.FIGHT_TYPE_COOPERATION {
 			// 合作
-			matchResult.SeedId = []int32{6, 7, 5, 4, 1, 5, 7, 2, 4, 5, 6, 2, 1, 4, 5, 8, 4, 2, 8, 9, 3, 9, 6, 4, 3, 9, 4, 6, 9, 9, 8}
+			matchResult.SeedId = []int32{3, 2, 1, 3, 7, 4, 6, 3, 2, 3, 3, 9, 4, 2, 6, 8, 6, 9, 3, 1, 9, 2, 8, 5, 3, 5, 6, 2, 7, 6, 4}
 			matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-			matchResult.BossIdIndexs = []int32{6, 7, 5, 4, 1, 5, 7, 2, 4, 5, 6, 2, 1, 4, 5, 8, 4, 2, 8, 9, 3, 9, 6, 4, 3, 9, 4, 6, 9, 9, 8}
-		} else if cMatchDuelFight.FightType == 12 {
+			matchResult.BossIdIndexs = []int32{3, 2, 1, 3, 7, 4, 6, 3, 2, 3, 3, 9, 4, 2, 6, 8, 6, 9, 3, 1, 9, 2, 8, 5, 3, 5, 6, 2, 7, 6, 4}
+		} else if cMatchDuelFight.FightType == constants.FIGHT_TYPE_WEEK_COOPERATION {
 			// 寒冰堡
-			matchResult.SeedId = []int32{5, 3, 5, 6, 4, 4, 7, 7, 8, 8, 8, 5, 4, 2, 8, 1, 4, 8, 1, 4, 7, 8, 3, 4, 7, 6, 6, 1, 6, 1, 5}
+			matchResult.SeedId = []int32{7, 2, 4, 2, 3, 8, 4, 8, 8, 9, 3, 2, 8, 1, 8, 7, 5, 2, 7, 8, 1, 5, 1, 3, 5, 7, 8, 1, 6, 1, 2}
 			matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-			matchResult.BossIdIndexs = []int32{5, 3, 5, 6, 4, 4, 7, 7, 8, 8, 8, 5, 4, 2, 8, 1, 4, 8, 1, 4, 7, 8, 3, 4, 7, 6, 6, 1, 6, 1, 5}
-		} else if cMatchDuelFight.FightType == 15 {
+			matchResult.BossIdIndexs = []int32{7, 2, 4, 2, 3, 8, 4, 8, 8, 9, 3, 2, 8, 1, 8, 7, 5, 2, 7, 8, 1, 5, 1, 3, 5, 7, 8, 1, 6, 1, 2}
+		} else if cMatchDuelFight.FightType == constants.FIGHT_TYPE_FOG_HIDDEN {
+			// 雾隐/镖人
+			matchResult.SeedId = []int32{6, 6, 9, 7, 1, 9, 3, 6, 4, 5, 3, 3, 5, 5, 3, 3, 9, 3, 7, 1, 8, 9, 6, 6, 5, 4, 1, 6, 1, 6, 3}
+			matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
+			matchResult.BossIdIndexs = []int32{6, 6, 9, 7, 1, 9, 3, 6, 4, 5, 3, 3, 5, 5, 3, 3, 9, 3, 7, 1, 8, 9, 6, 6, 5, 4, 1, 6, 1, 6, 3}
+		} else if cMatchDuelFight.FightType == constants.FIGHT_TYPE_MACHINARIUM {
 			// 机械迷城
 			matchResult.SeedId = []int32{8, 8, 8, 6, 9, 5, 5, 6, 3, 1, 4, 6, 3, 1, 9, 2, 5, 2, 9, 5, 8, 2, 7, 8, 1, 7, 8, 2, 6, 4, 2}
 			matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}

@@ -2,7 +2,7 @@ package apis
 
 import (
 	"bytes"
-	"encoding/json"
+	"tfjl-h5/constants"
 	"tfjl-h5/core"
 	"tfjl-h5/db"
 	"tfjl-h5/iface"
@@ -453,6 +453,15 @@ func (p *RoleSynRoleDataRouter) Handle(request iface.IRequest) {
 			},
 		},
 	}
+	jsonData2 := []byte(`{"CurrentChapterId":1,"ChapterInfoMap":{"1":{"ChapterId":1,"ChapterProgress":0,"RewardBoxStateMap":{}},"10":{"ChapterId":10,"ChapterProgress":0,"RewardBoxStateMap":{}},"101":{"ChapterId":101,"ChapterProgress":0,"RewardBoxStateMap":{}},"102":{"ChapterId":102,"ChapterProgress":0,"RewardBoxStateMap":{}},"103":{"ChapterId":103,"ChapterProgress":0,"RewardBoxStateMap":{}},"104":{"ChapterId":104,"ChapterProgress":0,"RewardBoxStateMap":{}},"105":{"ChapterId":105,"ChapterProgress":0,"RewardBoxStateMap":{}},"106":{"ChapterId":106,"ChapterProgress":0,"RewardBoxStateMap":{}},"107":{"ChapterId":107,"ChapterProgress":0,"RewardBoxStateMap":{}},"108":{"ChapterId":108,"ChapterProgress":0,"RewardBoxStateMap":{}},"109":{"ChapterId":109,"ChapterProgress":0,"RewardBoxStateMap":{}},"11":{"ChapterId":11,"ChapterProgress":0,"RewardBoxStateMap":{}},"110":{"ChapterId":110,"ChapterProgress":0,"RewardBoxStateMap":{}},"111":{"ChapterId":111,"ChapterProgress":0,"RewardBoxStateMap":{}},"12":{"ChapterId":12,"ChapterProgress":0,"RewardBoxStateMap":{}},"13":{"ChapterId":13,"ChapterProgress":0,"RewardBoxStateMap":{}},"14":{"ChapterId":14,"ChapterProgress":0,"RewardBoxStateMap":{}},"15":{"ChapterId":15,"ChapterProgress":0,"RewardBoxStateMap":{}},"16":{"ChapterId":16,"ChapterProgress":0,"RewardBoxStateMap":{}},"17":{"ChapterId":17,"ChapterProgress":0,"RewardBoxStateMap":{}},"18":{"ChapterId":18,"ChapterProgress":0,"RewardBoxStateMap":{}},"19":{"ChapterId":19,"ChapterProgress":0,"RewardBoxStateMap":{}},"2":{"ChapterId":2,"ChapterProgress":0,"RewardBoxStateMap":{}},"3":{"ChapterId":3,"ChapterProgress":0,"RewardBoxStateMap":{}},"4":{"ChapterId":4,"ChapterProgress":0,"RewardBoxStateMap":{}},"5":{"ChapterId":5,"ChapterProgress":0,"RewardBoxStateMap":{}},"6":{"ChapterId":6,"ChapterProgress":0,"RewardBoxStateMap":{}},"7":{"ChapterId":7,"ChapterProgress":0,"RewardBoxStateMap":{}},"88888":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"0":0,"100":1,"1000":1,"10000":0,"1200":1,"12000":0,"14000":0,"1600":1,"16000":0,"18000":0,"200":1,"2000":1,"20000":0,"22000":0,"2500":1,"2800":1,"300":1,"3000":1,"400":1,"4000":0,"50":1,"500":1,"5000":0,"600":1,"6000":0,"800":1,"8000":0}},"88889":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"1000":1,"10000":1,"1500":1,"2000":1,"3000":1,"4000":1,"500":1,"5000":1,"6000":1,"8000":1}},"88890":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"1000":0,"10000":0,"1500":0,"2000":0,"3000":0,"4000":0,"500":0,"5000":0,"6000":0,"8000":0}},"88989":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"10500":0,"11000":0,"11500":0,"12000":0,"13000":0,"14000":0,"15000":0,"16000":0,"18000":0,"20000":0}},"88990":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"10500":0,"11000":0,"11500":0,"12000":0,"13000":0,"14000":0,"15000":0,"16000":0,"18000":0,"20000":0}},"98889":{"ChapterId":0,"ChapterProgress":0,"RewardBoxStateMap":{"0":0,"100000":0,"1000000":0,"20000":0,"200000":0,"2000000":0,"5000":0,"50000":0,"500000":0}}}}`)
+	var sRoleSynChapterData protocols.T_Role_ChapterData
+	err = json.Unmarshal(jsonData2, &sRoleSynChapterData)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	sRoleSynRoleData.ChapterData = sRoleSynChapterData
+
 	sRoleSynRoleData.LegendData = protocols.T_Role_LegendData{
 		ChapterInfoMap: map[int32]int32{
 			0:     0,
@@ -502,7 +511,7 @@ func (p *RoleSynRoleDataRouter) Handle(request iface.IRequest) {
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Activity_SynAllActivityData, sActivitySynAllActivityData.Encode())
 
 	// 开关数据
-	jsonData := []byte(`{"Onoff":{"1":true,"10":true,"11":false,"12":false,"13":true,"14":true,"15":true,"16":true,"17":true,"18":true,"19":true,"2":true,"20":true,"21":true,"22":true,"23":true,"24":false,"25":false,"26":false,"27":true,"28":false,"29":false,"3":true,"30":true,"31":true,"32":true,"33":true,"34":true,"35":true,"36":true,"37":true,"38":true,"39":true,"4":true,"40":true,"41":true,"42":true,"43":true,"44":true,"45":false,"46":true,"47":true,"48":true,"49":false,"5":true,"50":false,"51":true,"52":true,"53":true,"54":true,"55":true,"56":false,"57":false,"58":false,"59":true,"6":false,"60":true,"61":true,"62":false,"63":true,"64":true,"65":true,"7":true,"8":true,"9":true}}`)
+	jsonData := []byte(`{"Onoff":{"1":true,"10":true,"11":false,"12":false,"13":true,"14":true,"15":true,"16":true,"17":true,"18":true,"19":true,"2":true,"20":true,"21":true,"22":true,"23":true,"24":false,"25":false,"26":false,"27":true,"28":false,"29":false,"3":true,"30":true,"31":true,"32":true,"33":true,"34":true,"35":true,"36":true,"37":true,"38":true,"39":true,"4":true,"40":true,"41":true,"42":true,"43":true,"44":true,"45":true,"46":true,"47":true,"48":true,"49":false,"5":true,"50":false,"51":true,"52":true,"53":true,"54":true,"55":true,"56":false,"57":true,"58":false,"59":true,"6":true,"60":true,"61":true,"62":false,"63":true,"64":true,"65":true,"66":true,"67":true,"68":true,"69":true,"7":true,"70":true,"71":true,"72":false,"73":false,"74":true,"75":true,"76":false,"77":true,"78":true,"79":true,"8":true,"80":false,"9":true}}`)
 	var sRoleOnOffDataInfo protocols.S_Role_OnOffDataInfo
 	err = json.Unmarshal(jsonData, &sRoleOnOffDataInfo)
 	if err != nil {
@@ -570,9 +579,9 @@ func (p *RoleCarSkinChangeRouter) Handle(request iface.IRequest) {
 	cRoleCarSkinChange.Decode(bytes.NewBuffer(request.GetData()), player.Key)
 	logrus.Infof("%#v", cRoleCarSkinChange)
 
-	db.DbManager.UpdateRoleAttrValueByAttrID(player.PID, 48, cRoleCarSkinChange.SkinId)
+	db.DbManager.UpdateRoleAttrValueByAttrID(player.PID, constants.ROLE_ATTR_CARSKINID, cRoleCarSkinChange.SkinId)
 	var sRoleSynRoleAttrValue = protocols.S_Role_SynRoleAttrValue{
-		Index: 48,
+		Index: constants.ROLE_ATTR_CARSKINID,
 		Value: cRoleCarSkinChange.SkinId,
 	}
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynRoleAttrValue, sRoleSynRoleAttrValue.Encode())
@@ -673,7 +682,7 @@ func (p *RoleGetRoleSimpleInfoRouter) Handle(request iface.IRequest) {
 			SkinID:    skinID,
 		}
 	}
-	carSkinAttrValueItem := db.DbManager.FindRoleAttrValueItemByAttrID(player.PID, 48)
+	carSkinAttrValueItem := db.DbManager.FindRoleAttrValueItemByAttrID(player.PID, constants.ROLE_ATTR_CARSKINID)
 	carSkinBagItem := db.DbManager.FindCarSkinByItemID(player.PID, carSkinAttrValueItem.Value)
 	// 战车皮肤
 	var tRuneAbstract = protocols.T_RuneAbstract{ItemID: carSkinBagItem.ItemID*1000 + carSkinBagItem.ItemNum}
@@ -689,10 +698,43 @@ func (p *RoleGetRoleSimpleInfoRouter) Handle(request iface.IRequest) {
 			Expressions: map[int32]protocols.T_ExpressionAbstract{},
 			Runes: map[int32]protocols.T_RuneAbstract{
 				40: {ItemID: attrValue.Value},
-				48: tRuneAbstract},
+				constants.ROLE_ATTR_CARSKINID: tRuneAbstract},
 			PetId: attrValue.Value,
 		},
 		RoleProficiency: protocols.T_RoleProficiency{},
 	}
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_GetRoleSimpleInfo, sRoleGetRoleSimpleInfo.Encode())
+}
+
+type RoleSetGuideRouter struct {
+	net.BaseRouter
+}
+
+func (p *RoleSetGuideRouter) Handle(request iface.IRequest) {
+	logrus.Info("******************************* 设置 guide ***********************************")
+	roleID, err := request.GetConnection().GetProperty("roleID")
+	if err != nil {
+		logrus.Error("GetProperty error:", err)
+		return
+	}
+	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
+
+	// 获取简要数据
+	var cRoleSetGuide = protocols.C_Role_SetGuide{}
+	cRoleSetGuide.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Infof("%#v", cRoleSetGuide)
+
+	var sRoleSetGuide = protocols.S_Role_SetGuide{Errorcode: 0}
+	updateResult, err := db.DbManager.UpdateRoleAttrValueByAttrID(player.PID, constants.ROLE_ATTR_GUIDE, cRoleSetGuide.Guide)
+	if err != nil || updateResult.MatchedCount == 0 || updateResult.ModifiedCount == 0 {
+		logrus.Error("UpdateRoleAttrValueByAttrID error:", err)
+		sRoleSetGuide.Errorcode = 1
+	} else {
+		var sRoleSynRoleAttrValue = protocols.S_Role_SynRoleAttrValue{
+			Index: constants.ROLE_ATTR_GUIDE,
+			Value: cRoleSetGuide.Guide,
+		}
+		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynRoleAttrValue, sRoleSynRoleAttrValue.Encode())
+	}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SetGuide, sRoleSetGuide.Encode())
 }
