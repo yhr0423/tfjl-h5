@@ -184,7 +184,7 @@ func main() {
 
 			logrus.Info("url: ", url)
 
-			if strings.Contains(url, "/tfjlh5/assets/") || strings.Contains(url, "/tfjlh5/resources/") || strings.Contains(url, "/tfjlh5/src/") {
+			if strings.Contains(url, "/tfjlh5/") {
 				url = strings.Replace(url, "/tfjlh5/", "", 1)
 				// 下载文件
 				err := downloadFile(url)

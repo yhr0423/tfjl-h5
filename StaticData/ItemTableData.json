@@ -133,7 +133,9 @@
     "source": "",
     "spineId": 0,
     "isChance": 0,
-    "big_icon": "ui/cardpic_l/8"
+    "big_icon": "ui/cardpic_l/8",
+    "bHave": 1,
+    "skinId": 0
   },
   "9": {
     "id": 9,
@@ -1609,7 +1611,7 @@
     "canStacking": 1,
     "maxNum": 0,
     "maxNumCompensate": "",
-    "source": "拥有此信使后，每日可获得免广告卡x1",
+    "source": "拥有此信使后，每日可获得蓝卡x1",
     "spineId": 30007,
     "isChance": 0,
     "big_icon": "ui/cardpic_l/jinglinglong"
@@ -29239,6 +29241,74 @@
     "isChance": 0,
     "big_icon": "ui/cardpic_l/3"
   },
+  "50001": {
+    "id": 50001,
+    "name": "赛季累充2000档",
+    "type": 13,
+    "quality": 4,
+    "level": 1,
+    "bag": 1,
+    "icon": "ui/cardpic_l/3",
+    "desc": "赛季累充2000档奖励道具",
+    "canStacking": 1,
+    "maxNum": 0,
+    "maxNumCompensate": "",
+    "source": "",
+    "spineId": 0,
+    "isChance": 0,
+    "big_icon": "ui/cardpic_l/3"
+  },
+  "50002": {
+    "id": 50002,
+    "name": "赛季累充5000档",
+    "type": 13,
+    "quality": 4,
+    "level": 1,
+    "bag": 1,
+    "icon": "ui/cardpic_l/3",
+    "desc": "赛季累充5000档奖励道具",
+    "canStacking": 1,
+    "maxNum": 0,
+    "maxNumCompensate": "",
+    "source": "",
+    "spineId": 0,
+    "isChance": 0,
+    "big_icon": "ui/cardpic_l/3"
+  },
+  "50003": {
+    "id": 50003,
+    "name": "赛季累充10000档",
+    "type": 13,
+    "quality": 4,
+    "level": 1,
+    "bag": 1,
+    "icon": "ui/cardpic_l/3",
+    "desc": "赛季累充10000档奖励道具",
+    "canStacking": 1,
+    "maxNum": 0,
+    "maxNumCompensate": "",
+    "source": "",
+    "spineId": 0,
+    "isChance": 0,
+    "big_icon": "ui/cardpic_l/3"
+  },
+  "50004": {
+    "id": 50004,
+    "name": "赛季累充20000档",
+    "type": 13,
+    "quality": 4,
+    "level": 1,
+    "bag": 1,
+    "icon": "ui/cardpic_l/3",
+    "desc": "赛季累充20000档奖励道具",
+    "canStacking": 1,
+    "maxNum": 0,
+    "maxNumCompensate": "",
+    "source": "",
+    "spineId": 0,
+    "isChance": 0,
+    "big_icon": "ui/cardpic_l/3"
+  },
   "110001": {
     "id": 110001,
     "name": "萌新1元宝箱",
@@ -30140,6 +30210,25 @@
     "isChance": 0,
     "big_icon": "ui/cardpic_l/12172"
   },
+  "312208": {
+    "id": 312208,
+    "name": "丝西娜·蛇女",
+    "type": 12,
+    "quality": 4,
+    "level": 1,
+    "bag": 2,
+    "icon": "ui/cardpic_l/12208",
+    "desc": "赛季活动中获得",
+    "canStacking": 1,
+    "maxNum": 0,
+    "maxNumCompensate": "",
+    "source": "皮肤专属被动：自身暴击+50%",
+    "spineId": 0,
+    "isChance": 0,
+    "big_icon": "ui/cardpic_l/12208",
+    "bHave": 0,
+    "skinId": 122
+  },
   "410133": {
     "id": 410133,
     "name": "冰雪魔女【头像】",
@@ -30496,5 +30585,22 @@
     "spineId": 0,
     "isChance": 0,
     "big_icon": "ui/headpic/12172"
+  },
+  "412208": {
+    "id": 412208,
+    "name": "丝西娜·蛇女【头像】",
+    "type": 4,
+    "quality": 4,
+    "level": 1,
+    "bag": 4,
+    "icon": "ui/headpic/12208",
+    "desc": "赛季活动中获得",
+    "canStacking": 0,
+    "maxNum": 1,
+    "maxNumCompensate": "",
+    "source": "",
+    "spineId": 0,
+    "isChance": 0,
+    "big_icon": "ui/headpic/12208"
   }
 }
