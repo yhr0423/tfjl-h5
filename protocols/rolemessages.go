@@ -372,38 +372,38 @@ func (p *T_Game_Time) Decode(buffer *bytes.Buffer) error {
 }
 
 type T_Information_Data struct {
-	ID_                            primitive.ObjectID `bson:"_id,omitempty"` // 主键
-	RoleID                         int64              `bson:"role_id"`       // 角色ID
-	FightData                      T_Information_FightData
-	EncourageNum                   int32 `bson:"encourage_num"`
-	EncourageDayNum                int32 `bson:"encourage_day_num"`
-	EncourageTime                  int32 `bson:"encourage_time"`
-	CooperationDayLeftNum          int32 `bson:"cooperation_day_left_num"`
-	CooperationDayWatchAdNum       int32 `bson:"cooperation_day_watch_ad_num"`
-	SupportBoxNum                  int32 `bson:"support_box_num"`
-	SupportBoxDayNum               int32 `bson:"support_box_day_num"`
-	SupportBoxLastTime             int32 `bson:"support_box_last_time"`
-	CooperationDayBuyNum           int32 `bson:"cooperation_day_buy_num"`
-	CooperationDayGiveNum          int32 `bson:"cooperation_day_give_num"`
-	CooperationDayNum              int32 `bson:"cooperation_day_num"`
-	FightLoserProtectDayNum        int32 `bson:"fight_loser_protect_day_num"`
-	FightLoserDecScore             int32 `bson:"fight_loser_dec_score"`
-	FightWinDayNum                 int32 `bson:"fight_win_day_num"`
-	FightWinExtra                  bool  `bson:"fight_win_extra"`
-	WeekCardAddCooperationExtraNum int32 `bson:"week_card_add_cooperation_extra_num"`
-	CooperationExtra               bool  `bson:"cooperation_extra"`
-	UsedCooperationLastExtraEnd    bool  `bson:"used_cooperation_last_extra_end"`
-	DayFirstWinNum                 int32 `bson:"day_first_win_num"`
-	DayFirstIsWin                  bool  `bson:"day_first_is_win"`
-	CooperADNum                    int32 `bson:"cooper_ad_num"`
-	CooperADRoundNum               int32 `bson:"cooper_ad_round_num"`
-	IsGetFirstRechargeReward       bool  `bson:"is_get_first_recharge_reward"`
-	FightLookADDoubleCount         int32 `bson:"fight_look_ad_double_count"`
-	CooperationDayHelpNum          int32 `bson:"cooperation_day_help_num"`
-	QQHallBlueVipVector            []int32
-	QQHallRewardsVector            []string
-	HeroSkinMap                    map[int64]int32
-	SelfSelectMap                  map[int32]int32
+	ID_                            primitive.ObjectID      `bson:"_id,omitempty"` // 主键
+	RoleID                         int64                   `bson:"role_id"`       // 角色ID
+	FightData                      T_Information_FightData `bson:"-"`
+	EncourageNum                   int32                   `bson:"encourage_num"`
+	EncourageDayNum                int32                   `bson:"encourage_day_num"`
+	EncourageTime                  int32                   `bson:"encourage_time"`
+	CooperationDayLeftNum          int32                   `bson:"cooperation_day_left_num"`
+	CooperationDayWatchAdNum       int32                   `bson:"cooperation_day_watch_ad_num"`
+	SupportBoxNum                  int32                   `bson:"support_box_num"`
+	SupportBoxDayNum               int32                   `bson:"support_box_day_num"`
+	SupportBoxLastTime             int32                   `bson:"support_box_last_time"`
+	CooperationDayBuyNum           int32                   `bson:"cooperation_day_buy_num"`
+	CooperationDayGiveNum          int32                   `bson:"cooperation_day_give_num"`
+	CooperationDayNum              int32                   `bson:"cooperation_day_num"`
+	FightLoserProtectDayNum        int32                   `bson:"fight_loser_protect_day_num"`
+	FightLoserDecScore             int32                   `bson:"fight_loser_dec_score"`
+	FightWinDayNum                 int32                   `bson:"fight_win_day_num"`
+	FightWinExtra                  bool                    `bson:"fight_win_extra"`
+	WeekCardAddCooperationExtraNum int32                   `bson:"week_card_add_cooperation_extra_num"`
+	CooperationExtra               bool                    `bson:"cooperation_extra"`
+	UsedCooperationLastExtraEnd    bool                    `bson:"used_cooperation_last_extra_end"`
+	DayFirstWinNum                 int32                   `bson:"day_first_win_num"`
+	DayFirstIsWin                  bool                    `bson:"day_first_is_win"`
+	CooperADNum                    int32                   `bson:"cooper_ad_num"`
+	CooperADRoundNum               int32                   `bson:"cooper_ad_round_num"`
+	IsGetFirstRechargeReward       bool                    `bson:"is_get_first_recharge_reward"`
+	FightLookADDoubleCount         int32                   `bson:"fight_look_ad_double_count"`
+	CooperationDayHelpNum          int32                   `bson:"cooperation_day_help_num"`
+	QQHallBlueVipVector            []int32                 `bson:"-"`
+	QQHallRewardsVector            []string                `bson:"-"`
+	HeroSkinMap                    map[int64]int32         `bson:"-"`
+	SelfSelectMap                  map[int32]int32         `bson:"-"`
 }
 
 func (p *T_Information_Data) Encode() []byte {
@@ -1027,11 +1027,7 @@ func (p *T_Role_ExchangeData) Decode(buffer *bytes.Buffer) error {
 }
 
 type T_Role_BattleArrayIndexData struct {
-	ID_      primitive.ObjectID `bson:"_id,omitempty"`
-	RoleID   int64              `bson:"role_id"`
-	ID       int32              `bson:"id"`
-	Index    int32              `bson:"index"`
-	HeroUUID int64              `bson:"hero_uuid"`
+	HeroUUID int64
 }
 
 func (p *T_Role_BattleArrayIndexData) Encode() []byte {
@@ -2694,6 +2690,31 @@ func (p *C_Role_SynRoleData) Decode(buffer *bytes.Buffer, key uint8) error {
 	return nil
 }
 
+// 客户端请求数据结构-设置战斗阵容
+type C_Role_BattleArraySetDefine struct {
+	ArrayID int32
+}
+
+func (p *C_Role_BattleArraySetDefine) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.ArrayID)
+	return buffer.Bytes()
+}
+
+func (p *C_Role_BattleArraySetDefine) Decode(buffer *bytes.Buffer, key uint8) error {
+	if key != 0 {
+		for i := 0; i < buffer.Len(); i++ {
+			buffer.Bytes()[i] ^= byte(key)
+		}
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.ArrayID)
+	return nil
+}
+
+// 客户端请求数据结构-阵容上阵修改
 type C_Role_BattleArrayUp struct {
 	ArrayID    int32
 	ArrayIndex int32
@@ -2723,6 +2744,7 @@ func (p *C_Role_BattleArrayUp) Decode(buffer *bytes.Buffer, key uint8) error {
 	return nil
 }
 
+// 客户端请求数据结构-战车皮肤更换
 type C_Role_Car_Skin_Change struct {
 	SkinId int32
 }
@@ -2746,6 +2768,7 @@ func (p *C_Role_Car_Skin_Change) Decode(buffer *bytes.Buffer, key uint8) error {
 	return nil
 }
 
+// 客户端请求数据结构-英雄皮肤更换
 type C_Role_HeroChangeSkin struct {
 	HeroUUID int64
 	SkinId   int32
@@ -2772,6 +2795,41 @@ func (p *C_Role_HeroChangeSkin) Decode(buffer *bytes.Buffer, key uint8) error {
 	return nil
 }
 
+// 客户端请求数据结构-阵容名称设置
+type C_Role_SetBattleArrayName struct {
+	BattleArrayIndex int32
+	BattleArrayName  string
+}
+
+func (p *C_Role_SetBattleArrayName) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.BattleArrayIndex)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.BattleArrayName)))
+	buffer.Write([]byte(p.BattleArrayName))
+	return buffer.Bytes()
+}
+
+func (p *C_Role_SetBattleArrayName) Decode(buffer *bytes.Buffer, key uint8) error {
+	if key != 0 {
+		for i := 0; i < buffer.Len(); i++ {
+			buffer.Bytes()[i] ^= byte(key)
+		}
+
+	}
+	if buffer.Len() < 8 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.BattleArrayIndex)
+	var BattleArrayNameLen uint32
+	binary.Read(buffer, binary.LittleEndian, &BattleArrayNameLen)
+	if uint32(buffer.Len()) < BattleArrayNameLen {
+		return errors.New("message length error")
+	}
+	p.BattleArrayName = string(buffer.Next(int(BattleArrayNameLen)))
+	return nil
+}
+
+// 客户端请求数据结构-获取角色简要信息
 type C_Role_GetRoleSimpleInfo struct {
 	ShowID string
 }
@@ -3116,7 +3174,7 @@ func (p *S_Role_SynRoleData) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
-// 同步角色开关数据
+// 服务器返回-同步角色开关数据
 type S_Role_OnOffDataInfo struct {
 	Onoff map[int32]bool
 }
@@ -3152,7 +3210,7 @@ func (p *S_Role_OnOffDataInfo) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
-// 同步战斗阵容数据
+// 服务器返回-同步战斗阵容数据
 type S_Role_SynBattleArrayData struct {
 	Battlearray T_Role_BattleArrayData
 }
@@ -3334,6 +3392,26 @@ func (p *S_Role_FightBalance) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
+// 服务器返回数据结构-设置默认阵容
+type S_Role_BattleArraySetDefine struct {
+	Errorcode int32
+}
+
+func (p *S_Role_BattleArraySetDefine) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
+	return buffer.Bytes()
+}
+
+func (p *S_Role_BattleArraySetDefine) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Errorcode)
+	return nil
+}
+
+// 服务器返回数据结构-战车皮肤更换
 type S_Role_Car_Skin_Change struct {
 	Errorcode int32
 }
@@ -3352,6 +3430,7 @@ func (p *S_Role_Car_Skin_Change) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
+// 服务器返回数据结构-英雄皮肤更换
 type S_Role_HeroChangeSkin struct {
 	Errorcode int32
 }
@@ -3370,6 +3449,35 @@ func (p *S_Role_HeroChangeSkin) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
+// 服务器返回数据结构-阵容名称设置
+type S_Role_SetBattleArrayName struct {
+	Errorcode       int32
+	BattleArrayName string
+}
+
+func (p *S_Role_SetBattleArrayName) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.BattleArrayName)))
+	buffer.WriteString(p.BattleArrayName)
+	return buffer.Bytes()
+}
+
+func (p *S_Role_SetBattleArrayName) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 8 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Errorcode)
+	var BattleArrayNameLen uint32
+	binary.Read(buffer, binary.LittleEndian, &BattleArrayNameLen)
+	if uint32(buffer.Len()) < BattleArrayNameLen {
+		return errors.New("message length error")
+	}
+	p.BattleArrayName = string(buffer.Next(int(BattleArrayNameLen)))
+	return nil
+}
+
+// 服务器返回数据结构-获取角色简要信息
 type S_Role_GetRoleSimpleInfo struct {
 	Errorcode       int32
 	RoleAbstract    T_RoleAbstract

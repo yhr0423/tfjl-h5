@@ -27,7 +27,7 @@ func (p *FightReportResultToLogicRouter) Handle(request iface.IRequest) {
 
 	var cFightReportResultToLogic = protocols.C_Fight_Report_Result_To_Logic{}
 	cFightReportResultToLogic.Decode(bytes.NewBuffer(request.GetData()), player.Key)
-	logrus.Infof("%#v", cFightReportResultToLogic)
+	logrus.Infof("cFightReportResultToLogic: %#v", cFightReportResultToLogic)
 
 	var sRoleFightBalance = protocols.S_Role_FightBalance{
 		Type: cFightReportResultToLogic.ReportData.FightType,
@@ -92,7 +92,7 @@ func (p *FightReportPhaseResultToLogicRouter) Handle(request iface.IRequest) {
 
 	var cFightReportResultToLogic = protocols.C_Fight_Report_Result_To_Logic{}
 	cFightReportResultToLogic.Decode(bytes.NewBuffer(request.GetData()), player.Key)
-	logrus.Infof("%#v", cFightReportResultToLogic)
+	logrus.Infof("cFightReportResultToLogic: %#v", cFightReportResultToLogic)
 
 	if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_BATTLE {
 		// 对战

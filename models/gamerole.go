@@ -14,16 +14,24 @@ type Role struct {
 	Key                      uint8              `bson:"key"`                         // 数据加密key
 	Level                    int32              `bson:"level"`                       // 等级
 	ForbidLoginTimeRemaining int32              `bson:"forbid_login_time_remaining"` // 封禁剩余时间
+	BattleArraySelectID      int32              `bson:"battle_array_select_id"`      // 封禁剩余时间
+}
+
+type RoleBattleArray struct {
+	RoleID     int64  `bson:"role_id"`
+	ID         int32  `bson:"id"`
+	Index      int32  `bson:"index"`
+	HeroUUID   int64  `bson:"hero_uuid"`
+	BattleName string `bson:"battle_name"`
 }
 
 type RoleHeroSkin struct {
-	ID_        primitive.ObjectID `bson:"_id"`
-	RoleID     int64              `bson:"role_id"`
-	UUID       int64              `bson:"uuid"`
-	ID         int32              `bson:"id"`
-	CreateTime int32              `bson:"create_time"`
-	Name       string             `bson:"name"`
-	Num        int32              `bson:"num"`
+	RoleID     int64  `bson:"role_id"`
+	UUID       int64  `bson:"uuid"`
+	ID         int32  `bson:"id"`
+	CreateTime int32  `bson:"create_time"`
+	Name       string `bson:"name"`
+	Num        int32  `bson:"num"`
 }
 
 type RoleSeasonForeverScorePrize struct {

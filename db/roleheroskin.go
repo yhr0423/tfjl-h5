@@ -7,7 +7,6 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -51,7 +50,6 @@ func (manager *dbManager) UpdateRoleHeroSkinByItemUUID(roleID int64, itemUUID in
 	roleHeroSkin := manager.FindRoleHeroSkinByItemUUID(roleID, itemUUID)
 	if roleHeroSkin == (models.RoleHeroSkin{}) {
 		roleHeroSkin = models.RoleHeroSkin{
-			ID_: primitive.NewObjectID(),
 			RoleID:     roleID,
 			UUID:       itemUUID,
 			ID:         skinID,

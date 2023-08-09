@@ -130,12 +130,16 @@ func main() {
 
 	// 角色同步数据
 	net.GWServer.AddRouter(protocols.P_Role_SynRoleData, &apis.RoleSynRoleDataRouter{})
+	// 设置默认阵容
+	net.GWServer.AddRouter(protocols.P_Role_BattleArraySetDefine, &apis.RoleBattleArraySetDefineRouter{})
 	// 阵容上阵更新
 	net.GWServer.AddRouter(protocols.P_Role_BattleArrayUp, &apis.RoleBattleArrayUpRouter{})
 	// 角色车皮修改
 	net.GWServer.AddRouter(protocols.P_Role_Car_Skin_Change, &apis.RoleCarSkinChangeRouter{})
 	// 角色英雄皮肤修改
 	net.GWServer.AddRouter(protocols.P_Role_HeroChangeSkin, &apis.RoleHeroChangeSkinRouter{})
+	// 角色战斗阵容名称修改
+	net.GWServer.AddRouter(protocols.P_Role_SetBattleArrayName, &apis.RoleSetBattleArrayNameRouter{})
 	// 角色获取简要信息（头像框点击）
 	net.GWServer.AddRouter(protocols.P_Role_GetRoleSimpleInfo, &apis.RoleGetRoleSimpleInfoRouter{})
 	net.GWServer.AddRouter(protocols.P_Role_SetGuide, &apis.RoleSetGuideRouter{})
@@ -184,7 +188,7 @@ func main() {
 
 			logrus.Info("url: ", url)
 
-			if strings.Contains(url, "/tfjlh5/") {
+			if strings.HasPrefix(url, "/tfjlh5/") {
 				url = strings.Replace(url, "/tfjlh5/", "", 1)
 				// 下载文件
 				err := downloadFile(url)
@@ -246,6 +250,19 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"redirect": "index"})
 	})
 	router.GET("/tfjlh5/index", Authorize(), func(c *gin.Context) {
+		// response, err := http.Get("https://mszctest-1300944069.file.myqcloud.com/miyaVideoH5/web-mobile/index.html")
+		// if err != nil || response.StatusCode != http.StatusOK {
+		// 	c.Status(http.StatusServiceUnavailable)
+		// 	return
+		// }
+
+		// reader := response.Body
+		// contentLength := response.ContentLength
+		// contentType := response.Header.Get("Content-Type")
+
+		// extraHeaders := map[string]string{}
+
+		// c.DataFromReader(http.StatusOK, contentLength, contentType, reader, extraHeaders)
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
 	router.GET("/tfjlh5/gameservergroup", Authorize(), func(c *gin.Context) {
@@ -338,6 +355,28 @@ func downloadFile(url string) error {
 	}
 	defer resp.Body.Close()
 
+	if strings.HasPrefix(url, "assets/main/index.") {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+		// 替换主逻辑文件
+		if bytes.HasPrefix(body, []byte("window.__require")) {
+			logrus.Info("未混淆文件")
+			body = bytes.Replace(body, []byte("http://192.168.1.242/gmsys_mszc/weblogic/webc/pcloginbygroup.php"), []byte("http://127.0.0.1:8080/tfjlh5/pcloginbygroup"), -1)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   // 登录地址替换
+			body = bytes.Replace(body, []byte("https://mszctest.gameserver.iplay11g.com/gmsys/weblogic/webc/weixingameservergroup.php"), []byte("http://127.0.0.1:8080/tfjlh5/gameservergroup"), -1)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            // 服务器列表地址替换
+			body = bytes.Replace(body, []byte(`E="ws://"+t.fightServerIp+":"+t.fightServerPort`), []byte(`E="ws://"+t.fightServerIp`), -1)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      // 对战服务器websocket地址替换
+			body = bytes.Replace(body, []byte(`e="ws://"+t.fightServerIp+":"+t.fightServerPort`), []byte(`e="ws://"+t.fightServerIp`), -1)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      // 对战服务器重连websocket地址替换
+			body = bytes.Replace(body, []byte(`)}}}.bind(this),this),u.ClientNetwork.getInstance()`), []byte(`)}}else {if (y.GamePlatform.isPC() || y.GamePlatform.isAndroid()) {var S = new f.C_Login_ValidateOnline,T = y.GamePlatform.getMiYaVideoType(),I = T.toString().slice(0, 5),b = y.GamePlatform.getMiYaAnchorType();console.log("type======", T);var w = y.GamePlatform.getMiYaLoginData();if (w) {if (S.sdkType = w.sdktype, S.sdkID = w.sdkid, "ylh" == T ? S.entranceID = 60103 : "csj" == T ? S.entranceID = 60101 : "gdt" == T ? S.entranceID = 60105 : "mzf" == T ? S.entranceID = 340 : "lektn" == I ? S.entranceID = 60111 : "yltt" == T ? S.entranceID = 60112 : "ks" == T ? S.entranceID = 60114 : "ylks" == T ? S.entranceID = 60115 : "bigBlue" == T ? S.entranceID = 342 : "leniu" == T ? S.entranceID = 343 : "zc" == T ? S.entranceID = 60118 : "mayiH5yl" == T ? S.entranceID = 60122 : "mayiH5my" == T ? S.entranceID = 60123 : "lyH5sq" == T ? S.entranceID = 347 : "issueByDance" == T ? S.entranceID = 60132 : "mayiH5gdt" == T ? S.entranceID = 60105 : "lyH5dysb" == T ? S.entranceID = 348 : "ly5add7" == T ? y.GamePlatform.is_hykb ? S.entranceID = 60185 : (console.log("ly5add7-----------------pid=", y.GamePlatform.pid), S.entranceID = y.GamePlatform.pid) : "ttss" == T ? S.entranceID = 60184 : "mayiH5xfc" == T ? S.entranceID = 60238 : "miyaIosH5" == T ? (console.log("miyaIosH5-----------------pid=", y.GamePlatform.miyaIospid), S.entranceID = y.GamePlatform.miyaIospid) : "tab" != T && "mayiH5tab" != T || (S.entranceID = 60104), "" != b) for (d = 1; d < 9; d++) if (b == "anchor" + d) {S.entranceID = 60123 + d;break}console.log("req.entranceID-----------------------------------===================" + S.entranceID),S.clientType = 2,S.accountName = w.accountname,S.sign = w.sign,S.headUrl = "",u.ClientNetwork.getInstance().Send(g.LOGIN_CLIENT_ENUM.P_Login_ValidateOnline, S)}}}}.bind(this),this),u.ClientNetwork.getInstance()`), -1) // 连接完websocket后登录验证替换
+			body = bytes.Replace(body, []byte(`a.onLoginGame(e[0].webname,e[0].webport)`), []byte(`y.GamePlatform.setMiYaLoginData(e[0]),a.onLoginGame(e[0].webname,e[0].webport)`), -1)
+			body = bytes.Replace(body, []byte(`(h.LOCAL_MESSAGE.LocalMsg_ChooseServer,t.groupId)}}`), []byte(`(h.LOCAL_MESSAGE.LocalMsg_ChooseServer,t.groupId);this.scheduleOnce(function() {k.ServerAddrInfo.getInstance().requestPCServer();}, 2);}}.bind(this)`), -1)
+			body = bytes.Replace(body, []byte(`if(console.log("LoginView, onLoginGame! serverName="`), []byte(`if (y.GamePlatform.isPC() || y.GamePlatform.isAndroid()) {return s.G.UIManager.showWaitingLayer(I.SceneName.LoginScene),this.m_serverUrl = "ws://" + e,T.GlobalVar.setServerURL(this.m_serverUrl),void(u.ClientNetwork.getInstance().Connect(this.m_serverUrl) && setTimeout(function() {u.ClientNetwork.getInstance().getWebSocket() && u.ClientNetwork.getInstance().getWebSocket().readyState === WebSocket.OPEN || (s.G.StringManager.PopString(s.G.StringManager.getString("CONNECT_ERROR")), o.wechatLoginBtn && (o.wechatLoginBtn.active = !0), o.enterBtn && (o.enterBtn.active = !1))}, 6e3));}if(console.log("LoginView, onLoginGame! serverName="`), -1)
+		} else if bytes.HasPrefix(body, []byte("window['__require']")) {
+			logrus.Info("已混淆文件")
+		}
+		resp.Body = io.NopCloser(bytes.NewReader(body))
+	}
+
 	filePath := "static/" + url
 	dirPath := filepath.Dir(filePath)
 	err = os.MkdirAll(dirPath, os.ModePerm)
@@ -417,19 +456,6 @@ func decode(c *gin.Context) {
 			}
 			res = message
 		}
-	case protocols.P_Role_SynRoleAttrValue:
-		if websocketDataDecode.ClientType == 1 {
-
-		} else if websocketDataDecode.ClientType == 2 {
-			message := protocols.S_Role_SynRoleAttrValue{}
-			err = message.Decode(buffer)
-			if err != nil {
-				logrus.Error(err)
-				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
-				return
-			}
-			res = message
-		}
 	case protocols.P_Role_SynRoleData:
 		if websocketDataDecode.ClientType == 1 {
 			message := protocols.C_Role_SynRoleData{}
@@ -450,11 +476,10 @@ func decode(c *gin.Context) {
 			}
 			res = message
 		}
-	case protocols.P_Role_SynChapterData:
+	case protocols.P_Role_SynRoleAttrValue:
 		if websocketDataDecode.ClientType == 1 {
-
 		} else if websocketDataDecode.ClientType == 2 {
-			message := protocols.S_Role_SynChapterData{}
+			message := protocols.S_Role_SynRoleAttrValue{}
 			err = message.Decode(buffer)
 			if err != nil {
 				logrus.Error(err)
@@ -463,11 +488,11 @@ func decode(c *gin.Context) {
 			}
 			res = message
 		}
-	case protocols.P_Role_SyncCostGet:
+	case protocols.P_Role_SynBattleArrayData:
+		// 同步阵容数据
 		if websocketDataDecode.ClientType == 1 {
-
 		} else if websocketDataDecode.ClientType == 2 {
-			message := protocols.S_Role_SyncCostGet{}
+			message := protocols.S_Role_SynBattleArrayData{}
 			err = message.Decode(buffer)
 			if err != nil {
 				logrus.Error(err)
@@ -476,11 +501,11 @@ func decode(c *gin.Context) {
 			}
 			res = message
 		}
-	case protocols.P_Role_OnOffDataInfo:
-		// 开关数据
+	case protocols.P_Role_FightBalance:
+		// 角色对战结算数据
 		if websocketDataDecode.ClientType == 1 {
 		} else if websocketDataDecode.ClientType == 2 {
-			message := protocols.S_Role_OnOffDataInfo{}
+			message := protocols.S_Role_FightBalance{}
 			err = message.Decode(buffer)
 			if err != nil {
 				logrus.Error(err)
@@ -509,6 +534,77 @@ func decode(c *gin.Context) {
 			}
 			res = message
 		}
+	case protocols.P_Role_GetRoleSimpleInfo:
+		// 获取简要信息（头像框点击）
+		if websocketDataDecode.ClientType == 1 {
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_GetRoleSimpleInfo{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Role_OnOffDataInfo:
+		// 开关数据
+		if websocketDataDecode.ClientType == 1 {
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_OnOffDataInfo{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Role_SyncCostGet:
+		if websocketDataDecode.ClientType == 1 {
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_SyncCostGet{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Role_SetBattleArrayName:
+		if websocketDataDecode.ClientType == 1 {
+			message := protocols.C_Role_SetBattleArrayName{}
+			err = message.Decode(buffer, apis.KEY)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_SetBattleArrayName{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Role_SynChapterData:
+		if websocketDataDecode.ClientType == 1 {
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_SynChapterData{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+
 	case protocols.P_Activity_SynAllActivityData:
 		if websocketDataDecode.ClientType == 1 {
 
@@ -587,6 +683,7 @@ func decode(c *gin.Context) {
 			}
 			res = message
 		}
+
 	case protocols.P_Match_Result:
 		// 匹配结果
 		if websocketDataDecode.ClientType == 1 {
@@ -676,19 +773,6 @@ func decode(c *gin.Context) {
 			}
 			res = message
 		}
-	case protocols.P_Role_FightBalance:
-		// 角色对战结算数据
-		if websocketDataDecode.ClientType == 1 {
-		} else if websocketDataDecode.ClientType == 2 {
-			message := protocols.S_Role_FightBalance{}
-			err = message.Decode(buffer)
-			if err != nil {
-				logrus.Error(err)
-				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
-				return
-			}
-			res = message
-		}
 	case protocols.P_Activity_GetGreatSailingData:
 		// 获取大航海数据
 		if websocketDataDecode.ClientType == 1 {
@@ -714,18 +798,6 @@ func decode(c *gin.Context) {
 			}
 			res = message
 		} else if websocketDataDecode.ClientType == 2 {
-		}
-	case protocols.P_Role_GetRoleSimpleInfo:
-		if websocketDataDecode.ClientType == 1 {
-		} else if websocketDataDecode.ClientType == 2 {
-			message := protocols.S_Role_GetRoleSimpleInfo{}
-			err = message.Decode(buffer)
-			if err != nil {
-				logrus.Error(err)
-				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
-				return
-			}
-			res = message
 		}
 	case protocols.P_Sociaty_SynData:
 		if websocketDataDecode.ClientType == 1 {
@@ -1124,7 +1196,7 @@ func create(c *gin.Context) {
 		}
 
 		// 复制role_battle_array
-		var roleBattleArray = []protocols.T_Role_BattleArrayIndexData{}
+		var roleBattleArray = []models.RoleBattleArray{}
 		err = db.DbManager.FindRoleBattleArrayByRoleID(roleID, &roleBattleArray)
 		if err != nil {
 			logrus.Error("db.DbManager.FindRoleBattleArrayByRoleID: ", err)
@@ -1132,7 +1204,6 @@ func create(c *gin.Context) {
 			return
 		}
 		for _, roleBattle := range roleBattleArray {
-			roleBattle.ID_ = primitive.NewObjectID()
 			roleBattle.RoleID = role.RoleID
 			_, err = db.DbManager.InsertOneRoleBattleArray(roleBattle)
 			if err != nil {
@@ -1227,7 +1298,6 @@ func create(c *gin.Context) {
 			return
 		}
 		for _, roleHeroSkin := range roleHeroSkins {
-			roleHeroSkin.ID_ = primitive.NewObjectID()
 			roleHeroSkin.RoleID = role.RoleID
 			_, err = db.DbManager.InsertOneRoleHeroSkin(roleHeroSkin)
 			if err != nil {

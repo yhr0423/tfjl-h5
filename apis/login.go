@@ -268,7 +268,7 @@ func (p *LoginChooseRoleRouter) Handle(request iface.IRequest) {
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Activity_SyncWeekCooperationData, sActivitySyncWeekCooperationData.Encode())
 
 	// 雾隐
-	jsonData = []byte(`{"Error":0,"ActivityID":10000,"IsOpen":true,"FailCount":0,"Score":0,"DayFailNum":0,"DayMatchNum":0,"ContinuousWinNum":0,"ContinuousFailNum":0,"WinNum":26,"ReliveNum":5,"MaxContinuousWinNum":0,"RefleshId":0,"Prize":{},"NormalPrize":null,"Superprize":null}`)
+	jsonData = []byte(`{"Error":0,"ActivityID":10000,"IsOpen":false,"FailCount":0,"Score":0,"DayFailNum":0,"DayMatchNum":0,"ContinuousWinNum":0,"ContinuousFailNum":0,"WinNum":26,"ReliveNum":5,"MaxContinuousWinNum":0,"RefleshId":0,"Prize":{},"NormalPrize":null,"Superprize":null}`)
 	var sActivitySyncFogHiddenData protocols.S_Activity_SyncFogHiddenData
 	err = json.Unmarshal(jsonData, &sActivitySyncFogHiddenData)
 	if err != nil {

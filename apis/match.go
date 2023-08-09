@@ -3,6 +3,7 @@ package apis
 import (
 	"bytes"
 	"fmt"
+	"strconv"
 	"tfjl-h5/constants"
 	"tfjl-h5/core"
 	"tfjl-h5/db"
@@ -36,23 +37,32 @@ func (p *MatchFightRouter) Handle(request iface.IRequest) {
 	logrus.Info("fightData: ", fightData)
 
 	// 快速匹配结果
-	var roleBattleArray []protocols.T_Role_BattleArrayIndexData
+	var roleBattleArray []models.RoleBattleArray
 	db.DbManager.FindRoleBattleArray(bson.M{"role_id": player.PID}, &roleBattleArray)
 	var roleBattleArrayMap = make(map[int32]protocols.T_Role_BattleArrayIDData, len(roleBattleArray))
 	for _, v := range roleBattleArray {
 		if roleBattleArrayIDData, ok := roleBattleArrayMap[v.ID]; ok {
-			roleBattleArrayIDData.IndexData[v.Index] = v
+			roleBattleArrayIDData.IndexData[v.Index] = protocols.T_Role_BattleArrayIndexData{HeroUUID: v.HeroUUID}
 		} else {
+			battleName := strconv.Itoa(int(v.ID))
+			if v.BattleName != "" {
+				battleName = v.BattleName
+			}
 			roleBattleArrayMap[v.ID] = protocols.T_Role_BattleArrayIDData{
-				IndexData:     map[int32]protocols.T_Role_BattleArrayIndexData{v.Index: v},
+				IndexData:     map[int32]protocols.T_Role_BattleArrayIndexData{v.Index: {HeroUUID: v.HeroUUID}},
 				RuneIndexData: map[int32]protocols.T_Role_BattleRuneIndexData{},
-				BattleArray:   string(v.Index),
+				BattleArray:   battleName,
 			}
 		}
 	}
+	role := db.DbManager.FindRoleByRoleID(roleID.(int64))
+	if role == (models.Role{}) {
+		logrus.Error("role not found")
+		return
+	}
 	var battleArrayData protocols.S_Role_SynBattleArrayData
 	battleArrayData.Battlearray = protocols.T_Role_BattleArrayData{
-		DefineID: 1, // 默认阵容
+		DefineID: role.BattleArraySelectID, // 默认阵容
 		IDData:   roleBattleArrayMap,
 	}
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynBattleArrayData, battleArrayData.Encode())
@@ -225,23 +235,32 @@ func (p *MatchDuelFightRouter) Handle(request iface.IRequest) {
 		}
 
 		// 战斗匹配结果
-		var roleBattleArray []protocols.T_Role_BattleArrayIndexData
+		var roleBattleArray []models.RoleBattleArray
 		db.DbManager.FindRoleBattleArray(bson.M{"role_id": player.PID}, &roleBattleArray)
 		var roleBattleArrayMap = make(map[int32]protocols.T_Role_BattleArrayIDData, len(roleBattleArray))
 		for _, v := range roleBattleArray {
 			if roleBattleArrayIDData, ok := roleBattleArrayMap[v.ID]; ok {
-				roleBattleArrayIDData.IndexData[v.Index] = v
+				roleBattleArrayIDData.IndexData[v.Index] = protocols.T_Role_BattleArrayIndexData{HeroUUID: v.HeroUUID}
 			} else {
+				battleName := strconv.Itoa(int(v.ID))
+				if v.BattleName != "" {
+					battleName = v.BattleName
+				}
 				roleBattleArrayMap[v.ID] = protocols.T_Role_BattleArrayIDData{
-					IndexData:     map[int32]protocols.T_Role_BattleArrayIndexData{v.Index: v},
+					IndexData:     map[int32]protocols.T_Role_BattleArrayIndexData{v.Index: {HeroUUID: v.HeroUUID}},
 					RuneIndexData: map[int32]protocols.T_Role_BattleRuneIndexData{},
-					BattleArray:   string(v.Index),
+					BattleArray:   battleName,
 				}
 			}
 		}
+		role := db.DbManager.FindRoleByRoleID(roleID.(int64))
+		if role == (models.Role{}) {
+			logrus.Error("role not found")
+			return
+		}
 		var battleArrayData protocols.S_Role_SynBattleArrayData
 		battleArrayData.Battlearray = protocols.T_Role_BattleArrayData{
-			DefineID: 1, // 默认阵容
+			DefineID: role.BattleArraySelectID, // 默认阵容
 			IDData:   roleBattleArrayMap,
 		}
 		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynBattleArrayData, battleArrayData.Encode())

@@ -6,6 +6,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -52,6 +53,16 @@ func (manager *dbManager) FindRoles(filter interface{}, result *[]models.Role, o
 		return err
 	}
 	return nil
+}
+
+func (manager *dbManager) UpdateOneRoleDefineBattleArrayByArrayID(roleID int64, arrayID int32) (*mongo.UpdateResult, error) {
+	filter := bson.M{"id": roleID}
+	update := bson.M{"$set": bson.M{"battle_array_select_id": arrayID}}
+	return manager.UpdateOneDefineRoleBattleArray(filter, update)
+}
+
+func (manager *dbManager) UpdateOneDefineRoleBattleArray(filter interface{}, update interface{}, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error) {
+	return manager.RoleCollection.UpdateOne(context.Background(), filter, update, opts...)
 }
 
 func (manager *dbManager) CreateRole(user models.Role) error {

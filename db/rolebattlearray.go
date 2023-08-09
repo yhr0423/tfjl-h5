@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"tfjl-h5/protocols"
+	"tfjl-h5/models"
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,12 +15,12 @@ func (manager *dbManager) SetRoleBattleArrayCollection(collection string) {
 	logrus.Info("Set Collection:RoleBattleArrayCollection success!")
 }
 
-func (manager *dbManager) FindRoleBattleArrayByRoleID(roleID int64, result *[]protocols.T_Role_BattleArrayIndexData, opts ...*options.FindOptions) error {
+func (manager *dbManager) FindRoleBattleArrayByRoleID(roleID int64, result *[]models.RoleBattleArray, opts ...*options.FindOptions) error {
 	filter := bson.M{"role_id": roleID}
 	return manager.FindRoleBattleArray(filter, result, opts...)
 }
 
-func (manager *dbManager) FindRoleBattleArray(filter bson.M, result *[]protocols.T_Role_BattleArrayIndexData, opts ...*options.FindOptions) error {
+func (manager *dbManager) FindRoleBattleArray(filter bson.M, result *[]models.RoleBattleArray, opts ...*options.FindOptions) error {
 	cursor, err := manager.RoleBattleArrayCollection.Find(context.Background(), filter, opts...)
 	if err != nil {
 		return err
@@ -35,7 +35,13 @@ func (manager *dbManager) FindRoleBattleArray(filter bson.M, result *[]protocols
 	return nil
 }
 
-func (manager *dbManager) UpdateOneRoleBattleArrayByID(roleID int64, arrayID int32, index int32, heroUUID int64) (*mongo.UpdateResult, error) {
+func (manager *dbManager) UpdateOneRoleBattleArrayByID(roleID int64, arrayID int32, battleName string) (*mongo.UpdateResult, error) {
+	filter := bson.M{"role_id": roleID, "id": arrayID}
+	update := bson.M{"$set": bson.M{"battle_name": battleName}}
+	return manager.UpdateOneRoleBattleArray(filter, update)
+}
+
+func (manager *dbManager) UpdateOneRoleBattleArrayByIndex(roleID int64, arrayID int32, index int32, heroUUID int64) (*mongo.UpdateResult, error) {
 	filter := bson.M{"role_id": roleID, "id": arrayID, "index": index}
 	update := bson.M{"$set": bson.M{"hero_uuid": heroUUID}}
 	return manager.UpdateOneRoleBattleArray(filter, update)
@@ -45,7 +51,7 @@ func (manager *dbManager) UpdateOneRoleBattleArray(filter interface{}, update in
 	return manager.RoleBattleArrayCollection.UpdateOne(context.Background(), filter, update, opts...)
 }
 
-func (manager *dbManager) InsertOneRoleBattleArray(data protocols.T_Role_BattleArrayIndexData, opts ...*options.InsertOneOptions) (*mongo.InsertOneResult, error) {
+func (manager *dbManager) InsertOneRoleBattleArray(data models.RoleBattleArray, opts ...*options.InsertOneOptions) (*mongo.InsertOneResult, error) {
 	return manager.RoleBattleArrayCollection.InsertOne(context.Background(), data, opts...)
 }
 

@@ -35,7 +35,7 @@ const (
 	// 角色-同步角色任务数据
 	P_Role_SynTaskData = 2000009
 
-	// 角色-同步战斗数据
+	// 角色-同步战斗阵容数据
 	P_Role_SynBattleArrayData = 2000011
 
 	// 角色-设置默认战斗阵容
@@ -58,7 +58,7 @@ const (
 
 	// 角色-角色总看广告数据
 	P_Role_TotalWatchADBoxData = 2000054
-	
+
 	// 同步角色任务额外数据
 	P_Role_SynTaskExtraData = 2000071
 
@@ -76,6 +76,9 @@ const (
 
 	// 角色-修改角色英雄皮肤
 	P_Role_HeroChangeSkin = 2000151
+
+	// 角色-修改角色战斗阵容名称
+	P_Role_SetBattleArrayName = 2000153
 
 	// 角色-同步角色章节数据
 	P_Role_SynChapterData = 2000155
