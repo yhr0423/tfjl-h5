@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"context"
 	"crypto/md5"
+	"embed"
 	"encoding/base64"
 	"encoding/json"
-	"flag"
 	"fmt"
+	"html/template"
 	"io"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -37,9 +39,36 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var (
-	configFile string
-)
+//go:embed config.json
+var configFile []byte
+
+//go:embed static
+var staticFS embed.FS
+
+//go:embed templates
+var tmplFS embed.FS
+
+type embedFileSystem struct {
+	http.FileSystem
+}
+
+func (e embedFileSystem) Exists(prefix string, path string) bool {
+	if p := strings.TrimPrefix(path, prefix); len(p) < len(path) {
+		_, err := e.Open(p)
+		return err == nil
+	}
+	return false
+}
+
+func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
+	subFS, err := fs.Sub(fsEmbed, targetPath)
+	if err != nil {
+		panic(err)
+	}
+	return embedFileSystem{
+		FileSystem: http.FS(subFS),
+	}
+}
 
 func init() {
 	logrus.SetOutput(os.Stdout)
@@ -92,11 +121,6 @@ func Authorize() gin.HandlerFunc {
 	}
 }
 
-func initCmd() {
-	flag.StringVar(&configFile, "config", "./config.json", "where load config json")
-	flag.Parse()
-}
-
 func OnConnectionLost(conn iface.IConnection) {
 	roleID, err := conn.GetProperty("roleID")
 	if err != nil {
@@ -110,7 +134,6 @@ func OnConnectionLost(conn iface.IConnection) {
 }
 
 func main() {
-	initCmd()
 	if err := configs.LoadConfig(configFile); err != nil {
 		fmt.Println("Load config json error:", err)
 	}
@@ -175,7 +198,7 @@ func main() {
 	})
 	router.Use(sessions.Sessions("tfjlh5session", store))
 
-	router.Use(static.Serve("/tfjlh5", static.LocalFile("static", false)))
+	router.Use(static.Serve("/tfjlh5/", EmbedFolder(staticFS, "static")))
 	// 中间件处理
 	router.Use(func(c *gin.Context) {
 		// 尝试获取静态资源
@@ -203,7 +226,13 @@ func main() {
 			}
 		}
 	})
-	router.LoadHTMLGlob("templates/*")
+	// router.LoadHTMLGlob("templates/*")
+	tmpl, err := template.ParseFS(tmplFS, "templates/*")
+	if err != nil {
+		logrus.Error("模板解析失败:", err)
+		return
+	}
+	router.SetHTMLTemplate(tmpl)
 	// 解密websocket数据接口
 	router.POST("/tfjlh5/decode", Authorize(), decode)
 	// 创建用户接口

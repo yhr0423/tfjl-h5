@@ -2,11 +2,10 @@ package configs
 
 import (
 	"encoding/json"
-	"io/ioutil"
 )
 
 type Conf struct {
-	//websocket config
+	// websocket config
 	Name          string `json:"name"`
 	IpVersion     string `json:"ipVersion"`
 	Ip            string `json:"ip"`
@@ -15,12 +14,12 @@ type Conf struct {
 	InChanSize    int    `json:"inChanSize"`
 	OutChanSize   int    `json:"outChanSize"`
 
-	//redis config
+	// redis config
 	RedisAddr string `json:"redisAddr"`
 	RedisPort int    `json:"redisPort"`
 	RedisPw   string `json:"redisPw"`
 
-	//db config
+	// db config
 	DbAddr     string `json:"dbAddr"`
 	DbPort     int    `json:"dbPort"`
 	DbDatabase string `json:"dbDatabase"`
@@ -36,15 +35,9 @@ type Conf struct {
 
 var GConf *Conf
 
-func LoadConfig(filename string) error {
-	content, err := ioutil.ReadFile(filename)
-
-	if err != nil {
-		return err
-	}
-
+func LoadConfig(content []byte) error {
 	conf := Conf{}
-	err = json.Unmarshal(content, &conf)
+	err := json.Unmarshal(content, &conf)
 
 	if err != nil {
 		return err
