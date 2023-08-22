@@ -23,11 +23,12 @@ import (
 	"tfjl-h5/db"
 	"tfjl-h5/iface"
 	"tfjl-h5/models"
-	"tfjl-h5/net"
+	net_ "tfjl-h5/net"
 	"tfjl-h5/protocols"
 	"tfjl-h5/utils"
 	"time"
 
+	"github.com/denisbrodbeck/machineid"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-contrib/static"
@@ -91,6 +92,7 @@ func init() {
 // 用户认证中间件
 func Authorize() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// python 解码用的授权（自定义，防止外网被人恶意调用）
 		if c.Request.Header.Get("Authorization") == "e756795a-1245-458f-ae1c-8f1e2ccf5e28" {
 			c.Next()
 			return
@@ -137,57 +139,57 @@ func main() {
 	if err := configs.LoadConfig(configFile); err != nil {
 		fmt.Println("Load config json error:", err)
 	}
-	net.GWServer = net.NewServer()
-	net.GWServer.SetOnConnStop(OnConnectionLost)
+	net_.GWServer = net_.NewServer()
+	net_.GWServer.SetOnConnStop(OnConnectionLost)
 
 	// Ping
-	net.GWServer.AddRouter(protocols.P_Login_Ping, &apis.LoginPingRouter{})
+	net_.GWServer.AddRouter(protocols.P_Login_Ping, &apis.LoginPingRouter{})
 	// 登录验证在线
-	net.GWServer.AddRouter(protocols.P_Login_ValidateOnline, &apis.LoginValidateOnlineRouter{})
+	net_.GWServer.AddRouter(protocols.P_Login_ValidateOnline, &apis.LoginValidateOnlineRouter{})
 	// 重连验证在线
-	net.GWServer.AddRouter(protocols.P_Login_Validate, &apis.LoginValidateOnlineRouter{})
+	net_.GWServer.AddRouter(protocols.P_Login_Validate, &apis.LoginValidateOnlineRouter{})
 	// 登录请求角色
-	net.GWServer.AddRouter(protocols.P_Login_RequestRole, &apis.LoginRequestRoleRouter{})
+	net_.GWServer.AddRouter(protocols.P_Login_RequestRole, &apis.LoginRequestRoleRouter{})
 	// 登录选择角色
-	net.GWServer.AddRouter(protocols.P_Login_ChooseRole, &apis.LoginChooseRoleRouter{})
+	net_.GWServer.AddRouter(protocols.P_Login_ChooseRole, &apis.LoginChooseRoleRouter{})
 
 	// 角色同步数据
-	net.GWServer.AddRouter(protocols.P_Role_SynRoleData, &apis.RoleSynRoleDataRouter{})
+	net_.GWServer.AddRouter(protocols.P_Role_SynRoleData, &apis.RoleSynRoleDataRouter{})
 	// 设置默认阵容
-	net.GWServer.AddRouter(protocols.P_Role_BattleArraySetDefine, &apis.RoleBattleArraySetDefineRouter{})
+	net_.GWServer.AddRouter(protocols.P_Role_BattleArraySetDefine, &apis.RoleBattleArraySetDefineRouter{})
 	// 阵容上阵更新
-	net.GWServer.AddRouter(protocols.P_Role_BattleArrayUp, &apis.RoleBattleArrayUpRouter{})
+	net_.GWServer.AddRouter(protocols.P_Role_BattleArrayUp, &apis.RoleBattleArrayUpRouter{})
 	// 角色车皮修改
-	net.GWServer.AddRouter(protocols.P_Role_Car_Skin_Change, &apis.RoleCarSkinChangeRouter{})
+	net_.GWServer.AddRouter(protocols.P_Role_Car_Skin_Change, &apis.RoleCarSkinChangeRouter{})
 	// 角色英雄皮肤修改
-	net.GWServer.AddRouter(protocols.P_Role_HeroChangeSkin, &apis.RoleHeroChangeSkinRouter{})
+	net_.GWServer.AddRouter(protocols.P_Role_HeroChangeSkin, &apis.RoleHeroChangeSkinRouter{})
 	// 角色战斗阵容名称修改
-	net.GWServer.AddRouter(protocols.P_Role_SetBattleArrayName, &apis.RoleSetBattleArrayNameRouter{})
+	net_.GWServer.AddRouter(protocols.P_Role_SetBattleArrayName, &apis.RoleSetBattleArrayNameRouter{})
 	// 角色获取简要信息（头像框点击）
-	net.GWServer.AddRouter(protocols.P_Role_GetRoleSimpleInfo, &apis.RoleGetRoleSimpleInfoRouter{})
-	net.GWServer.AddRouter(protocols.P_Role_SetGuide, &apis.RoleSetGuideRouter{})
+	net_.GWServer.AddRouter(protocols.P_Role_GetRoleSimpleInfo, &apis.RoleGetRoleSimpleInfoRouter{})
+	net_.GWServer.AddRouter(protocols.P_Role_SetGuide, &apis.RoleSetGuideRouter{})
 
 	// 活动-大航海数据获得
-	net.GWServer.AddRouter(protocols.P_Activity_GetGreatSailingData, &apis.ActivityGetGreatSailingDataRouter{})
+	net_.GWServer.AddRouter(protocols.P_Activity_GetGreatSailingData, &apis.ActivityGetGreatSailingDataRouter{})
 	// 活动-大航海刷新卡牌
-	net.GWServer.AddRouter(protocols.P_Activity_GreatSailingRefleshCard, &apis.ActivityGreatSailingRefleshCardRouter{})
+	net_.GWServer.AddRouter(protocols.P_Activity_GreatSailingRefleshCard, &apis.ActivityGreatSailingRefleshCardRouter{})
 
 	// 匹配-快速匹配
-	net.GWServer.AddRouter(protocols.P_Match_Fight, &apis.MatchFightRouter{})
+	net_.GWServer.AddRouter(protocols.P_Match_Fight, &apis.MatchFightRouter{})
 	// 匹配-房间匹配
-	net.GWServer.AddRouter(protocols.P_Match_Duel_Fight, &apis.MatchDuelFightRouter{})
+	net_.GWServer.AddRouter(protocols.P_Match_Duel_Fight, &apis.MatchDuelFightRouter{})
 	// 对战-提交结束的战斗结果到逻辑服务器
-	net.GWServer.AddRouter(protocols.P_Fight_Report_Result_To_Logic, &apis.FightReportResultToLogicRouter{})
+	net_.GWServer.AddRouter(protocols.P_Fight_Report_Result_To_Logic, &apis.FightReportResultToLogicRouter{})
 	// 对战-提交每阶段的战斗结果到逻辑服务器
-	net.GWServer.AddRouter(protocols.P_Fight_Report_Phase_Result_To_Logic, &apis.FightReportPhaseResultToLogicRouter{})
+	net_.GWServer.AddRouter(protocols.P_Fight_Report_Phase_Result_To_Logic, &apis.FightReportPhaseResultToLogicRouter{})
 
 	// 联盟-获取机械迷城数据
-	net.GWServer.AddRouter(protocols.P_Sociaty_RoleGetMachinariumData, &apis.SociatyRoleGetMachinariumDataRouter{})
+	net_.GWServer.AddRouter(protocols.P_Sociaty_RoleGetMachinariumData, &apis.SociatyRoleGetMachinariumDataRouter{})
 	// 联盟-机械迷城卡组数据
-	net.GWServer.AddRouter(protocols.P_Sociaty_RoleMachinariumSelectCard, &apis.SociatyRoleMachinariumSelectCardRouter{})
+	net_.GWServer.AddRouter(protocols.P_Sociaty_RoleMachinariumSelectCard, &apis.SociatyRoleMachinariumSelectCardRouter{})
 
 	// 对战网络与主逻辑服务器通信
-	net.GWServer.AddRouter(protocols.P_Network_Fight_To_Logic, &apis.NetworkFightToClientRouter{})
+	net_.GWServer.AddRouter(protocols.P_Network_Fight_To_Logic, &apis.NetworkFightToClientRouter{})
 
 	router := gin.Default()
 	// 初始化基于Cookie的Session中间件
@@ -236,7 +238,7 @@ func main() {
 	// 解密websocket数据接口
 	router.POST("/tfjlh5/decode", Authorize(), decode)
 	// 创建用户接口
-	router.GET("/tfjlh5/create", Authorize(), create)
+	router.POST("/tfjlh5/create", create)
 	// 删除用户接口
 	router.GET("/tfjlh5/delete", Authorize(), delete)
 
@@ -257,8 +259,8 @@ func main() {
 		c.Redirect(http.StatusMovedPermanently, fmt.Sprintf("/tfjlh5/index?_=%d", time.Now().Unix()))
 	})
 	router.POST("/tfjlh5/login", func(c *gin.Context) {
-		username := c.PostForm("username")
-		user := db.DbManager.FindUserByAccount(username)
+		account := c.PostForm("account")
+		user := db.DbManager.FindUserByAccount(account)
 		if user == (models.User{}) {
 			c.JSON(http.StatusOK, gin.H{"info": "账号或者密码错误"})
 			return
@@ -271,7 +273,7 @@ func main() {
 			return
 		}
 		token := uuid.NewV4()
-		db.DbManager.UpdateTokenByAccount(username, token.String())
+		db.DbManager.UpdateTokenByAccount(account, token.String())
 		// 在会话中设置值
 		session := sessions.Default(c)
 		session.Set("Authorization", token.String())
@@ -339,7 +341,7 @@ func main() {
 		}
 		c.JSON(http.StatusOK, result)
 	})
-	router.GET("/tfjlh5/ws", Authorize(), net.WsHandler)
+	router.GET("/tfjlh5/ws", Authorize(), net_.WsHandler)
 	bindAddress := fmt.Sprintf("%s:%d", configs.GConf.Ip, configs.GConf.Port)
 	srv := &http.Server{
 		Addr:    bindAddress,
@@ -1127,37 +1129,50 @@ func decode(c *gin.Context) {
 
 // 创建用户角色数据（需要登录test账号）
 func create(c *gin.Context) {
-	token := c.GetString("token")
-	curUser := db.DbManager.FindUserByToken(token)
-	if curUser == (models.User{}) && curUser.Account != "test" {
-		c.JSON(http.StatusOK, gin.H{"error": 1})
+	account := c.PostForm("account")
+	user := db.DbManager.FindUserByAccount(account)
+	if user != (models.User{}) {
+		c.JSON(http.StatusOK, gin.H{"info": "账号已存在！创建账号失败！"})
 		return
 	}
-	account := c.Query("account")
+	password := c.PostForm("password")
 	if account == "" {
 		account = utils.GetRandomString(6)
 	}
-	var user = models.User{
+	if password == "" {
+		password = account
+	}
+	// 获取设备 ID
+	id, err := machineid.ProtectedID("tfjlh5")
+	if err != nil {
+		logrus.Error("获取设备 ID 失败：", err)
+		c.JSON(http.StatusOK, gin.H{"info": "创建账号失败！"})
+		return
+	}
+	// 输出设备 ID
+	logrus.Info("设备 ID：", id)
+	user = models.User{
 		ID_:                primitive.NewObjectID(),
 		Account:            account,
-		PasswordCiphertext: fmt.Sprintf("%x", md5.Sum([]byte(account))),
+		PasswordCiphertext: fmt.Sprintf("%x", md5.Sum([]byte(password))),
+		DeviceID:           id,
 	}
-	err := db.DbManager.CreateUser(user)
+	err = db.DbManager.CreateUser(user)
 	if err != nil {
 		logrus.Error("db.DbManager.CreateUser: ", err)
-		c.JSON(http.StatusOK, gin.H{"data": "创建用户失败！"})
+		c.JSON(http.StatusOK, gin.H{"info": "创建用户失败！"})
 		return
 	}
 	var role models.Role
 	if err := db.DbManager.FindOneRole(bson.M{"account": "test"}, &role); err != nil {
 		logrus.Error("db.DbManager.FindOneRole: ", err)
-		c.JSON(http.StatusOK, gin.H{"data": "创建角色失败！"})
+		c.JSON(http.StatusOK, gin.H{"info": "创建角色失败！"})
 		return
 	}
 	count, err := db.DbManager.CountRoles(bson.M{})
 	if err != nil {
 		logrus.Error("db.DbManager.CountRoles: ", err)
-		c.JSON(http.StatusOK, gin.H{"data": "创建角色失败！"})
+		c.JSON(http.StatusOK, gin.H{"info": "创建角色失败！"})
 		return
 	}
 	if role != (models.Role{}) {
@@ -1171,7 +1186,7 @@ func create(c *gin.Context) {
 		err = db.DbManager.CreateRole(role)
 		if err != nil {
 			logrus.Error("db.DbManager.CreateRole: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "创建角色失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "创建角色失败！"})
 			return
 		}
 
@@ -1180,7 +1195,7 @@ func create(c *gin.Context) {
 		err = db.DbManager.FindRoleAttrValueItemsByRoleID(roleID, &roleAttrValueItems)
 		if err != nil {
 			logrus.Error("db.DbManager.FindRoleAttrValueItems: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "复制AttrValue失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "复制AttrValue失败！"})
 			return
 		}
 		for _, roleAttrValueItem := range roleAttrValueItems {
@@ -1189,7 +1204,7 @@ func create(c *gin.Context) {
 			_, err = db.DbManager.CreateRoleAttrValueItem(roleAttrValueItem)
 			if err != nil {
 				logrus.Error("db.DbManager.CreateRoleAttrValueItem: ", err)
-				c.JSON(http.StatusOK, gin.H{"data": "创建AttrValue失败！"})
+				c.JSON(http.StatusOK, gin.H{"info": "创建AttrValue失败！"})
 				return
 			}
 		}
@@ -1201,7 +1216,7 @@ func create(c *gin.Context) {
 		_, err = db.DbManager.InsertOneRoleInformation(roleInformation)
 		if err != nil {
 			logrus.Error("db.DbManager.InsertOneRoleInformation: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "复制RoleInformation失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "复制角色信息失败！"})
 			return
 		}
 
@@ -1210,7 +1225,7 @@ func create(c *gin.Context) {
 		err = db.DbManager.FindRoleBagItemsByRoleID(roleID, &roleBagItems)
 		if err != nil {
 			logrus.Error("db.DbManager.FindRoleBagItems: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "复制RoleBag失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "复制角色背包物品失败！"})
 			return
 		}
 		for _, roleBagItem := range roleBagItems {
@@ -1219,7 +1234,7 @@ func create(c *gin.Context) {
 			_, err = db.DbManager.CreateRoleBagItem(roleBagItem)
 			if err != nil {
 				logrus.Error("db.DbManager.CreateRoleBagItem: ", err)
-				c.JSON(http.StatusOK, gin.H{"data": "复制RoleBag失败！"})
+				c.JSON(http.StatusOK, gin.H{"info": "复制角色背包物品失败！"})
 				return
 			}
 		}
@@ -1229,7 +1244,7 @@ func create(c *gin.Context) {
 		err = db.DbManager.FindRoleBattleArrayByRoleID(roleID, &roleBattleArray)
 		if err != nil {
 			logrus.Error("db.DbManager.FindRoleBattleArrayByRoleID: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "复制RoleBattleArray失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "复制角色阵容失败！"})
 			return
 		}
 		for _, roleBattle := range roleBattleArray {
@@ -1237,7 +1252,7 @@ func create(c *gin.Context) {
 			_, err = db.DbManager.InsertOneRoleBattleArray(roleBattle)
 			if err != nil {
 				logrus.Error("db.DbManager.InsertOneRoleBattleArray: ", err)
-				c.JSON(http.StatusOK, gin.H{"data": "复制RoleBattleArray失败！"})
+				c.JSON(http.StatusOK, gin.H{"info": "复制角色阵容失败！"})
 				return
 			}
 		}
@@ -1247,7 +1262,7 @@ func create(c *gin.Context) {
 		err = db.DbManager.FindRoleSeasonItemsByRoleID(roleID, &seasonEntityArray)
 		if err != nil {
 			logrus.Error("db.DbManager.FindRoleSeasonItemsByRoleID: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "复制RoleSeasonItems失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "复制RoleSeasonItems失败！"})
 			return
 		}
 		for _, seasonEntity := range seasonEntityArray {
@@ -1256,7 +1271,7 @@ func create(c *gin.Context) {
 			_, err = db.DbManager.InsertOneSeason(seasonEntity)
 			if err != nil {
 				logrus.Error("db.DbManager.InsertOneSeason: ", err)
-				c.JSON(http.StatusOK, gin.H{"data": "复制RoleSeasonItems失败！"})
+				c.JSON(http.StatusOK, gin.H{"info": "复制RoleSeasonItems失败！"})
 				return
 			}
 		}
@@ -1266,7 +1281,7 @@ func create(c *gin.Context) {
 		err = db.DbManager.FindRoleSeasonForeverScorePrizeByRoleID(roleID, &seasonForeverScorePrizeEntityArray)
 		if err != nil {
 			logrus.Error("db.DbManager.FindRoleSeasonForeverScorePrizeByRoleID: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "复制RoleSeasonForeverScorePrize失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "复制RoleSeasonForeverScorePrize失败！"})
 			return
 		}
 		for _, seasonForeverScorePrizeEntity := range seasonForeverScorePrizeEntityArray {
@@ -1275,7 +1290,7 @@ func create(c *gin.Context) {
 			_, err = db.DbManager.InsertOneRoleSeasonForeverScorePrize(seasonForeverScorePrizeEntity)
 			if err != nil {
 				logrus.Error("db.DbManager.InsertOneRoleSeasonForeverScorePrize: ", err)
-				c.JSON(http.StatusOK, gin.H{"data": "复制RoleSeasonForeverScorePrize失败！"})
+				c.JSON(http.StatusOK, gin.H{"info": "复制RoleSeasonForeverScorePrize失败！"})
 				return
 			}
 		}
@@ -1285,7 +1300,7 @@ func create(c *gin.Context) {
 		err = db.DbManager.FindRoleSeasonScorePrizeByRoleID(roleID, &seasonScorePrizeEntityArray)
 		if err != nil {
 			logrus.Error("db.DbManager.FindRoleSeasonScorePrizeByRoleID: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "复制RoleSeasonScorePrize失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "复制RoleSeasonScorePrize失败！"})
 			return
 		}
 		for _, seasonScorePrizeEntity := range seasonScorePrizeEntityArray {
@@ -1294,7 +1309,7 @@ func create(c *gin.Context) {
 			_, err = db.DbManager.InsertOneRoleSeasonScorePrize(seasonScorePrizeEntity)
 			if err != nil {
 				logrus.Error("db.DbManager.InsertOneRoleSeasonScorePrize: ", err)
-				c.JSON(http.StatusOK, gin.H{"data": "复制RoleSeasonScorePrize失败！"})
+				c.JSON(http.StatusOK, gin.H{"info": "复制RoleSeasonScorePrize失败！"})
 				return
 			}
 		}
@@ -1304,7 +1319,7 @@ func create(c *gin.Context) {
 		err = db.DbManager.FindRoleTaskItemsByRoleID(roleID, &roleSingleTaskArray)
 		if err != nil {
 			logrus.Error("db.DbManager.FindRoleTaskItemsByRoleID: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "复制RoleTaskItems失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "复制RoleTaskItems失败！"})
 			return
 		}
 		for _, roleSingleTask := range roleSingleTaskArray {
@@ -1313,7 +1328,7 @@ func create(c *gin.Context) {
 			_, err = db.DbManager.InsertOneRoleSingleTask(roleSingleTask)
 			if err != nil {
 				logrus.Error("db.DbManager.InsertOneRoleSingleTask: ", err)
-				c.JSON(http.StatusOK, gin.H{"data": "复制RoleTaskItems失败！"})
+				c.JSON(http.StatusOK, gin.H{"info": "复制RoleTaskItems失败！"})
 				return
 			}
 		}
@@ -1323,7 +1338,7 @@ func create(c *gin.Context) {
 		err = db.DbManager.FindRoleHeroSkinByRoleID(roleID, &roleHeroSkins)
 		if err != nil {
 			logrus.Error("db.DbManager.FindRoleHeroSkinByRoleID: ", err)
-			c.JSON(http.StatusOK, gin.H{"data": "复制RoleHeroSkin失败！"})
+			c.JSON(http.StatusOK, gin.H{"info": "复制角色皮肤设置失败！"})
 			return
 		}
 		for _, roleHeroSkin := range roleHeroSkins {
@@ -1331,14 +1346,14 @@ func create(c *gin.Context) {
 			_, err = db.DbManager.InsertOneRoleHeroSkin(roleHeroSkin)
 			if err != nil {
 				logrus.Error("db.DbManager.InsertOneRoleHeroSkin: ", err)
-				c.JSON(http.StatusOK, gin.H{"data": "复制RoleHeroSkin失败！"})
+				c.JSON(http.StatusOK, gin.H{"info": "复制角色皮肤设置失败！"})
 				return
 			}
 		}
-		c.JSON(http.StatusOK, gin.H{"data": fmt.Sprintf("复制成功！新账号：%s", account)})
+		c.JSON(http.StatusOK, gin.H{"info": fmt.Sprintf("复制成功！新账号：%s", account)})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": "复制失败！"})
+	c.JSON(http.StatusOK, gin.H{"info": "创建账号失败！"})
 }
 
 // 删除用户角色数据（需要登录test账号）

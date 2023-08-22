@@ -69,8 +69,8 @@
     <div class="login-box">
         <h2>登录</h2>
         <div class="container">
-            <label for="uname"><b>账号*</b></label>
-            <input type="text" placeholder="输入账号" name="uname" id="uname" class="required">
+            <label for="account"><b>账号*</b></label>
+            <input type="text" placeholder="输入账号" name="account" id="account" class="required">
             <label></label><br />
 
             <label for="psw"><b>密码*</b></label>
@@ -78,6 +78,7 @@
             <label></label><br />
 
             <button id="login-button" onclikc="login">登录</button>
+            <button id="register-button" onclikc="register">创建账号</button>
         </div>
     </div>
 
@@ -89,19 +90,19 @@
                 e.preventDefault();
 
                 // 获取表单中的用户名和密码
-                var uname = $("#uname");
+                var account = $("#account");
                 var psw = $("#psw");
 
                 // 验证用户名和密码是否为空
-                if (uname.val().trim() == "") {
+                if (account.val().trim() == "") {
                     e.preventDefault();
-                    uname.addClass("required");
-                    uname.next().html("请输入您的账号！");
+                    account.addClass("required");
+                    account.next().html("请输入您的账号！");
                     return;
                 }
                 else {
-                    uname.removeClass("required");
-                    uname.next().html("");
+                    account.removeClass("required");
+                    account.next().html("");
                 }
 
                 if (psw.val().trim() == "") {
@@ -117,7 +118,7 @@
 
                 // 准备请求数据
                 var requestData = {
-                    username: uname.val(),
+                    account: account.val(),
                     password: psw.val()
                 };
 
@@ -128,6 +129,55 @@
                         // 重定向到新页面
                         window.location.href = response["redirect"] + "?_=" + new Date().getTime();
                     } else if (response["info"] != undefined) {
+                        alert(response["info"]);
+                    }
+                })
+                    .fail(function (error) {
+                        // 处理错误
+                    });
+            });
+            // 为注册按钮添加点击事件
+            $("#register-button").click(function (e) {
+                // 阻止表单提交
+                e.preventDefault();
+
+                // 获取表单中的用户名和密码
+                var account = $("#account");
+                var psw = $("#psw");
+
+                // 验证用户名和密码是否为空
+                if (account.val().trim() == "") {
+                    e.preventDefault();
+                    account.addClass("required");
+                    account.next().html("请输入您的账号！");
+                    return;
+                }
+                else {
+                    account.removeClass("required");
+                    account.next().html("");
+                }
+
+                if (psw.val().trim() == "") {
+                    e.preventDefault();
+                    psw.addClass("required");
+                    psw.next().html("请输入您的密码！");
+                    return;
+                }
+                else {
+                    psw.removeClass("required");
+                    psw.next().html("");
+                }
+
+                // 准备请求数据
+                var requestData = {
+                    account: account.val(),
+                    password: psw.val()
+                };
+
+                // 使用$.post方法发起POST请求
+                $.post("http://127.0.0.1:8080/tfjlh5/create", requestData, function (response) {
+                    // 处理响应数据
+                    if (response["info"] != undefined) {
                         alert(response["info"]);
                     }
                 })

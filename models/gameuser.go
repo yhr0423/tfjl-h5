@@ -7,6 +7,7 @@ type User struct {
 	Account            string             `bson:"account"`
 	PasswordCiphertext string             `bson:"password_ciphertext"`
 	Authorization      string             `bson:"authorization"`
+	DeviceID           string             `bson:"device_id"`
 }
 type LoginResult struct {
 	Error       int         `json:"error"`
