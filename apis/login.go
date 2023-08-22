@@ -62,7 +62,7 @@ func (p *LoginValidateOnlineRouter) Handle(request iface.IRequest) {
 	var sLoginValidate = protocols.S_Login_Validate{IsSucceed: true, ServerUTCTime: int32(time.Now().Unix()), Key: role.Key}
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Login_Validate, sLoginValidate.Encode())
 
-	logrus.Info("========> Player PID =", player.PID, "is arrived <========")
+	logrus.Info("========> Player PID = ", player.PID, " is arrived <========")
 }
 
 // 登录请求角色路由

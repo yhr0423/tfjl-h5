@@ -404,6 +404,7 @@ type T_Information_Data struct {
 	QQHallRewardsVector            []string                `bson:"-"`
 	HeroSkinMap                    map[int64]int32         `bson:"-"`
 	SelfSelectMap                  map[int32]int32         `bson:"-"`
+	CarLinkMap                     map[int32]int32         `bson:"-"`
 }
 
 func (p *T_Information_Data) Encode() []byte {
@@ -452,6 +453,11 @@ func (p *T_Information_Data) Encode() []byte {
 		binary.Write(buffer, binary.LittleEndian, k)
 		binary.Write(buffer, binary.LittleEndian, v)
 	}
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.CarLinkMap)))
+	for k, v := range p.CarLinkMap {
+		binary.Write(buffer, binary.LittleEndian, k)
+		binary.Write(buffer, binary.LittleEndian, v)
+	}
 	return buffer.Bytes()
 }
 
@@ -491,7 +497,7 @@ func (p *T_Information_Data) Decode(buffer *bytes.Buffer) error {
 	var QQHallBlueVipVectorLen uint32
 	binary.Read(buffer, binary.LittleEndian, &QQHallBlueVipVectorLen)
 	p.QQHallBlueVipVector = make([]int32, QQHallBlueVipVectorLen)
-	for i := 0; i < int(QQHallBlueVipVectorLen); i++ {
+	for i := uint32(0); i < QQHallBlueVipVectorLen; i++ {
 		binary.Read(buffer, binary.LittleEndian, &p.QQHallBlueVipVector[i])
 	}
 	if buffer.Len() < 4 {
@@ -499,13 +505,13 @@ func (p *T_Information_Data) Decode(buffer *bytes.Buffer) error {
 	}
 	var QQHallRewardsVectorLen uint32
 	binary.Read(buffer, binary.LittleEndian, &QQHallRewardsVectorLen)
-	for i := 0; i < int(QQHallRewardsVectorLen); i++ {
+	for i := uint32(0); i < QQHallRewardsVectorLen; i++ {
 		if buffer.Len() < 4 {
 			return errors.New("message length error")
 		}
 		var length uint32
 		binary.Read(buffer, binary.LittleEndian, &length)
-		if buffer.Len() < int(length) {
+		if uint32(buffer.Len()) < length {
 			return errors.New("message length error")
 		}
 		p.QQHallRewardsVector = append(p.QQHallRewardsVector, string(buffer.Next(int(length))))
@@ -515,11 +521,11 @@ func (p *T_Information_Data) Decode(buffer *bytes.Buffer) error {
 	}
 	var HeroSkinMapLen uint32
 	binary.Read(buffer, binary.LittleEndian, &HeroSkinMapLen)
-	if buffer.Len() < int(HeroSkinMapLen*12) {
+	if uint32(buffer.Len()) < HeroSkinMapLen*12 {
 		return errors.New("message length error")
 	}
 	p.HeroSkinMap = make(map[int64]int32, HeroSkinMapLen)
-	for i := 0; i < int(HeroSkinMapLen); i++ {
+	for i := uint32(0); i < HeroSkinMapLen; i++ {
 		var key int64
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value int32
@@ -531,16 +537,32 @@ func (p *T_Information_Data) Decode(buffer *bytes.Buffer) error {
 	}
 	var SelfSelectMapLen uint32
 	binary.Read(buffer, binary.LittleEndian, &SelfSelectMapLen)
-	if buffer.Len() < int(SelfSelectMapLen*8) {
+	if uint32(buffer.Len()) < SelfSelectMapLen*8 {
 		return errors.New("message length error")
 	}
 	p.SelfSelectMap = make(map[int32]int32, SelfSelectMapLen)
-	for i := 0; i < int(SelfSelectMapLen); i++ {
+	for i := uint32(0); i < SelfSelectMapLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value int32
 		binary.Read(buffer, binary.LittleEndian, &value)
 		p.SelfSelectMap[key] = value
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	var CarLinkMapLen uint32
+	binary.Read(buffer, binary.LittleEndian, &CarLinkMapLen)
+	if uint32(buffer.Len()) < CarLinkMapLen*8 {
+		return errors.New("message length error")
+	}
+	p.CarLinkMap = make(map[int32]int32, CarLinkMapLen)
+	for i := uint32(0); i < CarLinkMapLen; i++ {
+		var key int32
+		binary.Read(buffer, binary.LittleEndian, &key)
+		var value int32
+		binary.Read(buffer, binary.LittleEndian, &value)
+		p.CarLinkMap[key] = value
 	}
 	return nil
 }
@@ -660,7 +682,7 @@ func (p *T_Role_Item) Encode() []byte {
 	binary.Write(buffer, binary.LittleEndian, p.OwnUUID)
 	binary.Write(buffer, binary.LittleEndian, p.CreateTime)
 	binary.Write(buffer, binary.LittleEndian, p.ExpiryCDTime)
-	binary.Write(buffer, binary.LittleEndian, int32(len(p.ItemName)))
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.ItemName)))
 	buffer.Write([]byte(p.ItemName))
 	binary.Write(buffer, binary.LittleEndian, p.ItemNum)
 	binary.Write(buffer, binary.LittleEndian, p.ItemPos)
@@ -680,7 +702,7 @@ func (p *T_Role_Item) Decode(buffer *bytes.Buffer) error {
 	binary.Read(buffer, binary.LittleEndian, &p.ExpiryCDTime)
 	var ItemNameLen uint32
 	binary.Read(buffer, binary.LittleEndian, &ItemNameLen)
-	if buffer.Len() < int(ItemNameLen) {
+	if uint32(buffer.Len()) < ItemNameLen {
 		return errors.New("message length error")
 	}
 	p.ItemName = string(buffer.Next(int(ItemNameLen)))
@@ -3037,7 +3059,7 @@ type S_Role_SynRoleData struct {
 	Share                T_ShareData
 	Totalsignin          T_TotalSignInData
 	CDKdata              T_CDKData
-	BCheckFightRoom      bool //是否检查战斗房间
+	BCheckFightRoom      bool // 是否检查战斗房间
 	Watchadbox           T_TotalWatchADBox
 	Halloffame           T_HallofFameData
 	Condshare            T_CondShareData

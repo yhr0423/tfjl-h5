@@ -49,9 +49,9 @@
   </div>
 <script src="https://h5sdkapi.tanggugame.com/app/static/js/channel/jquery-3.4.0.min.js"></script>
 <!--<script src="https://h5sdkapi.tanggugame.com//app//static//js//tfjlzc//tg_tfjlzc_mayi.js?v=78070824"></script>-->
-<script src="src/settings.22564.js" charset="utf-8"></script>
+<script src="src/settings.6761c.js" charset="utf-8"></script>
 
-<script src="main.4911f.js" charset="utf-8"></script>
+<script src="main.1d5db.js" charset="utf-8"></script>
 
 <script type="text/javascript">
 (function () {
@@ -102,10 +102,15 @@
 			if (xMLHttpRequest.readyState == 4 && (xMLHttpRequest.status >= 200 && xMLHttpRequest.status < 400)) {
 							
 				var jsonString = xMLHttpRequest.responseText.toString();
-				var jsonArr = JSON.parse(jsonString);
-				console.log("index sdkurl1", jsonArr.info[0]);
-				url1 = jsonArr.info[0];
-				loadScript(url1);
+				try{
+					var jsonArr = JSON.parse(jsonString);
+					console.log("index sdkurl1", jsonArr.info[0]);
+					url1 = jsonArr.info[0];
+					loadScript(url1);
+				}catch(err){
+					console.log('JSON.parse 出错了')
+				}
+				
 				
 			}
 		}
