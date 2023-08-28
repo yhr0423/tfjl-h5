@@ -1,1 +1,1 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"59936634dd334cce898dc5b3697746f3","collectionName":"role_hero_skin","type":"collection"}
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"f0510474908848ffafadfdaceebd8fe7","collectionName":"role_hero_skin","type":"collection"}
