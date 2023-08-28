@@ -93,7 +93,7 @@ func init() {
 // 用户认证中间件
 func Authorize() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// python 解码用的授权（自定义，防止外网被人恶意调用）
+		// 对战服务、python 解码用的授权（自定义，防止外网被人恶意调用）
 		if c.Request.Header.Get("Authorization") == "e756795a-1245-458f-ae1c-8f1e2ccf5e28" {
 			c.Next()
 			return
