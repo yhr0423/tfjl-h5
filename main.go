@@ -1179,8 +1179,7 @@ func create(c *gin.Context) {
 	id, err := machineid.ProtectedID("tfjlh5")
 	if err != nil {
 		logrus.Error("获取设备 ID 失败：", err)
-		c.JSON(http.StatusOK, gin.H{"info": "创建账号失败！"})
-		return
+		id = ""
 	}
 	// 输出设备 ID
 	logrus.Info("设备 ID：", id)

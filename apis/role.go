@@ -837,8 +837,8 @@ func (p *RoleDrawPrizeRouter) Handle(request iface.IRequest) {
 		} else if cRoleDrawPrize.Num == 10 {
 			logrus.Info("十连抽")
 			sRoleDrawPrize.Prize = []protocols.T_Reward{}
-			for i := 0; i < 85; i++ {
-				sRoleDrawPrize.Prize = append(sRoleDrawPrize.Prize, protocols.T_Reward{DropType: 1, DropID: int32(i + 1), DropNum: 999999999})
+			for i := 0; i < 15; i++ {
+				sRoleDrawPrize.Prize = append(sRoleDrawPrize.Prize, protocols.T_Reward{DropType: 1, DropID: utils.GetRandomHeroID(), DropNum: 999999999})
 			}
 		}
 	}
