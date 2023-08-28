@@ -70,11 +70,11 @@ func (p *T_Information_FightData) Decode(buffer *bytes.Buffer) error {
 	}
 	var TypeDataLen uint32
 	binary.Read(buffer, binary.LittleEndian, &TypeDataLen)
-	if buffer.Len() < int(TypeDataLen)*40 {
+	if uint32(buffer.Len()) < TypeDataLen*40 {
 		return errors.New("message length error")
 	}
 	p.TypeData = make(map[int32]T_Information_FightTypeData, TypeDataLen)
-	for i := 0; i < int(TypeDataLen); i++ {
+	for i := uint32(0); i < TypeDataLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Information_FightTypeData
@@ -122,11 +122,11 @@ func (p *T_Task_Group_Data) Decode(buffer *bytes.Buffer) error {
 	}
 	var BoxsLen uint32
 	binary.Read(buffer, binary.LittleEndian, &BoxsLen)
-	if buffer.Len() < int(BoxsLen)*5 {
+	if uint32(buffer.Len()) < BoxsLen*5 {
 		return errors.New("message length error")
 	}
 	p.Boxs = make(map[int32]T_Task_Box_Data, BoxsLen)
-	for i := 0; i < int(BoxsLen); i++ {
+	for i := uint32(0); i < BoxsLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Task_Box_Data
@@ -186,11 +186,11 @@ func (p *T_Task_Rand_History_Data) Decode(buffer *bytes.Buffer) error {
 	}
 	var TaskLen uint32
 	binary.Read(buffer, binary.LittleEndian, &TaskLen)
-	if buffer.Len() < int(TaskLen)*4 {
+	if uint32(buffer.Len()) < TaskLen*4 {
 		return errors.New("message length error")
 	}
 	p.Task = make(map[int32]T_Task_Rand_History_Task_Data, TaskLen)
-	for i := 0; i < int(TaskLen); i++ {
+	for i := uint32(0); i < TaskLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Task_Rand_History_Task_Data
@@ -234,7 +234,7 @@ func (p *T_Task_Extra_Data) Decode(buffer *bytes.Buffer) error {
 	var TaskGroupLen uint32
 	binary.Read(buffer, binary.LittleEndian, &TaskGroupLen)
 	p.TaskGroup = make(map[int32]T_Task_Group_Data, TaskGroupLen)
-	for i := 0; i < int(TaskGroupLen); i++ {
+	for i := uint32(0); i < TaskGroupLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Task_Group_Data
@@ -246,11 +246,11 @@ func (p *T_Task_Extra_Data) Decode(buffer *bytes.Buffer) error {
 	}
 	var RandTaskLen uint32
 	binary.Read(buffer, binary.LittleEndian, &RandTaskLen)
-	if buffer.Len() < int(RandTaskLen)*8 {
+	if uint32(buffer.Len()) < RandTaskLen*8 {
 		return errors.New("message length error")
 	}
 	p.RandTask = make(map[int32]T_Task_Rand_Task_Data, RandTaskLen)
-	for i := 0; i < int(RandTaskLen); i++ {
+	for i := uint32(0); i < RandTaskLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Task_Rand_Task_Data
@@ -264,7 +264,7 @@ func (p *T_Task_Extra_Data) Decode(buffer *bytes.Buffer) error {
 	var RandTaskHistoryLen uint32
 	binary.Read(buffer, binary.LittleEndian, &RandTaskHistoryLen)
 	p.RandTaskHistory = make([]T_Task_Rand_History_Data, RandTaskHistoryLen)
-	for i := 0; i < int(RandTaskHistoryLen); i++ {
+	for i := uint32(0); i < RandTaskHistoryLen; i++ {
 		p.RandTaskHistory[i].Decode(buffer)
 	}
 	return nil
@@ -335,6 +335,55 @@ func (p *T_TotalWatchADBox) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
+type T_DrawPrizeDetail struct {
+	Daynum            int32
+	Totalnum          int32
+	GuideNum          int32
+	Round             int32
+	RoundDrawNum      int32
+	RewardBoxStateMap map[int32]int32
+}
+
+func (p *T_DrawPrizeDetail) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Daynum)
+	binary.Write(buffer, binary.LittleEndian, p.Totalnum)
+	binary.Write(buffer, binary.LittleEndian, p.GuideNum)
+	binary.Write(buffer, binary.LittleEndian, p.Round)
+	binary.Write(buffer, binary.LittleEndian, p.RoundDrawNum)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.RewardBoxStateMap)))
+	for k, v := range p.RewardBoxStateMap {
+		binary.Write(buffer, binary.LittleEndian, k)
+		binary.Write(buffer, binary.LittleEndian, v)
+	}
+	return buffer.Bytes()
+}
+
+func (p *T_DrawPrizeDetail) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 24 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Daynum)
+	binary.Read(buffer, binary.LittleEndian, &p.Totalnum)
+	binary.Read(buffer, binary.LittleEndian, &p.GuideNum)
+	binary.Read(buffer, binary.LittleEndian, &p.Round)
+	binary.Read(buffer, binary.LittleEndian, &p.RoundDrawNum)
+	var RewardBoxStateMapLen uint32
+	binary.Read(buffer, binary.LittleEndian, &RewardBoxStateMapLen)
+	if uint32(buffer.Len()) < RewardBoxStateMapLen*8 {
+		return errors.New("message length error")
+	}
+	p.RewardBoxStateMap = make(map[int32]int32, RewardBoxStateMapLen)
+	for i := uint32(0); i < RewardBoxStateMapLen; i++ {
+		var key int32
+		binary.Read(buffer, binary.LittleEndian, &key)
+		var value int32
+		binary.Read(buffer, binary.LittleEndian, &value)
+		p.RewardBoxStateMap[key] = value
+	}
+	return nil
+}
+
 type T_Game_Time struct {
 	Year    int32
 	Month   int32
@@ -372,8 +421,7 @@ func (p *T_Game_Time) Decode(buffer *bytes.Buffer) error {
 }
 
 type T_Information_Data struct {
-	ID_                            primitive.ObjectID      `bson:"_id,omitempty"` // 主键
-	RoleID                         int64                   `bson:"role_id"`       // 角色ID
+	RoleID                         int64                   `bson:"role_id"` // 角色ID
 	FightData                      T_Information_FightData `bson:"-"`
 	EncourageNum                   int32                   `bson:"encourage_num"`
 	EncourageDayNum                int32                   `bson:"encourage_day_num"`
@@ -587,11 +635,11 @@ func (p *T_Client_Data) Decode(buffer *bytes.Buffer) error {
 	}
 	var IntMapLen uint32
 	binary.Read(buffer, binary.LittleEndian, &IntMapLen)
-	if buffer.Len() < int(IntMapLen*8) {
+	if uint32(buffer.Len()) < IntMapLen*8 {
 		return errors.New("message length error")
 	}
 	p.IntMap = make(map[int32]int32, IntMapLen)
-	for i := 0; i < int(IntMapLen); i++ {
+	for i := uint32(0); i < IntMapLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value int32
@@ -645,11 +693,11 @@ func (p *T_Role_Recharge_Data) Decode(buffer *bytes.Buffer) error {
 	}
 	var RechargesLen uint32
 	binary.Read(buffer, binary.LittleEndian, &RechargesLen)
-	if buffer.Len() < int(RechargesLen*13) {
+	if uint32(buffer.Len()) < RechargesLen*13 {
 		return errors.New("message length error")
 	}
 	p.Recharges = make(map[int32]T_Role_Recharge_Single, RechargesLen)
-	for i := 0; i < int(RechargesLen); i++ {
+	for i := uint32(0); i < RechargesLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_Recharge_Single
@@ -659,20 +707,50 @@ func (p *T_Role_Recharge_Data) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
+type T_Role_Item_Compensate struct {
+	ItemNum       int32
+	CompensateVec []T_Reward
+}
+
+func (p *T_Role_Item_Compensate) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.ItemNum)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.CompensateVec)))
+	for _, v := range p.CompensateVec {
+		buffer.Write(v.Encode())
+	}
+	return buffer.Bytes()
+}
+
+func (p *T_Role_Item_Compensate) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 8 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.ItemNum)
+	var CompensateVecLen uint32
+	binary.Read(buffer, binary.LittleEndian, &CompensateVecLen)
+	p.CompensateVec = make([]T_Reward, CompensateVecLen)
+	for i := uint32(0); i < CompensateVecLen; i++ {
+		if err := p.CompensateVec[i].Decode(buffer); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 type T_Role_Item struct {
-	ID_          primitive.ObjectID `bson:"_id"`
-	RoleID       int64              `bson:"role_id"`
-	ItemUUID     int64              `bson:"uuid"`
-	ItemID       int32              `bson:"id"`
-	OwnUUID      int64              `bson:"own_uuid"`
-	CreateTime   int32              `bson:"create_time"`
-	ExpiryCDTime int32              `bson:"expiry_cd_time"`
-	ItemName     string             `bson:"name"`
-	ItemNum      int32              `bson:"num"`
-	ItemPos      int32              `bson:"pos"`
-	ItemLevel    int32              `bson:"level"`
-	ItemExp      int32              `bson:"exp"`
-	ItemType     int32              `bson:"type"`
+	RoleID       int64  `bson:"role_id"`
+	ItemUUID     int64  `bson:"uuid"`
+	ItemID       int32  `bson:"id"`
+	OwnUUID      int64  `bson:"own_uuid"`
+	CreateTime   int32  `bson:"create_time"`
+	ExpiryCDTime int32  `bson:"expiry_cd_time"`
+	ItemName     string `bson:"name"`
+	ItemNum      int32  `bson:"num"`
+	ItemPos      int32  `bson:"pos"`
+	ItemLevel    int32  `bson:"level"`
+	ItemExp      int32  `bson:"exp"`
+	ItemType     int32  `bson:"type"`
 }
 
 func (p *T_Role_Item) Encode() []byte {
@@ -737,11 +815,13 @@ func (p *T_Role_Bag) Decode(buffer *bytes.Buffer) error {
 	var ItemsLen uint32
 	binary.Read(buffer, binary.LittleEndian, &ItemsLen)
 	p.Items = make(map[int64]T_Role_Item, ItemsLen)
-	for i := 0; i < int(ItemsLen); i++ {
+	for i := uint32(0); i < ItemsLen; i++ {
 		var key int64
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_Item
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Items[key] = value
 	}
 	return nil
@@ -767,7 +847,7 @@ func (p *T_Role_MailAnnex) Decode(buffer *bytes.Buffer) error {
 	var AnnexLen uint32
 	binary.Read(buffer, binary.LittleEndian, &AnnexLen)
 	p.Annex = make([]T_Reward, AnnexLen)
-	for i := 0; i < int(AnnexLen); i++ {
+	for i := uint32(0); i < AnnexLen; i++ {
 		p.Annex[i].Decode(buffer)
 	}
 	return nil
@@ -857,11 +937,13 @@ func (p *T_Role_Mail) Decode(buffer *bytes.Buffer) error {
 	var MailsLen uint32
 	binary.Read(buffer, binary.LittleEndian, &MailsLen)
 	p.Mails = make(map[int64]T_Role_SingleMail, MailsLen)
-	for i := 0; i < int(MailsLen); i++ {
+	for i := uint32(0); i < MailsLen; i++ {
 		var key int64
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_SingleMail
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Mails[key] = value
 	}
 	return nil
@@ -909,11 +991,13 @@ func (p *T_Role_ItemInfo) Decode(buffer *bytes.Buffer) error {
 		return errors.New("message length error")
 	}
 	p.Day = make(map[int32]T_Role_ItemInfo_Day, DayLen)
-	for i := 0; i < int(DayLen); i++ {
+	for i := uint32(0); i < DayLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_ItemInfo_Day
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Day[key] = value
 	}
 	return nil
@@ -945,11 +1029,13 @@ func (p *T_Role_Task) Decode(buffer *bytes.Buffer) error {
 		return errors.New("message length error")
 	}
 	p.Tasks = make(map[int32]T_Role_SingleTask, TasksLen)
-	for i := 0; i < int(TasksLen); i++ {
+	for i := uint32(0); i < TasksLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_SingleTask
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Tasks[key] = value
 	}
 	p.Extra.Decode(buffer)
@@ -1007,11 +1093,13 @@ func (p *T_Role_ExchangeGroup) Decode(buffer *bytes.Buffer) error {
 		return errors.New("message length error")
 	}
 	p.Exchanges = make(map[int32]T_Role_ExchangeItem, ExchangesLen)
-	for i := 0; i < int(ExchangesLen); i++ {
+	for i := uint32(0); i < ExchangesLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_ExchangeItem
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Exchanges[key] = value
 	}
 	return nil
@@ -1038,11 +1126,13 @@ func (p *T_Role_ExchangeData) Decode(buffer *bytes.Buffer) error {
 	var GroupsLen uint32
 	binary.Read(buffer, binary.LittleEndian, &GroupsLen)
 	p.Groups = make(map[int32]T_Role_ExchangeGroup, GroupsLen)
-	for i := 0; i < int(GroupsLen); i++ {
+	for i := uint32(0); i < GroupsLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_ExchangeGroup
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Groups[key] = value
 	}
 	return nil
@@ -1113,15 +1203,17 @@ func (p *T_Role_BattleArrayIDData) Decode(buffer *bytes.Buffer) error {
 	}
 	var IndexDataLen uint32
 	binary.Read(buffer, binary.LittleEndian, &IndexDataLen)
-	if buffer.Len() < int(IndexDataLen)*12 {
+	if uint32(buffer.Len()) < IndexDataLen*12 {
 		return errors.New("message length error")
 	}
 	p.IndexData = make(map[int32]T_Role_BattleArrayIndexData, IndexDataLen)
-	for i := 0; i < int(IndexDataLen); i++ {
+	for i := uint32(0); i < IndexDataLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_BattleArrayIndexData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.IndexData[key] = value
 	}
 	if buffer.Len() < 4 {
@@ -1129,15 +1221,17 @@ func (p *T_Role_BattleArrayIDData) Decode(buffer *bytes.Buffer) error {
 	}
 	var RuneIndexDataLen uint32
 	binary.Read(buffer, binary.LittleEndian, &RuneIndexDataLen)
-	if buffer.Len() < int(RuneIndexDataLen)*8 {
+	if uint32(buffer.Len()) < RuneIndexDataLen*8 {
 		return errors.New("message length error")
 	}
 	p.RuneIndexData = make(map[int32]T_Role_BattleRuneIndexData, RuneIndexDataLen)
-	for i := 0; i < int(RuneIndexDataLen); i++ {
+	for i := uint32(0); i < RuneIndexDataLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_BattleRuneIndexData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.RuneIndexData[key] = value
 	}
 	if buffer.Len() < 4 {
@@ -1145,7 +1239,7 @@ func (p *T_Role_BattleArrayIDData) Decode(buffer *bytes.Buffer) error {
 	}
 	var BattleArrayLen uint32
 	binary.Read(buffer, binary.LittleEndian, &BattleArrayLen)
-	if buffer.Len() < int(BattleArrayLen) {
+	if uint32(buffer.Len()) < BattleArrayLen {
 		return errors.New("message length error")
 	}
 	p.BattleArray = string(buffer.Next(int(BattleArrayLen)))
@@ -1176,11 +1270,13 @@ func (p *T_Role_BattleArrayData) Decode(buffer *bytes.Buffer) error {
 	var IDDataLen uint32
 	binary.Read(buffer, binary.LittleEndian, &IDDataLen)
 	p.IDData = make(map[int32]T_Role_BattleArrayIDData, IDDataLen)
-	for i := 0; i < int(IDDataLen); i++ {
+	for i := uint32(0); i < IDDataLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_BattleArrayIDData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.IDData[key] = value
 	}
 	return nil
@@ -1224,15 +1320,17 @@ func (p *T_Role_ExpressionArrayData) Decode(buffer *bytes.Buffer) error {
 	}
 	var ArrayDataLen uint32
 	binary.Read(buffer, binary.LittleEndian, &ArrayDataLen)
-	if buffer.Len() < int(ArrayDataLen)*12 {
+	if uint32(buffer.Len()) < ArrayDataLen*12 {
 		return errors.New("message length error")
 	}
 	p.ArrayData = make(map[int32]T_Role_ExpressionArrayIndexData, ArrayDataLen)
-	for i := 0; i < int(ArrayDataLen); i++ {
+	for i := uint32(0); i < ArrayDataLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_ExpressionArrayIndexData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.ArrayData[key] = value
 	}
 	return nil
@@ -1258,15 +1356,17 @@ func (p *T_Role_ScoreAchievementSingle) Decode(buffer *bytes.Buffer) error {
 	}
 	var TakedInfoLen uint32
 	binary.Read(buffer, binary.LittleEndian, &TakedInfoLen)
-	if buffer.Len() < int(TakedInfoLen)*8 {
+	if uint32(buffer.Len()) < TakedInfoLen*8 {
 		return errors.New("message length error")
 	}
 	p.TakedInfo = make(map[int32]int32, TakedInfoLen)
-	for i := 0; i < int(TakedInfoLen); i++ {
+	for i := uint32(0); i < TakedInfoLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value int32
-		binary.Read(buffer, binary.LittleEndian, &value)
+		if err := binary.Read(buffer, binary.LittleEndian, &value); err != nil {
+			return err
+		}
 		p.TakedInfo[key] = value
 	}
 	return nil
@@ -1293,11 +1393,13 @@ func (p *T_Role_ScoreAchievement) Decode(buffer *bytes.Buffer) error {
 	var ScoreAchievementsLen uint32
 	binary.Read(buffer, binary.LittleEndian, &ScoreAchievementsLen)
 	p.ScoreAchievements = make(map[int32]T_Role_ScoreAchievementSingle, ScoreAchievementsLen)
-	for i := 0; i < int(ScoreAchievementsLen); i++ {
+	for i := uint32(0); i < ScoreAchievementsLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_ScoreAchievementSingle
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.ScoreAchievements[key] = value
 	}
 	return nil
@@ -1344,15 +1446,17 @@ func (p *T_SignInData) Decode(buffer *bytes.Buffer) error {
 	}
 	var DaysLen uint32
 	binary.Read(buffer, binary.LittleEndian, &DaysLen)
-	if buffer.Len() < int(DaysLen)*6 {
+	if uint32(buffer.Len()) < DaysLen*6 {
 		return errors.New("message length error")
 	}
 	p.Days = make(map[int32]T_SignInDayData, DaysLen)
-	for i := 0; i < int(DaysLen); i++ {
+	for i := uint32(0); i < DaysLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_SignInDayData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Days[key] = value
 	}
 	return nil
@@ -1405,15 +1509,17 @@ func (p *T_TimeBoxData) Decode(buffer *bytes.Buffer) error {
 	}
 	var BoxsLen uint32
 	binary.Read(buffer, binary.LittleEndian, &BoxsLen)
-	if buffer.Len() < int(BoxsLen)*20 {
+	if uint32(buffer.Len()) < BoxsLen*20 {
 		return errors.New("message length error")
 	}
 	p.Boxs = make(map[int32]T_TimeBoxSingleData, BoxsLen)
-	for i := 0; i < int(BoxsLen); i++ {
+	for i := uint32(0); i < BoxsLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_TimeBoxSingleData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Boxs[key] = value
 	}
 	return nil
@@ -1478,15 +1584,17 @@ func (p *T_ThemeBoxEntityData) Decode(buffer *bytes.Buffer) error {
 	binary.Read(buffer, binary.LittleEndian, &p.IsRecharge)
 	var LevelDataLen uint32
 	binary.Read(buffer, binary.LittleEndian, &LevelDataLen)
-	if buffer.Len() < int(LevelDataLen)*6 {
+	if uint32(buffer.Len()) < LevelDataLen*6 {
 		return errors.New("message length error")
 	}
 	p.LevelData = make(map[int32]T_ThemeBoxEntityLevelData, LevelDataLen)
-	for i := 0; i < int(LevelDataLen); i++ {
+	for i := uint32(0); i < LevelDataLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_ThemeBoxEntityLevelData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.LevelData[key] = value
 	}
 	return nil
@@ -1513,11 +1621,13 @@ func (p *T_ThemeBoxData) Decode(buffer *bytes.Buffer) error {
 	var EntityLen uint32
 	binary.Read(buffer, binary.LittleEndian, &EntityLen)
 	p.Entity = make(map[int32]T_ThemeBoxEntityData, EntityLen)
-	for i := 0; i < int(EntityLen); i++ {
+	for i := uint32(0); i < EntityLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_ThemeBoxEntityData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Entity[key] = value
 	}
 	return nil
@@ -1602,15 +1712,17 @@ func (p *T_SeasonEntityData) Decode(buffer *bytes.Buffer) error {
 	binary.Read(buffer, binary.LittleEndian, &p.SeasonEndTime)
 	var ForeverScorePrizeLen uint32
 	binary.Read(buffer, binary.LittleEndian, &ForeverScorePrizeLen)
-	if buffer.Len() < int(ForeverScorePrizeLen)*6 {
+	if uint32(buffer.Len()) < ForeverScorePrizeLen*6 {
 		return errors.New("message length error")
 	}
 	p.ForeverScorePrize = make(map[int32]T_SeasonForeverScorePrizeData, ForeverScorePrizeLen)
-	for i := 0; i < int(ForeverScorePrizeLen); i++ {
+	for i := uint32(0); i < ForeverScorePrizeLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_SeasonForeverScorePrizeData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.ForeverScorePrize[key] = value
 	}
 	if buffer.Len() < 4 {
@@ -1618,15 +1730,17 @@ func (p *T_SeasonEntityData) Decode(buffer *bytes.Buffer) error {
 	}
 	var ScorePrizeLen uint32
 	binary.Read(buffer, binary.LittleEndian, &ScorePrizeLen)
-	if buffer.Len() < int(ScorePrizeLen)*6 {
+	if uint32(buffer.Len()) < ScorePrizeLen*6 {
 		return errors.New("message length error")
 	}
 	p.ScorePrize = make(map[int32]T_SeasonScorePrizeData, ScorePrizeLen)
-	for i := 0; i < int(ScorePrizeLen); i++ {
+	for i := uint32(0); i < ScorePrizeLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_SeasonScorePrizeData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.ScorePrize[key] = value
 	}
 	return nil
@@ -1683,11 +1797,13 @@ func (p *T_SeasonData) Decode(buffer *bytes.Buffer) error {
 	var EntityLen uint32
 	binary.Read(buffer, binary.LittleEndian, &EntityLen)
 	p.Entity = make(map[int32]T_SeasonEntityData, EntityLen)
-	for i := 0; i < int(EntityLen); i++ {
+	for i := uint32(0); i < EntityLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_SeasonEntityData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Entity[key] = value
 	}
 	if buffer.Len() < 4 {
@@ -1695,15 +1811,17 @@ func (p *T_SeasonData) Decode(buffer *bytes.Buffer) error {
 	}
 	var LastLen uint32
 	binary.Read(buffer, binary.LittleEndian, &LastLen)
-	if buffer.Len() < int(LastLen)*16 {
+	if uint32(buffer.Len()) < LastLen*16 {
 		return errors.New("message length error")
 	}
 	p.Last = make(map[int32]T_SeasonLastData, LastLen)
-	for i := 0; i < int(LastLen); i++ {
+	for i := uint32(0); i < LastLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_SeasonLastData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Last[key] = value
 	}
 	return nil
@@ -1801,15 +1919,17 @@ func (p *T_SharePlayerData) Decode(buffer *bytes.Buffer) error {
 	binary.Read(buffer, binary.LittleEndian, &p.IsSharePrize)
 	var RankPrizeLen uint32
 	binary.Read(buffer, binary.LittleEndian, &RankPrizeLen)
-	if buffer.Len() < int(RankPrizeLen)*5 {
+	if uint32(buffer.Len()) < RankPrizeLen*5 {
 		return errors.New("message length error")
 	}
 	p.RankPrize = make(map[int32]T_ShareRankPrizeData, RankPrizeLen)
-	for i := 0; i < int(RankPrizeLen); i++ {
+	for i := uint32(0); i < RankPrizeLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_ShareRankPrizeData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.RankPrize[key] = value
 	}
 	return nil
@@ -1843,15 +1963,17 @@ func (p *T_ShareData) Decode(buffer *bytes.Buffer) error {
 	}
 	var RanksLen uint32
 	binary.Read(buffer, binary.LittleEndian, &RanksLen)
-	if buffer.Len() < int(RanksLen)*8 {
+	if uint32(buffer.Len()) < RanksLen*8 {
 		return errors.New("message length error")
 	}
 	p.Ranks = make(map[int64]T_SharePlayerRankData, RanksLen)
-	for i := 0; i < int(RanksLen); i++ {
+	for i := uint32(0); i < RanksLen; i++ {
 		var key int64
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_SharePlayerRankData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Ranks[key] = value
 	}
 	if buffer.Len() < 4 {
@@ -1860,11 +1982,13 @@ func (p *T_ShareData) Decode(buffer *bytes.Buffer) error {
 	var PlayersLen uint32
 	binary.Read(buffer, binary.LittleEndian, &PlayersLen)
 	p.Players = make(map[int64]T_SharePlayerData, PlayersLen)
-	for i := 0; i < int(PlayersLen); i++ {
+	for i := uint32(0); i < PlayersLen; i++ {
 		var key int64
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_SharePlayerData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Players[key] = value
 	}
 	if buffer.Len() < 4 {
@@ -1926,20 +2050,22 @@ func (p *T_CDKData) Decode(buffer *bytes.Buffer) error {
 	var DataLen uint32
 	binary.Read(buffer, binary.LittleEndian, &DataLen)
 	p.Data = make(map[string]int32, DataLen)
-	for i := 0; i < int(DataLen); i++ {
+	for i := uint32(0); i < DataLen; i++ {
 		if buffer.Len() < 4 {
 			return errors.New("message length error")
 		}
 		var keyLen uint32
 		binary.Read(buffer, binary.LittleEndian, &keyLen)
-		if buffer.Len() < int(keyLen) {
+		if uint32(buffer.Len()) < keyLen {
 			return errors.New("message length error")
 		}
-		key := make([]byte, keyLen)
-		binary.Read(buffer, binary.LittleEndian, &key)
+		var key string
+		key = string(buffer.Next(int(keyLen)))
 		var value int32
-		binary.Read(buffer, binary.LittleEndian, &value)
-		p.Data[string(key)] = value
+		if err := binary.Read(buffer, binary.LittleEndian, &value); err != nil {
+			return err
+		}
+		p.Data[key] = value
 	}
 	return nil
 }
@@ -1982,15 +2108,17 @@ func (p *T_HallofFameData) Decode(buffer *bytes.Buffer) error {
 	}
 	var DataLen uint32
 	binary.Read(buffer, binary.LittleEndian, &DataLen)
-	if buffer.Len() < int(DataLen)*8 {
+	if uint32(buffer.Len()) < DataLen*8 {
 		return errors.New("message length error")
 	}
 	p.Data = make(map[int32]T_HallofFameRoleData, DataLen)
-	for i := 0; i < int(DataLen); i++ {
+	for i := uint32(0); i < DataLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_HallofFameRoleData
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Data[key] = value
 	}
 	return nil
@@ -2016,7 +2144,7 @@ func (p *T_CondSharePlayer) Decode(buffer *bytes.Buffer) error {
 	binary.Read(buffer, binary.LittleEndian, &p.HeadID)
 	var HeadUrlLen uint32
 	binary.Read(buffer, binary.LittleEndian, &HeadUrlLen)
-	if buffer.Len() < int(HeadUrlLen) {
+	if uint32(buffer.Len()) < HeadUrlLen {
 		return errors.New("message length error")
 	}
 	HeadUrl := make([]byte, HeadUrlLen)
@@ -2053,11 +2181,13 @@ func (p *T_CondShare) Decode(buffer *bytes.Buffer) error {
 	binary.Read(buffer, binary.LittleEndian, &p.EndTime)
 	var PlayersLen uint32
 	binary.Read(buffer, binary.LittleEndian, &PlayersLen)
-	for i := 0; i < int(PlayersLen); i++ {
+	for i := uint32(0); i < PlayersLen; i++ {
 		var key int64
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_CondSharePlayer
-		value.Decode(buffer)
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
 		p.Players[key] = value
 	}
 	if buffer.Len() < 1 {
@@ -2088,12 +2218,12 @@ func (p *T_CondShareData) Decode(buffer *bytes.Buffer) error {
 	var CondsharesLen uint32
 	binary.Read(buffer, binary.LittleEndian, &CondsharesLen)
 	p.Condshares = make(map[int32]T_CondShare, CondsharesLen)
-	for i := 0; i < int(CondsharesLen); i++ {
+	for i := uint32(0); i < CondsharesLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_CondShare
-		if value.Decode(buffer) != nil {
-			return errors.New("message length error")
+		if err := value.Decode(buffer); err != nil {
+			return err
 		}
 		p.Condshares[key] = value
 	}
@@ -2138,15 +2268,15 @@ func (p *T_FinalRuneData) Decode(buffer *bytes.Buffer) error {
 	}
 	var RunesLen uint32
 	binary.Read(buffer, binary.LittleEndian, &RunesLen)
-	if buffer.Len() < int(RunesLen)*8 {
+	if uint32(buffer.Len()) < RunesLen*8 {
 		return errors.New("message length error")
 	}
-	for i := 0; i < int(RunesLen); i++ {
+	for i := uint32(0); i < RunesLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_SingleFinalRuneData
-		if value.Decode(buffer) != nil {
-			return errors.New("message length error")
+		if err := value.Decode(buffer); err != nil {
+			return err
 		}
 		p.Runes[key] = value
 	}
@@ -2199,16 +2329,16 @@ func (p *T_TimeLockBoxData) Decode(buffer *bytes.Buffer) error {
 	}
 	var PositionLen uint32
 	binary.Read(buffer, binary.LittleEndian, &PositionLen)
-	if buffer.Len() < int(PositionLen)*16 {
+	if uint32(buffer.Len()) < PositionLen*16 {
 		return errors.New("message length error")
 	}
 	p.Position = make(map[int32]T_TimeLockBoxPositionData)
-	for i := 0; i < int(PositionLen); i++ {
+	for i := uint32(0); i < PositionLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_TimeLockBoxPositionData
-		if value.Decode(buffer) != nil {
-			return errors.New("message length error")
+		if err := value.Decode(buffer); err != nil {
+			return err
 		}
 		p.Position[key] = value
 	}
@@ -2245,11 +2375,11 @@ func (p *T_Role_ChapterInfo) Decode(buffer *bytes.Buffer) error {
 	binary.Read(buffer, binary.LittleEndian, &p.ChapterProgress)
 	var RewardBoxStateMapLen uint32
 	binary.Read(buffer, binary.LittleEndian, &RewardBoxStateMapLen)
-	if buffer.Len() < int(RewardBoxStateMapLen)*8 {
+	if uint32(buffer.Len()) < RewardBoxStateMapLen*8 {
 		return errors.New("message length error")
 	}
 	p.RewardBoxStateMap = make(map[int32]int32, RewardBoxStateMapLen)
-	for i := 0; i < int(RewardBoxStateMapLen); i++ {
+	for i := uint32(0); i < RewardBoxStateMapLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value int32
@@ -2283,12 +2413,12 @@ func (p *T_Role_ChapterData) Decode(buffer *bytes.Buffer) error {
 	var ChapterInfoMapLen uint32
 	binary.Read(buffer, binary.LittleEndian, &ChapterInfoMapLen)
 	p.ChapterInfoMap = make(map[int32]T_Role_ChapterInfo, ChapterInfoMapLen)
-	for i := 0; i < int(ChapterInfoMapLen); i++ {
+	for i := uint32(0); i < ChapterInfoMapLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value T_Role_ChapterInfo
-		if value.Decode(buffer) != nil {
-			return errors.New("message length error")
+		if err := value.Decode(buffer); err != nil {
+			return err
 		}
 		p.ChapterInfoMap[key] = value
 	}
@@ -2315,11 +2445,11 @@ func (p *T_Role_LegendData) Decode(buffer *bytes.Buffer) error {
 	}
 	var ChapterInfoMapLen uint32
 	binary.Read(buffer, binary.LittleEndian, &ChapterInfoMapLen)
-	if buffer.Len() < int(ChapterInfoMapLen)*8 {
+	if uint32(buffer.Len()) < ChapterInfoMapLen*8 {
 		return errors.New("message length error")
 	}
 	p.ChapterInfoMap = make(map[int32]int32, ChapterInfoMapLen)
-	for i := 0; i < int(ChapterInfoMapLen); i++ {
+	for i := uint32(0); i < ChapterInfoMapLen; i++ {
 		var key int32
 		binary.Read(buffer, binary.LittleEndian, &key)
 		var value int32
@@ -2686,6 +2816,7 @@ func (p *T_FightBalance_ExtraData) Decode(buffer *bytes.Buffer) error {
 
 /************************************  客户端  *********************************/
 
+// 客户端请求数据结构-同步角色数据
 type C_Role_SynRoleData struct {
 	ClientVer string
 }
@@ -2709,6 +2840,31 @@ func (p *C_Role_SynRoleData) Decode(buffer *bytes.Buffer, key uint8) error {
 		return errors.New("message length error")
 	}
 	p.ClientVer = string(buffer.Next(int(ClientVerLen)))
+	return nil
+}
+
+// 客户端请求数据结构-英雄升级操作
+type C_Role_HeroLevelUp struct {
+	ItemUUID int64
+}
+
+func (p *C_Role_HeroLevelUp) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.ItemUUID)
+	return buffer.Bytes()
+}
+
+func (p *C_Role_HeroLevelUp) Decode(buffer *bytes.Buffer, key uint8) error {
+	if key != 0 {
+		for i := 0; i < buffer.Len(); i++ {
+			buffer.Bytes()[i] ^= byte(key)
+		}
+	}
+
+	if buffer.Len() < 8 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.ItemUUID)
 	return nil
 }
 
@@ -2763,6 +2919,124 @@ func (p *C_Role_BattleArrayUp) Decode(buffer *bytes.Buffer, key uint8) error {
 	binary.Read(buffer, binary.LittleEndian, &p.ArrayID)
 	binary.Read(buffer, binary.LittleEndian, &p.ArrayIndex)
 	binary.Read(buffer, binary.LittleEndian, &p.ItemUUID)
+	return nil
+}
+
+// 客户端请求数据结构-设置引导步骤
+type C_Role_SetGuide struct {
+	Guide int32
+}
+
+func (p *C_Role_SetGuide) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Guide)
+	return buffer.Bytes()
+}
+
+func (p *C_Role_SetGuide) Decode(buffer *bytes.Buffer, key uint8) error {
+	if key != 0 {
+		for i := 0; i < buffer.Len(); i++ {
+			buffer.Bytes()[i] ^= byte(key)
+		}
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Guide)
+	return nil
+}
+
+// 客户端请求数据结构-获取角色简要信息
+type C_Role_GetRoleSimpleInfo struct {
+	ShowID string
+}
+
+func (p *C_Role_GetRoleSimpleInfo) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.ShowID)))
+	buffer.Write([]byte(p.ShowID))
+	return buffer.Bytes()
+}
+
+func (p *C_Role_GetRoleSimpleInfo) Decode(buffer *bytes.Buffer, key uint8) error {
+	if key != 0 {
+		for i := 0; i < buffer.Len(); i++ {
+			buffer.Bytes()[i] ^= byte(key)
+		}
+	}
+	var ShowIDLen uint32
+	binary.Read(buffer, binary.LittleEndian, &ShowIDLen)
+	if uint32(buffer.Len()) < ShowIDLen {
+		return errors.New("message length error")
+	}
+	p.ShowID = string(buffer.Next(int(ShowIDLen)))
+	return nil
+}
+
+// 客户端请求数据结构-同步抽奖数据
+type C_Role_SyncDrawPrize struct {
+}
+
+func (p *C_Role_SyncDrawPrize) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	return buffer.Bytes()
+}
+
+func (p *C_Role_SyncDrawPrize) Decode(buffer *bytes.Buffer, key uint8) error {
+	return nil
+}
+
+// 客户端请求数据结构-抽奖
+type C_Role_DrawPrize struct {
+	Type int32
+	Num  int32
+}
+
+func (p *C_Role_DrawPrize) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Type)
+	binary.Write(buffer, binary.LittleEndian, p.Num)
+	return buffer.Bytes()
+}
+
+func (p *C_Role_DrawPrize) Decode(buffer *bytes.Buffer, key uint8) error {
+	if key != 0 {
+		for i := 0; i < buffer.Len(); i++ {
+			buffer.Bytes()[i] ^= byte(key)
+		}
+	}
+	if buffer.Len() < 8 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Type)
+	binary.Read(buffer, binary.LittleEndian, &p.Num)
+	return nil
+}
+
+// 客户端请求数据结构-花费数据
+type C_Role_Cost_Get struct {
+	ID    int32
+	Count int32
+}
+
+func (p *C_Role_Cost_Get) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.ID)
+	binary.Write(buffer, binary.LittleEndian, p.Count)
+	return buffer.Bytes()
+}
+
+func (p *C_Role_Cost_Get) Decode(buffer *bytes.Buffer, key uint8) error {
+	if key != 0 {
+		for i := 0; i < buffer.Len(); i++ {
+			buffer.Bytes()[i] ^= byte(key)
+		}
+	}
+	if buffer.Len() < 8 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.ID)
+	binary.Read(buffer, binary.LittleEndian, &p.Count)
 	return nil
 }
 
@@ -2851,175 +3125,37 @@ func (p *C_Role_SetBattleArrayName) Decode(buffer *bytes.Buffer, key uint8) erro
 	return nil
 }
 
-// 客户端请求数据结构-获取角色简要信息
-type C_Role_GetRoleSimpleInfo struct {
-	ShowID string
+// 客户端请求数据结构-战车链接
+type C_Role_CarLink struct {
+	MasterCarID int32
+	HelpCarID int32
 }
 
-func (p *C_Role_GetRoleSimpleInfo) Encode() []byte {
+func (p *C_Role_CarLink) Encode() []byte {
 	buffer := new(bytes.Buffer)
-	binary.Write(buffer, binary.LittleEndian, uint32(len(p.ShowID)))
-	buffer.Write([]byte(p.ShowID))
+	binary.Write(buffer, binary.LittleEndian, p.MasterCarID)
+	binary.Write(buffer, binary.LittleEndian, p.HelpCarID)
 	return buffer.Bytes()
 }
 
-func (p *C_Role_GetRoleSimpleInfo) Decode(buffer *bytes.Buffer, key uint8) error {
+func (p *C_Role_CarLink) Decode(buffer *bytes.Buffer, key uint8) error {
 	if key != 0 {
 		for i := 0; i < buffer.Len(); i++ {
 			buffer.Bytes()[i] ^= byte(key)
 		}
+
 	}
-	var ShowIDLen uint32
-	binary.Read(buffer, binary.LittleEndian, &ShowIDLen)
-	if uint32(buffer.Len()) < ShowIDLen {
+	if buffer.Len() < 8 {
 		return errors.New("message length error")
 	}
-	p.ShowID = string(buffer.Next(int(ShowIDLen)))
-	return nil
-}
-
-type C_Role_SetGuide struct {
-	Guide int32
-}
-
-func (p *C_Role_SetGuide) Encode() []byte {
-	buffer := new(bytes.Buffer)
-	binary.Write(buffer, binary.LittleEndian, p.Guide)
-	return buffer.Bytes()
-}
-
-func (p *C_Role_SetGuide) Decode(buffer *bytes.Buffer, key uint8) error {
-	if key != 0 {
-		for i := 0; i < buffer.Len(); i++ {
-			buffer.Bytes()[i] ^= byte(key)
-		}
-	}
-	if buffer.Len() < 4 {
-		return errors.New("message length error")
-	}
-	binary.Read(buffer, binary.LittleEndian, &p.Guide)
+	binary.Read(buffer, binary.LittleEndian, &p.MasterCarID)
+	binary.Read(buffer, binary.LittleEndian, &p.HelpCarID)
 	return nil
 }
 
 /************************************  服务端  *********************************/
 
-type S_Role_SynRoleAttrValue struct {
-	ID_    primitive.ObjectID `bson:"_id"`     // 唯一ID
-	RoleID int64              `bson:"role_id"` // 角色ID
-	Index  int32              `bson:"attr_id"` // 属性ID
-	Value  int32              `bson:"value"`   // 属性值
-}
-
-func (p *S_Role_SynRoleAttrValue) Encode() []byte {
-	buffer := new(bytes.Buffer)
-	binary.Write(buffer, binary.LittleEndian, p.Index)
-	binary.Write(buffer, binary.LittleEndian, p.Value)
-	return buffer.Bytes()
-}
-
-func (p *S_Role_SynRoleAttrValue) Decode(buffer *bytes.Buffer) error {
-	if buffer.Len() < 8 {
-		return errors.New("message length error")
-	}
-	binary.Read(buffer, binary.LittleEndian, &p.Index)
-	binary.Read(buffer, binary.LittleEndian, &p.Value)
-	return nil
-}
-
-type S_Role_SynTaskData struct {
-	ChangeTask []T_Role_SingleTask
-	DeleteTask []int32
-}
-
-func (p *S_Role_SynTaskData) Encode() []byte {
-	buffer := new(bytes.Buffer)
-	binary.Write(buffer, binary.LittleEndian, uint32(len(p.ChangeTask)))
-	for _, v := range p.ChangeTask {
-		buffer.Write(v.Encode())
-	}
-	binary.Write(buffer, binary.LittleEndian, uint32(len(p.DeleteTask)))
-	for _, v := range p.DeleteTask {
-		binary.Write(buffer, binary.LittleEndian, v)
-	}
-	return buffer.Bytes()
-}
-
-func (p *S_Role_SynTaskData) Decode(buffer *bytes.Buffer) error {
-	if buffer.Len() < 4 {
-		return errors.New("message length error")
-	}
-	var ChangeTaskLen uint32
-	binary.Read(buffer, binary.LittleEndian, &ChangeTaskLen)
-	p.ChangeTask = make([]T_Role_SingleTask, ChangeTaskLen)
-	for i := uint32(0); i < ChangeTaskLen; i++ {
-		var value T_Role_SingleTask
-		value.Decode(buffer)
-		p.ChangeTask[i] = value
-	}
-	if buffer.Len() < 4 {
-		return errors.New("message length error")
-	}
-	var DeleteTaskLen uint32
-	binary.Read(buffer, binary.LittleEndian, &DeleteTaskLen)
-	p.DeleteTask = make([]int32, DeleteTaskLen)
-	for i := uint32(0); i < DeleteTaskLen; i++ {
-		binary.Read(buffer, binary.LittleEndian, &p.DeleteTask[i])
-	}
-	return nil
-}
-
-type S_Role_TotalWatchADBoxData struct {
-	Totalwatchadbox T_TotalWatchADBox
-}
-
-func (p *S_Role_TotalWatchADBoxData) Encode() []byte {
-	buffer := new(bytes.Buffer)
-	buffer.Write(p.Totalwatchadbox.Encode())
-	return buffer.Bytes()
-}
-
-func (p *S_Role_TotalWatchADBoxData) Decode(buffer *bytes.Buffer) error {
-	if buffer.Len() < 18 {
-		return errors.New("message length error")
-	}
-	p.Totalwatchadbox.Decode(buffer)
-	return nil
-}
-
-type S_Role_SyncCostGet struct {
-	CostGetMap map[int32]int32
-}
-
-func (p *S_Role_SyncCostGet) Encode() []byte {
-	buffer := new(bytes.Buffer)
-	binary.Write(buffer, binary.LittleEndian, uint32(len(p.CostGetMap)))
-	for k, v := range p.CostGetMap {
-		binary.Write(buffer, binary.LittleEndian, k)
-		binary.Write(buffer, binary.LittleEndian, v)
-	}
-	return buffer.Bytes()
-}
-
-func (p *S_Role_SyncCostGet) Decode(buffer *bytes.Buffer) error {
-	if buffer.Len() < 4 {
-		return errors.New("message length error")
-	}
-	var CostGetMapLen uint32
-	binary.Read(buffer, binary.LittleEndian, &CostGetMapLen)
-	if uint32(buffer.Len()) < CostGetMapLen*8 {
-		return errors.New("message length error")
-	}
-	p.CostGetMap = make(map[int32]int32, CostGetMapLen)
-	for i := uint32(0); i < CostGetMapLen; i++ {
-		var key int32
-		var value int32
-		binary.Read(buffer, binary.LittleEndian, &key)
-		binary.Read(buffer, binary.LittleEndian, &value)
-		p.CostGetMap[key] = value
-	}
-	return nil
-}
-
+// 服务器返回数据结构-进入逻辑服务器 P_Role_RoleEnterLogic = 2000001
 type S_Role_RoleEnterLogic struct {
 }
 
@@ -3031,6 +3167,7 @@ func (p *S_Role_RoleEnterLogic) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
+// 服务器返回数据结构-同步角色数据 P_Role_SynRoleData = 2000002
 type S_Role_SynRoleData struct {
 	CurrTime             int32
 	RoleID               int64  // 角色ID
@@ -3196,43 +3333,139 @@ func (p *S_Role_SynRoleData) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
-// 服务器返回-同步角色开关数据
-type S_Role_OnOffDataInfo struct {
-	Onoff map[int32]bool
+// 服务器返回数据结构-同步角色属性 P_Role_SynRoleAttrValue = 2000003
+type S_Role_SynRoleAttrValue struct {
+	RoleID int64 `bson:"role_id"` // 角色ID
+	Index  int32 `bson:"attr_id"` // 属性ID
+	Value  int32 `bson:"value"`   // 属性值
 }
 
-func (p *S_Role_OnOffDataInfo) Encode() []byte {
+func (p *S_Role_SynRoleAttrValue) Encode() []byte {
 	buffer := new(bytes.Buffer)
-	var OnoffLen uint32 = uint32(len(p.Onoff))
-	binary.Write(buffer, binary.LittleEndian, OnoffLen)
-	for k, v := range p.Onoff {
+	binary.Write(buffer, binary.LittleEndian, p.Index)
+	binary.Write(buffer, binary.LittleEndian, p.Value)
+	return buffer.Bytes()
+}
+
+func (p *S_Role_SynRoleAttrValue) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 8 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Index)
+	binary.Read(buffer, binary.LittleEndian, &p.Value)
+	return nil
+}
+
+// 服务器返回数据结构-同步角色背包数据 P_Role_SynItemData = 2000006
+type S_Role_SynItemData struct {
+	ChangeItem []T_Role_Item
+	DeleteItem []int64
+	Compensate map[int32]T_Role_Item_Compensate
+}
+
+func (p *S_Role_SynItemData) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.ChangeItem)))
+	for _, v := range p.ChangeItem {
+		buffer.Write(v.Encode())
+	}
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.DeleteItem)))
+	for _, v := range p.DeleteItem {
+		binary.Write(buffer, binary.LittleEndian, v)
+	}
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.Compensate)))
+	for k, v := range p.Compensate {
 		binary.Write(buffer, binary.LittleEndian, k)
+		buffer.Write(v.Encode())
+	}
+	return buffer.Bytes()
+}
+
+func (p *S_Role_SynItemData) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	var ChangeItemLen uint32
+	binary.Read(buffer, binary.LittleEndian, &ChangeItemLen)
+	p.ChangeItem = make([]T_Role_Item, ChangeItemLen)
+	for i := uint32(0); i < ChangeItemLen; i++ {
+		if err := p.ChangeItem[i].Decode(buffer); err != nil {
+			return err
+		}
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	var DeleteItemLen uint32
+	binary.Read(buffer, binary.LittleEndian, &DeleteItemLen)
+	if uint32(buffer.Len()) < DeleteItemLen*8 {
+		return errors.New("message length error")
+	}
+	p.DeleteItem = make([]int64, DeleteItemLen)
+	for i := uint32(0); i < DeleteItemLen; i++ {
+		binary.Read(buffer, binary.LittleEndian, &p.DeleteItem[i])
+	}
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	var CompensateLen uint32
+	binary.Read(buffer, binary.LittleEndian, &CompensateLen)
+	for i := uint32(0); i < CompensateLen; i++ {
+		var key int32
+		binary.Read(buffer, binary.LittleEndian, &key)
+		var value T_Role_Item_Compensate
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
+		p.Compensate[key] = value
+	}
+	return nil
+}
+
+// 服务器返回数据结构-同步角色任务数据 P_Role_SynTaskData = 2000009
+type S_Role_SynTaskData struct {
+	ChangeTask []T_Role_SingleTask
+	DeleteTask []int32
+}
+
+func (p *S_Role_SynTaskData) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.ChangeTask)))
+	for _, v := range p.ChangeTask {
+		buffer.Write(v.Encode())
+	}
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.DeleteTask)))
+	for _, v := range p.DeleteTask {
 		binary.Write(buffer, binary.LittleEndian, v)
 	}
 	return buffer.Bytes()
 }
 
-func (p *S_Role_OnOffDataInfo) Decode(buffer *bytes.Buffer) error {
+func (p *S_Role_SynTaskData) Decode(buffer *bytes.Buffer) error {
 	if buffer.Len() < 4 {
 		return errors.New("message length error")
 	}
-	var OnoffLen uint32
-	binary.Read(buffer, binary.LittleEndian, &OnoffLen)
-	if uint32(buffer.Len()) < OnoffLen*5 {
+	var ChangeTaskLen uint32
+	binary.Read(buffer, binary.LittleEndian, &ChangeTaskLen)
+	p.ChangeTask = make([]T_Role_SingleTask, ChangeTaskLen)
+	for i := uint32(0); i < ChangeTaskLen; i++ {
+		if err := p.ChangeTask[i].Decode(buffer); err != nil {
+			return err
+		}
+	}
+	if buffer.Len() < 4 {
 		return errors.New("message length error")
 	}
-	p.Onoff = make(map[int32]bool, OnoffLen)
-	for i := uint32(0); i < OnoffLen; i++ {
-		var k int32
-		var v bool
-		binary.Read(buffer, binary.LittleEndian, &k)
-		binary.Read(buffer, binary.LittleEndian, &v)
-		p.Onoff[k] = v
+	var DeleteTaskLen uint32
+	binary.Read(buffer, binary.LittleEndian, &DeleteTaskLen)
+	p.DeleteTask = make([]int32, DeleteTaskLen)
+	for i := uint32(0); i < DeleteTaskLen; i++ {
+		binary.Read(buffer, binary.LittleEndian, &p.DeleteTask[i])
 	}
 	return nil
 }
 
-// 服务器返回-同步战斗阵容数据
+// 服务器返回数据结构-同步战斗阵容数据 P_Role_SynBattleArrayData = 2000011
 type S_Role_SynBattleArrayData struct {
 	Battlearray T_Role_BattleArrayData
 }
@@ -3251,6 +3484,45 @@ func (p *S_Role_SynBattleArrayData) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
+// 服务器返回数据结构-英雄升级操作 P_Role_HeroLevelUp = 2000024
+type S_Role_HeroLevelUp struct {
+	Errorcode int32
+}
+
+func (p *S_Role_HeroLevelUp) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
+	return buffer.Bytes()
+}
+
+func (p *S_Role_HeroLevelUp) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Errorcode)
+	return nil
+}
+
+// 服务器返回数据结构-设置默认阵容 P_Role_BattleArraySetDefine = 2000025
+type S_Role_BattleArraySetDefine struct {
+	Errorcode int32
+}
+
+func (p *S_Role_BattleArraySetDefine) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
+	return buffer.Bytes()
+}
+
+func (p *S_Role_BattleArraySetDefine) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Errorcode)
+	return nil
+}
+
+// 服务器返回数据结构-对战 P_Role_FightBalance = 2000030
 type S_Role_FightBalance struct {
 	Type               int32 // 战斗类型
 	BWin               bool  // 是否胜利
@@ -3414,18 +3686,18 @@ func (p *S_Role_FightBalance) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
-// 服务器返回数据结构-设置默认阵容
-type S_Role_BattleArraySetDefine struct {
+// 服务器返回数据结构-设置引导步骤 P_Role_SetGuide = 2000034
+type S_Role_SetGuide struct {
 	Errorcode int32
 }
 
-func (p *S_Role_BattleArraySetDefine) Encode() []byte {
+func (p *S_Role_SetGuide) Encode() []byte {
 	buffer := new(bytes.Buffer)
 	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
 	return buffer.Bytes()
 }
 
-func (p *S_Role_BattleArraySetDefine) Decode(buffer *bytes.Buffer) error {
+func (p *S_Role_SetGuide) Decode(buffer *bytes.Buffer) error {
 	if buffer.Len() < 4 {
 		return errors.New("message length error")
 	}
@@ -3433,7 +3705,223 @@ func (p *S_Role_BattleArraySetDefine) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
-// 服务器返回数据结构-战车皮肤更换
+// 服务器返回数据结构-获取角色简要信息 P_Role_GetRoleSimpleInfo = 2000039
+type S_Role_GetRoleSimpleInfo struct {
+	Errorcode       int32
+	RoleAbstract    T_RoleAbstract
+	RoleProficiency T_RoleProficiency
+}
+
+func (p *S_Role_GetRoleSimpleInfo) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
+	buffer.Write(p.RoleAbstract.Encode())
+	buffer.Write(p.RoleProficiency.Encode())
+	return buffer.Bytes()
+}
+
+func (p *S_Role_GetRoleSimpleInfo) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Errorcode)
+	p.RoleAbstract.Decode(buffer)
+	p.RoleProficiency.Decode(buffer)
+	return nil
+}
+
+// 服务器返回数据结构-角色总看广告数据 P_Role_TotalWatchADBoxData = 2000054
+type S_Role_TotalWatchADBoxData struct {
+	Totalwatchadbox T_TotalWatchADBox
+}
+
+func (p *S_Role_TotalWatchADBoxData) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	buffer.Write(p.Totalwatchadbox.Encode())
+	return buffer.Bytes()
+}
+
+func (p *S_Role_TotalWatchADBoxData) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 18 {
+		return errors.New("message length error")
+	}
+	p.Totalwatchadbox.Decode(buffer)
+	return nil
+}
+
+// 服务器返回数据结构-同步抽奖数据 P_Role_SyncDrawPrize = 2000060
+type S_Role_SyncDrawPrize struct {
+	Detail map[int32]T_DrawPrizeDetail
+}
+
+func (p *S_Role_SyncDrawPrize) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.Detail)))
+	for k, v := range p.Detail {
+		binary.Write(buffer, binary.LittleEndian, k)
+		buffer.Write(v.Encode())
+	}
+	return buffer.Bytes()
+}
+
+func (p *S_Role_SyncDrawPrize) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	var DetailLen uint32
+	binary.Read(buffer, binary.LittleEndian, &DetailLen)
+	p.Detail = make(map[int32]T_DrawPrizeDetail, DetailLen)
+	for i := uint32(0); i < DetailLen; i++ {
+		var key int32
+		binary.Read(buffer, binary.LittleEndian, &key)
+		var value T_DrawPrizeDetail
+		if err := value.Decode(buffer); err != nil {
+			return err
+		}
+		p.Detail[key] = value
+	}
+	return nil
+}
+
+// 服务器返回数据结构-抽奖 P_Role_DrawPrize = 2000061
+type S_Role_DrawPrize struct {
+	Error int32
+	Type  int32
+	Prize []T_Reward
+}
+
+func (p *S_Role_DrawPrize) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Error)
+	binary.Write(buffer, binary.LittleEndian, p.Type)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.Prize)))
+	for _, v := range p.Prize {
+		buffer.Write(v.Encode())
+	}
+	return buffer.Bytes()
+}
+
+func (p *S_Role_DrawPrize) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 12 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Error)
+	binary.Read(buffer, binary.LittleEndian, &p.Type)
+	var PrizeLen uint32
+	binary.Read(buffer, binary.LittleEndian, &PrizeLen)
+	p.Prize = make([]T_Reward, PrizeLen)
+	for i := uint32(0); i < PrizeLen; i++ {
+		if err := p.Prize[i].Decode(buffer); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// 服务器返回数据结构-角色花费数据 P_Role_Cost_Get = 2000113
+type S_Role_Cost_Get struct {
+	Errorcode int32
+	Prize     []T_Reward
+}
+
+func (p *S_Role_Cost_Get) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.Prize)))
+	for _, v := range p.Prize {
+		buffer.Write(v.Encode())
+	}
+	return buffer.Bytes()
+}
+
+func (p *S_Role_Cost_Get) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 8 {
+		return errors.New("message length error")
+	}
+	binary.Read(buffer, binary.LittleEndian, &p.Errorcode)
+	var PrizeLen uint32
+	binary.Read(buffer, binary.LittleEndian, &PrizeLen)
+	p.Prize = make([]T_Reward, PrizeLen)
+	for i := uint32(0); i < PrizeLen; i++ {
+		if err := p.Prize[i].Decode(buffer); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// 服务器返回-同步角色开关数据 P_Role_OnOffDataInfo = 2000121
+type S_Role_OnOffDataInfo struct {
+	Onoff map[int32]bool
+}
+
+func (p *S_Role_OnOffDataInfo) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	var OnoffLen uint32 = uint32(len(p.Onoff))
+	binary.Write(buffer, binary.LittleEndian, OnoffLen)
+	for k, v := range p.Onoff {
+		binary.Write(buffer, binary.LittleEndian, k)
+		binary.Write(buffer, binary.LittleEndian, v)
+	}
+	return buffer.Bytes()
+}
+
+func (p *S_Role_OnOffDataInfo) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	var OnoffLen uint32
+	binary.Read(buffer, binary.LittleEndian, &OnoffLen)
+	if uint32(buffer.Len()) < OnoffLen*5 {
+		return errors.New("message length error")
+	}
+	p.Onoff = make(map[int32]bool, OnoffLen)
+	for i := uint32(0); i < OnoffLen; i++ {
+		var k int32
+		var v bool
+		binary.Read(buffer, binary.LittleEndian, &k)
+		binary.Read(buffer, binary.LittleEndian, &v)
+		p.Onoff[k] = v
+	}
+	return nil
+}
+
+// 服务器返回数据结构-同步角色消耗数据 P_Role_SyncCostGet = 2000131
+type S_Role_SyncCostGet struct {
+	CostGetMap map[int32]int32
+}
+
+func (p *S_Role_SyncCostGet) Encode() []byte {
+	buffer := new(bytes.Buffer)
+	binary.Write(buffer, binary.LittleEndian, uint32(len(p.CostGetMap)))
+	for k, v := range p.CostGetMap {
+		binary.Write(buffer, binary.LittleEndian, k)
+		binary.Write(buffer, binary.LittleEndian, v)
+	}
+	return buffer.Bytes()
+}
+
+func (p *S_Role_SyncCostGet) Decode(buffer *bytes.Buffer) error {
+	if buffer.Len() < 4 {
+		return errors.New("message length error")
+	}
+	var CostGetMapLen uint32
+	binary.Read(buffer, binary.LittleEndian, &CostGetMapLen)
+	if uint32(buffer.Len()) < CostGetMapLen*8 {
+		return errors.New("message length error")
+	}
+	p.CostGetMap = make(map[int32]int32, CostGetMapLen)
+	for i := uint32(0); i < CostGetMapLen; i++ {
+		var key int32
+		var value int32
+		binary.Read(buffer, binary.LittleEndian, &key)
+		binary.Read(buffer, binary.LittleEndian, &value)
+		p.CostGetMap[key] = value
+	}
+	return nil
+}
+
+// 服务器返回数据结构-战车皮肤更换 P_Role_Car_Skin_Change = 2000138
 type S_Role_Car_Skin_Change struct {
 	Errorcode int32
 }
@@ -3452,7 +3940,7 @@ func (p *S_Role_Car_Skin_Change) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
-// 服务器返回数据结构-英雄皮肤更换
+// 服务器返回数据结构-英雄皮肤更换 P_Role_HeroChangeSkin = 2000151
 type S_Role_HeroChangeSkin struct {
 	Errorcode int32
 }
@@ -3471,7 +3959,7 @@ func (p *S_Role_HeroChangeSkin) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
-// 服务器返回数据结构-阵容名称设置
+// 服务器返回数据结构-阵容名称设置 P_Role_SetBattleArrayName = 2000153
 type S_Role_SetBattleArrayName struct {
 	Errorcode       int32
 	BattleArrayName string
@@ -3499,31 +3987,7 @@ func (p *S_Role_SetBattleArrayName) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
-// 服务器返回数据结构-获取角色简要信息
-type S_Role_GetRoleSimpleInfo struct {
-	Errorcode       int32
-	RoleAbstract    T_RoleAbstract
-	RoleProficiency T_RoleProficiency
-}
-
-func (p *S_Role_GetRoleSimpleInfo) Encode() []byte {
-	buffer := new(bytes.Buffer)
-	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
-	buffer.Write(p.RoleAbstract.Encode())
-	buffer.Write(p.RoleProficiency.Encode())
-	return buffer.Bytes()
-}
-
-func (p *S_Role_GetRoleSimpleInfo) Decode(buffer *bytes.Buffer) error {
-	if buffer.Len() < 4 {
-		return errors.New("message length error")
-	}
-	binary.Read(buffer, binary.LittleEndian, &p.Errorcode)
-	p.RoleAbstract.Decode(buffer)
-	p.RoleProficiency.Decode(buffer)
-	return nil
-}
-
+// 服务器返回数据结构-同步角色章节数据 P_Role_SynChapterData = 2000155
 type S_Role_SynChapterData struct {
 	ScoreFundData T_Role_ChapterData
 }
@@ -3541,17 +4005,18 @@ func (p *S_Role_SynChapterData) Decode(buffer *bytes.Buffer) error {
 	return nil
 }
 
-type S_Role_SetGuide struct {
+// 服务器返回数据结构-战车链接 P_Role_CarLink = 2000163
+type S_Role_CarLink struct {
 	Errorcode int32
 }
 
-func (p *S_Role_SetGuide) Encode() []byte {
+func (p *S_Role_CarLink) Encode() []byte {
 	buffer := new(bytes.Buffer)
 	binary.Write(buffer, binary.LittleEndian, p.Errorcode)
 	return buffer.Bytes()
 }
 
-func (p *S_Role_SetGuide) Decode(buffer *bytes.Buffer) error {
+func (p *S_Role_CarLink) Decode(buffer *bytes.Buffer) error {
 	if buffer.Len() < 4 {
 		return errors.New("message length error")
 	}

@@ -26,6 +26,7 @@ protocolNumMap = {
     2000039: "角色-角色简要信息",
     2000052: "角色-同步外挂数据",
     2000054: "角色-角色总看广告数据",
+    2000060: "角色-同步抽奖数据",
     2000071: "角色-同步角色任务额外数据",
     2000105: "角色-同步角色条件数据",
     2000121: "角色-同步角色开关数据",
@@ -114,7 +115,7 @@ async def process_file(session, file_path):
 
         async with session.post("http://localhost:8080/tfjlh5/decode", data=json_data, headers=headers) as resp:
             # print(await resp.text())
-            return os.path.basename(file_path), decoded_value, await resp.json()
+            return os.path.basename(file_path), decoded_value, await resp.json(content_type=None)
 
 async def read_files(directory):
     async with aiohttp.ClientSession() as session:

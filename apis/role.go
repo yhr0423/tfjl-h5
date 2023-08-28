@@ -10,6 +10,7 @@ import (
 	"tfjl-h5/models"
 	"tfjl-h5/net"
 	"tfjl-h5/protocols"
+	"tfjl-h5/utils"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -60,6 +61,7 @@ func (p *RoleSynRoleDataRouter) Handle(request iface.IRequest) {
 		WeedDay: int32(time.Now().Weekday()),
 	}
 
+	/********************************  roleInformation  ********************************/
 	var roleInformation = db.DbManager.FindRoleInformationByRoleID(player.PID)
 	roleInformation.FightData = protocols.T_Information_FightData{
 		TypeData: map[int32]protocols.T_Information_FightTypeData{
@@ -85,6 +87,15 @@ func (p *RoleSynRoleDataRouter) Handle(request iface.IRequest) {
 		roleHeroSkinMap[v.UUID] = v.ID
 	}
 	roleInformation.HeroSkinMap = roleHeroSkinMap
+
+	var roleCarLink = []models.RoleCarLink{}
+	db.DbManager.FindRoleCarLinkByRoleID(player.PID, &roleCarLink)
+	var roleCarLinkMap = make(map[int32]int32, len(roleCarLink))
+	for _, v := range roleCarLink {
+		roleCarLinkMap[v.MasterItemID] = v.SlaveItemID
+	}
+	roleInformation.CarLinkMap = roleCarLinkMap
+	/********************************  roleInformation  ********************************/
 
 	sRoleSynRoleData.Infomation = roleInformation
 
@@ -531,6 +542,37 @@ func (p *RoleSynRoleDataRouter) Handle(request iface.IRequest) {
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_OnOffDataInfo, sRoleOnOffDataInfo.Encode())
 }
 
+// 路由处理-英雄升级操作
+type RoleHeroLevelUpRouter struct {
+	net.BaseRouter
+}
+
+func (p *RoleHeroLevelUpRouter) Handle(request iface.IRequest) {
+	logrus.Info("***********************************  英雄升级操作  ***********************************")
+	roleID, err := request.GetConnection().GetProperty("roleID")
+	if err != nil {
+		logrus.Error("GetProperty error:", err)
+		return
+	}
+	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
+
+	var cRoleHeroLevelUp = protocols.C_Role_HeroLevelUp{}
+	cRoleHeroLevelUp.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Infof("cRoleHeroLevelUp: %#v", cRoleHeroLevelUp)
+
+	db.DbManager.UpdateRoleBagItemLevel(player.PID, cRoleHeroLevelUp.ItemUUID)
+
+	var roleItems []protocols.T_Role_Item
+	db.DbManager.FindRoleBagItemsByUUID(player.PID, cRoleHeroLevelUp.ItemUUID, &roleItems)
+	var sRoleSynItemData = protocols.S_Role_SynItemData{
+		ChangeItem: roleItems,
+	}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynItemData, sRoleSynItemData.Encode())
+
+	var sRoleHeroLevelUp = protocols.S_Role_HeroLevelUp{Errorcode: 0}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_HeroLevelUp, sRoleHeroLevelUp.Encode())
+}
+
 // 路由处理-英雄阵容设置默认
 type RoleBattleArraySetDefineRouter struct {
 	net.BaseRouter
@@ -637,6 +679,193 @@ func (p *RoleBattleArrayUpRouter) Handle(request iface.IRequest) {
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynBattleArrayData, battleArrayData.Encode())
 }
 
+type RoleSetGuideRouter struct {
+	net.BaseRouter
+}
+
+func (p *RoleSetGuideRouter) Handle(request iface.IRequest) {
+	logrus.Info("******************************* 设置 guide ***********************************")
+	roleID, err := request.GetConnection().GetProperty("roleID")
+	if err != nil {
+		logrus.Error("GetProperty error:", err)
+		return
+	}
+	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
+
+	// 获取简要数据
+	var cRoleSetGuide = protocols.C_Role_SetGuide{}
+	cRoleSetGuide.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Infof("%#v", cRoleSetGuide)
+
+	var sRoleSetGuide = protocols.S_Role_SetGuide{Errorcode: 0}
+	updateResult, err := db.DbManager.UpdateRoleAttrValueByAttrID(player.PID, constants.ROLE_ATTR_GUIDE, cRoleSetGuide.Guide)
+	if err != nil || updateResult.MatchedCount == 0 || updateResult.ModifiedCount == 0 {
+		logrus.Error("UpdateRoleAttrValueByAttrID error:", err)
+		sRoleSetGuide.Errorcode = 1
+	} else {
+		var sRoleSynRoleAttrValue = protocols.S_Role_SynRoleAttrValue{
+			Index: constants.ROLE_ATTR_GUIDE,
+			Value: cRoleSetGuide.Guide,
+		}
+		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynRoleAttrValue, sRoleSynRoleAttrValue.Encode())
+	}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SetGuide, sRoleSetGuide.Encode())
+}
+
+type RoleGetRoleSimpleInfoRouter struct {
+	net.BaseRouter
+}
+
+func (p *RoleGetRoleSimpleInfoRouter) Handle(request iface.IRequest) {
+	logrus.Info("*******************************  获取头像简要信息  ***********************************")
+	roleID, err := request.GetConnection().GetProperty("roleID")
+	if err != nil {
+		logrus.Error("GetProperty error:", err)
+		return
+	}
+	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
+
+	// 获取简要数据
+	var cRoleGetRoleSimpleInfo = protocols.C_Role_GetRoleSimpleInfo{}
+	cRoleGetRoleSimpleInfo.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Infof("%#v", cRoleGetRoleSimpleInfo)
+
+	var roleHeroSkin = []models.RoleHeroSkin{}
+	db.DbManager.FindRoleHeroSkinByRoleID(player.PID, &roleHeroSkin)
+	var roleHeroSkinMap = make(map[int64]int32, len(roleHeroSkin))
+	for _, v := range roleHeroSkin {
+		roleHeroSkinMap[v.UUID] = v.ID
+	}
+	var roleBagItems = []protocols.T_Role_Item{}
+	if err := db.DbManager.FindRoleBagItemsByType(player.PID, 2, &roleBagItems); err != nil {
+		logrus.Error("FindRoleBagItemsByType error:", err)
+		return
+	}
+	var tHeroAbstract = make(map[int32]protocols.T_HeroAbstract, len(roleBagItems))
+	for k, v := range roleBagItems {
+		var skinID int32
+		if value, ok := roleHeroSkinMap[v.ItemUUID]; ok {
+			skinID = value
+		}
+		tHeroAbstract[int32(k)] = protocols.T_HeroAbstract{
+			HeroUUID:  v.ItemUUID,
+			HeroID:    v.ItemID,
+			HeroLevel: 24,
+			Attr:      []protocols.T_Attr{},
+			SkinID:    skinID,
+		}
+	}
+	carSkinAttrValueItem := db.DbManager.FindRoleAttrValueItemByAttrID(player.PID, constants.ROLE_ATTR_CARSKINID)
+	carSkinBagItem := db.DbManager.FindCarSkinByItemID(player.PID, carSkinAttrValueItem.Value)
+	// 战车皮肤
+	var tRuneAbstract = protocols.T_RuneAbstract{ItemID: carSkinBagItem.ItemID*1000 + carSkinBagItem.ItemNum}
+	var attrValue = db.DbManager.FindRoleAttrValueItemByAttrID(player.PID, 40)
+	var sRoleGetRoleSimpleInfo = protocols.S_Role_GetRoleSimpleInfo{
+		Errorcode: 0,
+		RoleAbstract: protocols.T_RoleAbstract{
+			RoleID:      player.PID,
+			ShowID:      player.ShowID,
+			BRobot:      false,
+			NickName:    player.Nickname,
+			Heros:       tHeroAbstract,
+			Expressions: map[int32]protocols.T_ExpressionAbstract{},
+			Runes: map[int32]protocols.T_RuneAbstract{
+				40:                            {ItemID: attrValue.Value},
+				constants.ROLE_ATTR_CARSKINID: tRuneAbstract},
+			PetId: attrValue.Value,
+		},
+		RoleProficiency: protocols.T_RoleProficiency{},
+	}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_GetRoleSimpleInfo, sRoleGetRoleSimpleInfo.Encode())
+}
+
+type RoleSyncDrawPrizeRouter struct {
+	net.BaseRouter
+}
+
+func (p *RoleSyncDrawPrizeRouter) Handle(request iface.IRequest) {
+	logrus.Info("*******************************  同步抽奖数据  ***********************************")
+	roleID, err := request.GetConnection().GetProperty("roleID")
+	if err != nil {
+		logrus.Error("GetProperty error:", err)
+		return
+	}
+	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
+
+	var cRoleSyncDrawPrize = protocols.C_Role_SyncDrawPrize{}
+	cRoleSyncDrawPrize.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Infof("%#v", cRoleSyncDrawPrize)
+
+	jsonData := []byte(`{"Detail":{"1":{"Daynum":0,"Totalnum":0,"GuideNum":0,"Round":0,"RoundDrawNum":0,"RewardBoxStateMap":{"25":0,"50":0}}}}`)
+	var sRoleSyncDrawPrize protocols.S_Role_SyncDrawPrize
+	err = json.Unmarshal(jsonData, &sRoleSyncDrawPrize)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SyncDrawPrize, sRoleSyncDrawPrize.Encode())
+}
+
+type RoleDrawPrizeRouter struct {
+	net.BaseRouter
+}
+
+func (p *RoleDrawPrizeRouter) Handle(request iface.IRequest) {
+	logrus.Info("*******************************  抽奖  ***********************************")
+	roleID, err := request.GetConnection().GetProperty("roleID")
+	if err != nil {
+		logrus.Error("GetProperty error:", err)
+		return
+	}
+	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
+
+	var cRoleDrawPrize = protocols.C_Role_DrawPrize{}
+	cRoleDrawPrize.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Infof("%#v", cRoleDrawPrize)
+
+	var sRoleDrawPrize = protocols.S_Role_DrawPrize{
+		Error: 0,
+		Type:  cRoleDrawPrize.Type,
+	}
+	if cRoleDrawPrize.Type == 1 {
+		logrus.Info("抽卡")
+		if cRoleDrawPrize.Num == 1 {
+			logrus.Info("单抽")
+			sRoleDrawPrize.Prize = []protocols.T_Reward{
+				{DropType: 1, DropID: utils.GetRandomHeroID(), DropNum: 999999999},
+			}
+		} else if cRoleDrawPrize.Num == 10 {
+			logrus.Info("十连抽")
+			sRoleDrawPrize.Prize = []protocols.T_Reward{}
+			for i := 0; i < 85; i++ {
+				sRoleDrawPrize.Prize = append(sRoleDrawPrize.Prize, protocols.T_Reward{DropType: 1, DropID: int32(i + 1), DropNum: 999999999})
+			}
+		}
+	}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_DrawPrize, sRoleDrawPrize.Encode())
+}
+
+type RoleCostGetRouter struct {
+	net.BaseRouter
+}
+
+func (p *RoleCostGetRouter) Handle(request iface.IRequest) {
+	logrus.Info("*******************************  花费数据  ***********************************")
+	roleID, err := request.GetConnection().GetProperty("roleID")
+	if err != nil {
+		logrus.Error("GetProperty error:", err)
+		return
+	}
+	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
+
+	var cRoleCostGet = protocols.C_Role_Cost_Get{}
+	cRoleCostGet.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Infof("%#v", cRoleCostGet)
+
+	var sRoleCostGet = protocols.S_Role_Cost_Get{Errorcode: 0}
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_Cost_Get, sRoleCostGet.Encode())
+}
+
 // 路由处理-修改战车皮肤
 type RoleCarSkinChangeRouter struct {
 	net.BaseRouter
@@ -710,6 +939,13 @@ func (p *RoleHeroChangeSkinRouter) Handle(request iface.IRequest) {
 		roleHeroSkinMap[v.UUID] = v.ID
 	}
 	tInformationData.HeroSkinMap = roleHeroSkinMap
+	var roleCarLink = []models.RoleCarLink{}
+	db.DbManager.FindRoleCarLinkByRoleID(player.PID, &roleCarLink)
+	var roleCarLinkMap = make(map[int32]int32, len(roleCarLink))
+	for _, v := range roleCarLink {
+		roleCarLinkMap[v.MasterItemID] = v.SlaveItemID
+	}
+	tInformationData.CarLinkMap = roleCarLinkMap
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynRoleInformationData, tInformationData.Encode())
 
 	var sRoleHeroChanageSkin = protocols.S_Role_HeroChangeSkin{Errorcode: 0}
@@ -733,6 +969,7 @@ func (p *RoleSetBattleArrayNameRouter) Handle(request iface.IRequest) {
 	/************************ 1、客户端数据解析 ************************/
 	var cRoleSetBattleArrayName = protocols.C_Role_SetBattleArrayName{}
 	cRoleSetBattleArrayName.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Infof("cRoleSetBattleArrayName: %#v", cRoleSetBattleArrayName)
 
 	/************************ 2、业务逻辑 ************************/
 	db.DbManager.UpdateOneRoleBattleArrayByID(player.PID, cRoleSetBattleArrayName.BattleArrayIndex, cRoleSetBattleArrayName.BattleArrayName)
@@ -774,12 +1011,13 @@ func (p *RoleSetBattleArrayNameRouter) Handle(request iface.IRequest) {
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SetBattleArrayName, sRoleSetBattleArrayName.Encode())
 }
 
-type RoleGetRoleSimpleInfoRouter struct {
+// 路由处理-修改英雄阵容名称
+type RoleCarLinkRouter struct {
 	net.BaseRouter
 }
 
-func (p *RoleGetRoleSimpleInfoRouter) Handle(request iface.IRequest) {
-	logrus.Info("*******************************获取头像简要信息***********************************")
+func (p *RoleCarLinkRouter) Handle(request iface.IRequest) {
+	logrus.Info("***********************************  战车链接  ***********************************")
 	roleID, err := request.GetConnection().GetProperty("roleID")
 	if err != nil {
 		logrus.Error("GetProperty error:", err)
@@ -787,89 +1025,51 @@ func (p *RoleGetRoleSimpleInfoRouter) Handle(request iface.IRequest) {
 	}
 	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
 
-	// 获取简要数据
-	var cRoleGetRoleSimpleInfo = protocols.C_Role_GetRoleSimpleInfo{}
-	cRoleGetRoleSimpleInfo.Decode(bytes.NewBuffer(request.GetData()), player.Key)
-	logrus.Infof("%#v", cRoleGetRoleSimpleInfo)
+	/************************ 1、客户端数据解析 ************************/
+	var cRoleCarLink = protocols.C_Role_CarLink{}
+	cRoleCarLink.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Infof("cRoleCarLink: %#v", cRoleCarLink)
 
+	/************************ 2、业务逻辑 ************************/
+	db.DbManager.UpdateRoleCarLinkByMasterItemID(player.PID, cRoleCarLink.MasterCarID, cRoleCarLink.HelpCarID)
+
+	/************************ 3、服务器返回数据 ************************/
+	// 同步角色信息
+	var tInformationData = db.DbManager.FindRoleInformationByRoleID(player.PID)
+	tInformationData.FightData = protocols.T_Information_FightData{
+		TypeData: map[int32]protocols.T_Information_FightTypeData{
+			1:  {MaxRound: 310, WinNum: 999, LostNum: 0, TotalWinNum: 999, TotalLostNum: 0, SeriesWinNum: 999, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0},
+			2:  {MaxRound: 310, WinNum: 999, LostNum: 0, TotalWinNum: 999, TotalLostNum: 0, SeriesWinNum: 999, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0}, // 合作
+			3:  {MaxRound: 310, WinNum: 999, LostNum: 0, TotalWinNum: 999, TotalLostNum: 0, SeriesWinNum: 999, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0},
+			7:  {MaxRound: 310, WinNum: 0, LostNum: 0, TotalWinNum: 0, TotalLostNum: 0, SeriesWinNum: 0, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0},
+			8:  {MaxRound: 310, WinNum: 0, LostNum: 0, TotalWinNum: 0, TotalLostNum: 0, SeriesWinNum: 0, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0},
+			9:  {MaxRound: 310, WinNum: 0, LostNum: 0, TotalWinNum: 0, TotalLostNum: 0, SeriesWinNum: 0, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0},
+			10: {MaxRound: 200, WinNum: 999, LostNum: 0, TotalWinNum: 999, TotalLostNum: 0, SeriesWinNum: 0, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0}, // 大航海
+			11: {MaxRound: 0, WinNum: 0, LostNum: 0, TotalWinNum: 0, TotalLostNum: 0, SeriesWinNum: 0, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0},
+			12: {MaxRound: 130, WinNum: 999, LostNum: 0, TotalWinNum: 999, TotalLostNum: 0, SeriesWinNum: 0, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0}, // 寒冰堡
+			13: {MaxRound: 310, WinNum: 999, LostNum: 0, TotalWinNum: 999, TotalLostNum: 0, SeriesWinNum: 1, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0},
+			14: {MaxRound: 310, WinNum: 999, LostNum: 0, TotalWinNum: 999, TotalLostNum: 0, SeriesWinNum: 0, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0},
+			15: {MaxRound: 200, WinNum: 999, LostNum: 0, TotalWinNum: 999, TotalLostNum: 0, SeriesWinNum: 0, SeriesLostNum: 0, WinLostResetNum: 0, AdditionalDayNum: 0}, // 机械迷城
+		},
+	}
 	var roleHeroSkin = []models.RoleHeroSkin{}
 	db.DbManager.FindRoleHeroSkinByRoleID(player.PID, &roleHeroSkin)
 	var roleHeroSkinMap = make(map[int64]int32, len(roleHeroSkin))
 	for _, v := range roleHeroSkin {
 		roleHeroSkinMap[v.UUID] = v.ID
 	}
-	var roleBagItems = []protocols.T_Role_Item{}
-	if err := db.DbManager.FindRoleBagItemsByType(player.PID, 2, &roleBagItems); err != nil {
-		logrus.Error("FindRoleBagItemsByType error:", err)
-		return
+	tInformationData.HeroSkinMap = roleHeroSkinMap
+	var roleCarLink = []models.RoleCarLink{}
+	db.DbManager.FindRoleCarLinkByRoleID(player.PID, &roleCarLink)
+	var roleCarLinkMap = make(map[int32]int32, len(roleCarLink))
+	for _, v := range roleCarLink {
+		roleCarLinkMap[v.MasterItemID] = v.SlaveItemID
 	}
-	var tHeroAbstract = make(map[int32]protocols.T_HeroAbstract, len(roleBagItems))
-	for k, v := range roleBagItems {
-		var skinID int32
-		if value, ok := roleHeroSkinMap[v.ItemUUID]; ok {
-			skinID = value
-		}
-		tHeroAbstract[int32(k)] = protocols.T_HeroAbstract{
-			HeroUUID:  v.ItemUUID,
-			HeroID:    v.ItemID,
-			HeroLevel: 24,
-			Attr:      []protocols.T_Attr{},
-			SkinID:    skinID,
-		}
-	}
-	carSkinAttrValueItem := db.DbManager.FindRoleAttrValueItemByAttrID(player.PID, constants.ROLE_ATTR_CARSKINID)
-	carSkinBagItem := db.DbManager.FindCarSkinByItemID(player.PID, carSkinAttrValueItem.Value)
-	// 战车皮肤
-	var tRuneAbstract = protocols.T_RuneAbstract{ItemID: carSkinBagItem.ItemID*1000 + carSkinBagItem.ItemNum}
-	var attrValue = db.DbManager.FindRoleAttrValueItemByAttrID(player.PID, 40)
-	var sRoleGetRoleSimpleInfo = protocols.S_Role_GetRoleSimpleInfo{
+	tInformationData.CarLinkMap = roleCarLinkMap
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynRoleInformationData, tInformationData.Encode())
+
+	var sRoleCarLink = protocols.S_Role_CarLink{
 		Errorcode: 0,
-		RoleAbstract: protocols.T_RoleAbstract{
-			RoleID:      player.PID,
-			ShowID:      player.ShowID,
-			BRobot:      false,
-			NickName:    player.Nickname,
-			Heros:       tHeroAbstract,
-			Expressions: map[int32]protocols.T_ExpressionAbstract{},
-			Runes: map[int32]protocols.T_RuneAbstract{
-				40:                            {ItemID: attrValue.Value},
-				constants.ROLE_ATTR_CARSKINID: tRuneAbstract},
-			PetId: attrValue.Value,
-		},
-		RoleProficiency: protocols.T_RoleProficiency{},
 	}
-	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_GetRoleSimpleInfo, sRoleGetRoleSimpleInfo.Encode())
-}
-
-type RoleSetGuideRouter struct {
-	net.BaseRouter
-}
-
-func (p *RoleSetGuideRouter) Handle(request iface.IRequest) {
-	logrus.Info("******************************* 设置 guide ***********************************")
-	roleID, err := request.GetConnection().GetProperty("roleID")
-	if err != nil {
-		logrus.Error("GetProperty error:", err)
-		return
-	}
-	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
-
-	// 获取简要数据
-	var cRoleSetGuide = protocols.C_Role_SetGuide{}
-	cRoleSetGuide.Decode(bytes.NewBuffer(request.GetData()), player.Key)
-	logrus.Infof("%#v", cRoleSetGuide)
-
-	var sRoleSetGuide = protocols.S_Role_SetGuide{Errorcode: 0}
-	updateResult, err := db.DbManager.UpdateRoleAttrValueByAttrID(player.PID, constants.ROLE_ATTR_GUIDE, cRoleSetGuide.Guide)
-	if err != nil || updateResult.MatchedCount == 0 || updateResult.ModifiedCount == 0 {
-		logrus.Error("UpdateRoleAttrValueByAttrID error:", err)
-		sRoleSetGuide.Errorcode = 1
-	} else {
-		var sRoleSynRoleAttrValue = protocols.S_Role_SynRoleAttrValue{
-			Index: constants.ROLE_ATTR_GUIDE,
-			Value: cRoleSetGuide.Guide,
-		}
-		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SynRoleAttrValue, sRoleSynRoleAttrValue.Encode())
-	}
-	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_SetGuide, sRoleSetGuide.Encode())
+	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Role_CarLink, sRoleCarLink.Encode())
 }

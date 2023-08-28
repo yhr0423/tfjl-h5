@@ -3,13 +3,13 @@ package apis
 import (
 	"bytes"
 	"fmt"
-	"math/rand"
 	"tfjl-h5/core"
 	"tfjl-h5/db"
 	"tfjl-h5/iface"
 	"tfjl-h5/models"
 	"tfjl-h5/net"
 	"tfjl-h5/protocols"
+	"tfjl-h5/utils"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
@@ -208,7 +208,7 @@ func (p *LoginChooseRoleRouter) Handle(request iface.IRequest) {
 	costGetMap[5] = 0
 	costGetMap[6] = 0
 	costGetMap[7] = 0
-	costGetMap[8] = 0
+	costGetMap[8] = 1 // 英雄额外卡组
 	costGetMap[9] = 0
 	costGetMap[101] = 0
 	costGetMap[102] = 0
@@ -246,8 +246,7 @@ func (p *LoginChooseRoleRouter) Handle(request iface.IRequest) {
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Activity_SyncEatChickenData, sActivitySyncEatChickenData.Encode())
 
 	// 大航海
-	rand.Seed(time.Now().Unix())
-	cardID := rand.Intn(135) + 1
+	cardID := utils.GetRandomInt(1, 135)
 	jsonData = []byte(fmt.Sprintf(`{"Error":0,"ActivityID":5000,"FailCount":0,"IsOpen":true,"HistoryMaxScore":200,"TodayScore":200,"DayFailNum":0,"DayMatchNum":0,"ContinuousWinNum":0,"ContinuousFailNum":0,"WinNum":0,"ReliveNum":0,"MaxContinuousWinNum":0,"CardId":%d,"PrizeReward":{},"RefleshCardNum":0}`, cardID))
 	var sActivitySyncGreatSailingData protocols.S_Activity_SyncGreatSailingData
 	err = json.Unmarshal(jsonData, &sActivitySyncGreatSailingData)

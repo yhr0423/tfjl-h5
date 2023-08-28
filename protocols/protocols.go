@@ -29,6 +29,9 @@ const (
 	// 角色-同步角色信息
 	P_Role_SynRoleInformationData = 2000004
 
+	// 角色-同步角色背包数据
+	P_Role_SynItemData = 2000006
+
 	// 角色-同步角色邮件数据
 	P_Role_SynMailData = 2000007
 
@@ -37,6 +40,9 @@ const (
 
 	// 角色-同步战斗阵容数据
 	P_Role_SynBattleArrayData = 2000011
+
+	// 角色-英雄升级操作
+	P_Role_HeroLevelUp = 2000024
 
 	// 角色-设置默认战斗阵容
 	P_Role_BattleArraySetDefine = 2000025
@@ -59,20 +65,32 @@ const (
 	// 角色-角色总看广告数据
 	P_Role_TotalWatchADBoxData = 2000054
 
-	// 同步角色任务额外数据
+	// 角色-同步抽奖数据
+	P_Role_SyncDrawPrize = 2000060
+
+	// 角色-抽奖
+	P_Role_DrawPrize = 2000061
+
+	// 角色-同步角色任务额外数据
 	P_Role_SynTaskExtraData = 2000071
 
-	// 同步角色条件数据
+	// 角色-同步角色条件数据
 	P_Role_SynCondShareData = 2000105
+
+	// 角色-角色花费数据
+	P_Role_Cost_Get = 2000113
 
 	// 角色-同步角色开关数据
 	P_Role_OnOffDataInfo = 2000121
 
-	// 角色-同步角色消耗数据
+	// 角色-同步角色花费数据
 	P_Role_SyncCostGet = 2000131
 
 	// 角色-修改角色战车皮肤
 	P_Role_Car_Skin_Change = 2000138
+
+	// 角色-发送卡组血量到服务器
+	P_Role_SendCarHpToServer = 2000148
 
 	// 角色-修改角色英雄皮肤
 	P_Role_HeroChangeSkin = 2000151
@@ -82,6 +100,9 @@ const (
 
 	// 角色-同步角色章节数据
 	P_Role_SynChapterData = 2000155
+
+	// 角色-战车链接
+	P_Role_CarLink = 2000163
 
 	/**********************  活动  **********************/
 	// 活动-同步角色所有活动数据

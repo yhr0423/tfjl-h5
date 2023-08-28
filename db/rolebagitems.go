@@ -30,6 +30,11 @@ func (manager *dbManager) FindRoleBagItemsByType(roleID int64, itemType int32, r
 	return manager.FindRoleBagItems(filter, result, opts...)
 }
 
+func (manager *dbManager) FindRoleBagItemsByUUID(roleID int64, uuid int64, result *[]protocols.T_Role_Item, opts ...*options.FindOptions) error {
+	filter := bson.M{"role_id": roleID, "uuid": uuid}
+	return manager.FindRoleBagItems(filter, result, opts...)
+}
+
 func (manager *dbManager) FindRoleBagItemsByRoleID(roleID int64, result *[]protocols.T_Role_Item, opts ...*options.FindOptions) error {
 	filter := bson.M{"role_id": roleID}
 	return manager.FindRoleBagItems(filter, result, opts...)
@@ -48,6 +53,16 @@ func (manager *dbManager) FindRoleBagItems(filter bson.M, result *[]protocols.T_
 	}
 
 	return nil
+}
+
+func (manager *dbManager) UpdateRoleBagItemLevel(roleID int64, itemUUID int64) (*mongo.UpdateResult, error) {
+	filter := bson.M{"role_id": roleID, "uuid": itemUUID}
+	update := bson.M{"$inc": bson.M{"level": 1}}
+	return manager.UpdateOneRoleBagItems(filter, update)
+}
+
+func (manager *dbManager) UpdateOneRoleBagItems(filter interface{}, update interface{}, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error) {
+	return manager.RoleBagItemsCollection.UpdateOne(context.Background(), filter, update, opts...)
 }
 
 func (manager *dbManager) CreateRoleBagItem(data interface{}, opts ...*options.InsertOneOptions) (*mongo.InsertOneResult, error) {

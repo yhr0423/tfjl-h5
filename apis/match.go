@@ -25,7 +25,7 @@ type MatchFightRouter struct {
 }
 
 func (p *MatchFightRouter) Handle(request iface.IRequest) {
-	logrus.Info("************************* 快速匹配 *************************")
+	logrus.Info("*************************  快速匹配  *************************")
 	roleID, err := request.GetConnection().GetProperty("roleID")
 	if err != nil {
 		logrus.Error("GetProperty error:", err)
@@ -107,7 +107,7 @@ func (p *MatchFightRouter) Handle(request iface.IRequest) {
 				RoleID:   1,
 				ShowID:   "1",
 				BRobot:   true,
-				NickName: player.Nickname,
+				NickName: "塔防精灵机器人",
 				FightType: map[int32]protocols.T_RoleFightTypeAbstract{
 					1: {MaxRound: 0, WinNum: 0, LostNum: 0, SeriesWinNum: 0},
 				},
@@ -153,14 +153,14 @@ func (p *MatchFightRouter) Handle(request iface.IRequest) {
 
 	if fightData.FightType == constants.FIGHT_TYPE_BATTLE {
 		// 对战
-		matchResult.SeedId = []int32{625, 867, 296, 299, 75, 115, 294, 268, 235, 775, 346, 588, 849, 223, 161, 987, 158, 917, 509, 498, 604, 529, 162, 419, 636, 730, 844, 659, 783, 312, 265, 987, 315, 724, 184, 390, 448, 982, 327, 709, 280, 696, 932, 821, 400, 567, 380, 63, 593, 504, 69, 741, 206, 708, 724, 227, 576, 859, 201, 710, 844, 556, 424, 22, 545, 526, 528, 717, 186, 143, 82, 813, 465, 656, 31, 575, 435, 343, 558, 640, 639, 83, 35, 471, 710, 142, 170, 658, 594, 390, 609, 949, 773, 965, 57, 852, 855, 288, 385, 81}
+		matchResult.SeedId = []int32{3, 7, 4, 2, 3, 8, 2, 9, 8, 9, 5, 9, 9, 7, 3, 8, 8, 5, 9, 1, 8, 3, 7, 3, 5, 3, 5, 7, 8, 6, 5}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-		matchResult.BossIdIndexs = []int32{625, 867, 296, 299, 75, 115, 294, 268, 235, 775, 346, 588, 849, 223, 161, 987, 158, 917, 509, 498, 604, 529, 162, 419, 636, 730, 844, 659, 783, 312, 265, 987, 315, 724, 184, 390, 448, 982, 327, 709, 280, 696, 932, 821, 400, 567, 380, 63, 593, 504, 69, 741, 206, 708, 724, 227, 576, 859, 201, 710, 844, 556, 424, 22, 545, 526, 528, 717, 186, 143, 82, 813, 465, 656, 31, 575, 435, 343, 558, 640, 639, 83, 35, 471, 710, 142, 170, 658, 594, 390, 609, 949, 773, 965, 57, 852, 855, 288, 385, 81}
+		matchResult.BossIdIndexs = []int32{3, 7, 4, 2, 3, 8, 2, 9, 8, 9, 5, 9, 9, 7, 3, 8, 8, 5, 9, 1, 8, 3, 7, 3, 5, 3, 5, 7, 8, 6, 5}
 	} else if fightData.FightType == constants.FIGHT_TYPE_COOPERATION {
 		// 合作
-		matchResult.SeedId = []int32{3, 2, 1, 3, 7, 4, 6, 3, 2, 3, 3, 9, 4, 2, 6, 8, 6, 9, 3, 1, 9, 2, 8, 5, 3, 5, 6, 2, 7, 6, 4}
+		matchResult.SeedId = []int32{8, 3, 5, 9, 6, 4, 9, 2, 9, 5, 6, 3, 6, 4, 2, 7, 9, 9, 4, 1, 1, 9, 7, 9, 7, 1, 4, 2, 5, 5, 3}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-		matchResult.BossIdIndexs = []int32{3, 2, 1, 3, 7, 4, 6, 3, 2, 3, 3, 9, 4, 2, 6, 8, 6, 9, 3, 1, 9, 2, 8, 5, 3, 5, 6, 2, 7, 6, 4}
+		matchResult.BossIdIndexs = []int32{8, 3, 5, 9, 6, 4, 9, 2, 9, 5, 6, 3, 6, 4, 2, 7, 9, 9, 4, 1, 1, 9, 7, 9, 7, 1, 4, 2, 5, 5, 3}
 	} else if fightData.FightType == constants.FIGHT_TYPE_BATTLE_GREAT_SAILING {
 		// 大航海
 		matchResult.SeedId = []int32{3, 5, 6, 2, 5, 1, 7, 5, 9, 1, 4, 2, 1, 1, 6, 4, 7, 1, 4, 9, 1, 4, 7, 6, 1, 9, 6, 2, 3, 8, 3}
@@ -168,9 +168,9 @@ func (p *MatchFightRouter) Handle(request iface.IRequest) {
 		matchResult.BossIdIndexs = []int32{3, 5, 6, 2, 5, 1, 7, 5, 9, 1, 4, 2, 1, 1, 6, 4, 7, 1, 4, 9, 1, 4, 7, 6, 1, 9, 6, 2, 3, 8, 3}
 	} else if fightData.FightType == constants.FIGHT_TYPE_WEEK_COOPERATION {
 		// 寒冰堡
-		matchResult.SeedId = []int32{7, 2, 4, 2, 3, 8, 4, 8, 8, 9, 3, 2, 8, 1, 8, 7, 5, 2, 7, 8, 1, 5, 1, 3, 5, 7, 8, 1, 6, 1, 2}
+		matchResult.SeedId = []int32{1, 8, 7, 3, 8, 7, 3, 3, 9, 8, 1, 8, 1, 3, 3, 6, 1, 7, 3, 8, 7, 8, 2, 2, 5, 9, 5, 5, 6, 9, 8}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-		matchResult.BossIdIndexs = []int32{7, 2, 4, 2, 3, 8, 4, 8, 8, 9, 3, 2, 8, 1, 8, 7, 5, 2, 7, 8, 1, 5, 1, 3, 5, 7, 8, 1, 6, 1, 2}
+		matchResult.BossIdIndexs = []int32{1, 8, 7, 3, 8, 7, 3, 3, 9, 8, 1, 8, 1, 3, 3, 6, 1, 7, 3, 8, 7, 8, 2, 2, 5, 9, 5, 5, 6, 9, 8}
 	}
 	request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Match_Result, matchResult.Encode())
 }
@@ -181,7 +181,7 @@ type MatchDuelFightRouter struct {
 }
 
 func (p *MatchDuelFightRouter) Handle(request iface.IRequest) {
-	logrus.Info("***************************** 房间匹配 *******************************")
+	logrus.Info("*****************************  房间匹配  *******************************")
 	roleID, err := request.GetConnection().GetProperty("roleID")
 	if err != nil {
 		logrus.Error("GetProperty error:", err)
@@ -369,14 +369,14 @@ func (p *MatchDuelFightRouter) Handle(request iface.IRequest) {
 		}
 		if cMatchDuelFight.FightType == constants.FIGHT_TYPE_COOPERATION {
 			// 合作
-			matchResult.SeedId = []int32{3, 2, 1, 3, 7, 4, 6, 3, 2, 3, 3, 9, 4, 2, 6, 8, 6, 9, 3, 1, 9, 2, 8, 5, 3, 5, 6, 2, 7, 6, 4}
+			matchResult.SeedId = []int32{8, 3, 5, 9, 6, 4, 9, 2, 9, 5, 6, 3, 6, 4, 2, 7, 9, 9, 4, 1, 1, 9, 7, 9, 7, 1, 4, 2, 5, 5, 3}
 			matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-			matchResult.BossIdIndexs = []int32{3, 2, 1, 3, 7, 4, 6, 3, 2, 3, 3, 9, 4, 2, 6, 8, 6, 9, 3, 1, 9, 2, 8, 5, 3, 5, 6, 2, 7, 6, 4}
+			matchResult.BossIdIndexs = []int32{8, 3, 5, 9, 6, 4, 9, 2, 9, 5, 6, 3, 6, 4, 2, 7, 9, 9, 4, 1, 1, 9, 7, 9, 7, 1, 4, 2, 5, 5, 3}
 		} else if cMatchDuelFight.FightType == constants.FIGHT_TYPE_WEEK_COOPERATION {
 			// 寒冰堡
-			matchResult.SeedId = []int32{7, 2, 4, 2, 3, 8, 4, 8, 8, 9, 3, 2, 8, 1, 8, 7, 5, 2, 7, 8, 1, 5, 1, 3, 5, 7, 8, 1, 6, 1, 2}
+			matchResult.SeedId = []int32{1, 8, 7, 3, 8, 7, 3, 3, 9, 8, 1, 8, 1, 3, 3, 6, 1, 7, 3, 8, 7, 8, 2, 2, 5, 9, 5, 5, 6, 9, 8}
 			matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
-			matchResult.BossIdIndexs = []int32{7, 2, 4, 2, 3, 8, 4, 8, 8, 9, 3, 2, 8, 1, 8, 7, 5, 2, 7, 8, 1, 5, 1, 3, 5, 7, 8, 1, 6, 1, 2}
+			matchResult.BossIdIndexs = []int32{1, 8, 7, 3, 8, 7, 3, 3, 9, 8, 1, 8, 1, 3, 3, 6, 1, 7, 3, 8, 7, 8, 2, 2, 5, 9, 5, 5, 6, 9, 8}
 		} else if cMatchDuelFight.FightType == constants.FIGHT_TYPE_FOG_HIDDEN {
 			// 雾隐/镖人
 			matchResult.SeedId = []int32{6, 6, 9, 7, 1, 9, 3, 6, 4, 5, 3, 3, 5, 5, 3, 3, 9, 3, 7, 1, 8, 9, 6, 6, 5, 4, 1, 6, 1, 6, 3}

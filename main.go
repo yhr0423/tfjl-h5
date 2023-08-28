@@ -87,6 +87,7 @@ func init() {
 	db.DbManager.SetActivityCollection("activity")
 	db.DbManager.SetRoomCollection("room")
 	db.DbManager.SetFightItemsCollection("fight_items")
+	db.DbManager.SetRoleCarLinkCollection("role_car_link")
 }
 
 // 用户认证中间件
@@ -155,19 +156,30 @@ func main() {
 
 	// 角色同步数据
 	net_.GWServer.AddRouter(protocols.P_Role_SynRoleData, &apis.RoleSynRoleDataRouter{})
+	// 英雄升级操作
+	net_.GWServer.AddRouter(protocols.P_Role_HeroLevelUp, &apis.RoleHeroLevelUpRouter{})
 	// 设置默认阵容
 	net_.GWServer.AddRouter(protocols.P_Role_BattleArraySetDefine, &apis.RoleBattleArraySetDefineRouter{})
 	// 阵容上阵更新
 	net_.GWServer.AddRouter(protocols.P_Role_BattleArrayUp, &apis.RoleBattleArrayUpRouter{})
+	// 设置引导步骤
+	net_.GWServer.AddRouter(protocols.P_Role_SetGuide, &apis.RoleSetGuideRouter{})
+	// 角色获取简要信息（头像框点击）
+	net_.GWServer.AddRouter(protocols.P_Role_GetRoleSimpleInfo, &apis.RoleGetRoleSimpleInfoRouter{})
+	// 同步抽奖数据
+	net_.GWServer.AddRouter(protocols.P_Role_SyncDrawPrize, &apis.RoleSyncDrawPrizeRouter{})
+	// 抽奖
+	net_.GWServer.AddRouter(protocols.P_Role_DrawPrize, &apis.RoleDrawPrizeRouter{})
+	// 花费数据
+	net_.GWServer.AddRouter(protocols.P_Role_Cost_Get, &apis.RoleCostGetRouter{})
 	// 角色车皮修改
 	net_.GWServer.AddRouter(protocols.P_Role_Car_Skin_Change, &apis.RoleCarSkinChangeRouter{})
 	// 角色英雄皮肤修改
 	net_.GWServer.AddRouter(protocols.P_Role_HeroChangeSkin, &apis.RoleHeroChangeSkinRouter{})
 	// 角色战斗阵容名称修改
 	net_.GWServer.AddRouter(protocols.P_Role_SetBattleArrayName, &apis.RoleSetBattleArrayNameRouter{})
-	// 角色获取简要信息（头像框点击）
-	net_.GWServer.AddRouter(protocols.P_Role_GetRoleSimpleInfo, &apis.RoleGetRoleSimpleInfoRouter{})
-	net_.GWServer.AddRouter(protocols.P_Role_SetGuide, &apis.RoleSetGuideRouter{})
+	// 战车链接
+	net_.GWServer.AddRouter(protocols.P_Role_CarLink, &apis.RoleCarLinkRouter{})
 
 	// 活动-大航海数据获得
 	net_.GWServer.AddRouter(protocols.P_Activity_GetGreatSailingData, &apis.ActivityGetGreatSailingDataRouter{})
@@ -570,6 +582,27 @@ func decode(c *gin.Context) {
 		if websocketDataDecode.ClientType == 1 {
 		} else if websocketDataDecode.ClientType == 2 {
 			message := protocols.S_Role_GetRoleSimpleInfo{}
+			err = message.Decode(buffer)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		}
+	case protocols.P_Role_SyncDrawPrize:
+		// 同步抽奖数据
+		if websocketDataDecode.ClientType == 1 {
+			message := protocols.C_Role_SyncDrawPrize{}
+			err = message.Decode(buffer, apis.KEY)
+			if err != nil {
+				logrus.Error(err)
+				c.JSON(http.StatusOK, gin.H{"data": err.Error()})
+				return
+			}
+			res = message
+		} else if websocketDataDecode.ClientType == 2 {
+			message := protocols.S_Role_SyncDrawPrize{}
 			err = message.Decode(buffer)
 			if err != nil {
 				logrus.Error(err)
@@ -1199,7 +1232,6 @@ func create(c *gin.Context) {
 			return
 		}
 		for _, roleAttrValueItem := range roleAttrValueItems {
-			roleAttrValueItem.ID_ = primitive.NewObjectID()
 			roleAttrValueItem.RoleID = role.RoleID
 			_, err = db.DbManager.CreateRoleAttrValueItem(roleAttrValueItem)
 			if err != nil {
@@ -1211,7 +1243,6 @@ func create(c *gin.Context) {
 
 		// 复制role_information
 		var roleInformation = db.DbManager.FindRoleInformationByRoleID(roleID)
-		roleInformation.ID_ = primitive.NewObjectID()
 		roleInformation.RoleID = role.RoleID
 		_, err = db.DbManager.InsertOneRoleInformation(roleInformation)
 		if err != nil {
@@ -1229,7 +1260,6 @@ func create(c *gin.Context) {
 			return
 		}
 		for _, roleBagItem := range roleBagItems {
-			roleBagItem.ID_ = primitive.NewObjectID()
 			roleBagItem.RoleID = role.RoleID
 			_, err = db.DbManager.CreateRoleBagItem(roleBagItem)
 			if err != nil {

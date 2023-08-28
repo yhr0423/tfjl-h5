@@ -36,6 +36,7 @@ type dbManager struct {
 	ActivityCollection                    *mongo.Collection // 活动
 	RoomCollection                        *mongo.Collection // 房间
 	FightItemsCollection                  *mongo.Collection // 对战items
+	RoleCarLinkCollection                 *mongo.Collection // 战车链接
 }
 
 // InitDatabase ...

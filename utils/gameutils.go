@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"math/rand"
+	cryptorand "crypto/rand"
 	"strconv"
 	"strings"
 	"time"
@@ -11,26 +12,32 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var r = rand.New(rand.NewSource(time.Now().UnixNano()))
+
+func GetRandomInt(min int, max int) int {
+	return r.Intn(max-min) + min
+}
+
 func GetRandomNumber(n int) string {
 	letters := []rune("0123456789")
-
-	rand.Seed(time.Now().UnixNano())
 	b := make([]rune, n)
 	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
+		b[i] = letters[r.Intn(len(letters))]
 	}
 	return string(b)
 }
 
 func GetRandomString(n int) string {
 	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-
-	rand.Seed(time.Now().UnixNano())
 	b := make([]rune, n)
 	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
+		b[i] = letters[r.Intn(len(letters))]
 	}
 	return string(b)
+}
+
+func GetRandomHeroID() int32 {
+	return int32(r.Intn(85) + 1)
 }
 
 func GetShowID(num int64) string {
@@ -42,19 +49,17 @@ func GetRoleName(num int64) string {
 }
 
 func GetRandomKey() uint8 {
-	rand.Seed(time.Now().UnixNano())
-	return uint8(rand.Intn(255) + 1)
+	return uint8(r.Intn(255) + 1)
 }
 
 func GetRandomMachinariumcarID() int32 {
-	rand.Seed(time.Now().UnixNano())
-	return int32(rand.Intn(13) + 1)
+	return int32(r.Intn(13) + 1)
 }
 
 func GetFightToken() string {
 	// 生成32字节的随机字节片
 	randomBytes := make([]byte, 32)
-	if _, err := rand.Read(randomBytes); err != nil {
+	if _, err := cryptorand.Read(randomBytes); err != nil {
 		logrus.Error("rand.Read: ", err)
 		return ""
 	}

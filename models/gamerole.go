@@ -49,3 +49,9 @@ type RoleSeasonScorePrize struct {
 	IsPrize bool               `bson:"is_prize"`
 	IsExtra bool               `bson:"is_extra"`
 }
+
+type RoleCarLink struct {
+	RoleID       int64 `bson:"role_id"`
+	MasterItemID int32 `bson:"master_item_id"`
+	SlaveItemID  int32 `bson:"slave_item_id"`
+}
