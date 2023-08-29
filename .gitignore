@@ -5,3 +5,7 @@ static/
 !static/assets/main/index.*.js
 Pipfile
 tfjlh5server
+*.exe
+build
+dist
+*.spec
