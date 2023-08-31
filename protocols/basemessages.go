@@ -250,9 +250,9 @@ type T_RoleAbstract struct {
 	LoginClientType  int32
 	LoginSystematic  int32
 	NickName         string
-	HeadID           int32
+	HeadID           int32 // 头像ID
 	HeadUrl          string
-	HeadFrameID      int32
+	HeadFrameID      int32 // 头像框ID
 	MapSkinID        int32
 	AutoExpressionID int32
 	Score            int32

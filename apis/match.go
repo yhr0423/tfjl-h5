@@ -32,9 +32,9 @@ func (p *MatchFightRouter) Handle(request iface.IRequest) {
 		return
 	}
 	player := core.WorldMgrObj.GetPlayerByPID(roleID.(int64))
-	var fightData protocols.C_Match_Fight
-	fightData.Decode(bytes.NewBuffer(request.GetData()), player.Key)
-	logrus.Info("fightData: ", fightData)
+	var cMatchFight protocols.C_Match_Fight
+	cMatchFight.Decode(bytes.NewBuffer(request.GetData()), player.Key)
+	logrus.Info("快速匹配 cMatchFight: ", cMatchFight)
 
 	// 快速匹配结果
 	var roleBattleArray []models.RoleBattleArray
@@ -98,16 +98,19 @@ func (p *MatchFightRouter) Handle(request iface.IRequest) {
 
 	var matchResult = protocols.S_Match_Result{
 		Ret:          0,
-		FightPattern: fightData.FightType,
-		FightType:    fightData.FightType,
-		FightModule:  fightData.FightType,
-		RoleIdentity: fightData.FightType,
+		FightPattern: cMatchFight.FightType,
+		FightType:    cMatchFight.FightType,
+		FightModule:  cMatchFight.FightType,
+		RoleIdentity: cMatchFight.FightType,
 		MatchRoles: map[int64]protocols.T_RoleAbstract{
 			1: {
-				RoleID:   1,
-				ShowID:   "1",
-				BRobot:   true,
-				NickName: "塔防精灵机器人",
+				RoleID:      1,
+				ShowID:      "1",
+				BRobot:      true,
+				Aiid:        utils.GetRandomAIID(),
+				NickName:    "塔防精灵机器人",
+				HeadID:      412959,
+				HeadFrameID: 383,
 				FightType: map[int32]protocols.T_RoleFightTypeAbstract{
 					1: {MaxRound: 0, WinNum: 0, LostNum: 0, SeriesWinNum: 0},
 				},
@@ -119,10 +122,12 @@ func (p *MatchFightRouter) Handle(request iface.IRequest) {
 				PetId:           attrValue.Value,
 			},
 			player.PID: {
-				RoleID:   player.PID,
-				ShowID:   player.ShowID,
-				BRobot:   false,
-				NickName: player.Nickname,
+				RoleID:      player.PID,
+				ShowID:      player.ShowID,
+				BRobot:      false,
+				NickName:    player.Nickname,
+				HeadID:      412959,
+				HeadFrameID: 383,
 				FightType: map[int32]protocols.T_RoleFightTypeAbstract{
 					1:  {MaxRound: 999, WinNum: 999, LostNum: 0, SeriesWinNum: 999},
 					2:  {MaxRound: 0, WinNum: 0, LostNum: 0, SeriesWinNum: 0},
@@ -151,22 +156,22 @@ func (p *MatchFightRouter) Handle(request iface.IRequest) {
 		FightToken:         "",
 	}
 
-	if fightData.FightType == constants.FIGHT_TYPE_BATTLE {
+	if cMatchFight.FightType == constants.FIGHT_TYPE_BATTLE {
 		// 对战
 		matchResult.SeedId = []int32{3, 7, 4, 2, 3, 8, 2, 9, 8, 9, 5, 9, 9, 7, 3, 8, 8, 5, 9, 1, 8, 3, 7, 3, 5, 3, 5, 7, 8, 6, 5}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
 		matchResult.BossIdIndexs = []int32{3, 7, 4, 2, 3, 8, 2, 9, 8, 9, 5, 9, 9, 7, 3, 8, 8, 5, 9, 1, 8, 3, 7, 3, 5, 3, 5, 7, 8, 6, 5}
-	} else if fightData.FightType == constants.FIGHT_TYPE_COOPERATION {
+	} else if cMatchFight.FightType == constants.FIGHT_TYPE_COOPERATION {
 		// 合作
 		matchResult.SeedId = []int32{8, 3, 5, 9, 6, 4, 9, 2, 9, 5, 6, 3, 6, 4, 2, 7, 9, 9, 4, 1, 1, 9, 7, 9, 7, 1, 4, 2, 5, 5, 3}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
 		matchResult.BossIdIndexs = []int32{8, 3, 5, 9, 6, 4, 9, 2, 9, 5, 6, 3, 6, 4, 2, 7, 9, 9, 4, 1, 1, 9, 7, 9, 7, 1, 4, 2, 5, 5, 3}
-	} else if fightData.FightType == constants.FIGHT_TYPE_BATTLE_GREAT_SAILING {
+	} else if cMatchFight.FightType == constants.FIGHT_TYPE_BATTLE_GREAT_SAILING {
 		// 大航海
 		matchResult.SeedId = []int32{3, 5, 6, 2, 5, 1, 7, 5, 9, 1, 4, 2, 1, 1, 6, 4, 7, 1, 4, 9, 1, 4, 7, 6, 1, 9, 6, 2, 3, 8, 3}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
 		matchResult.BossIdIndexs = []int32{3, 5, 6, 2, 5, 1, 7, 5, 9, 1, 4, 2, 1, 1, 6, 4, 7, 1, 4, 9, 1, 4, 7, 6, 1, 9, 6, 2, 3, 8, 3}
-	} else if fightData.FightType == constants.FIGHT_TYPE_WEEK_COOPERATION {
+	} else if cMatchFight.FightType == constants.FIGHT_TYPE_WEEK_COOPERATION {
 		// 寒冰堡
 		matchResult.SeedId = []int32{1, 8, 7, 3, 8, 7, 3, 3, 9, 8, 1, 8, 1, 3, 3, 6, 1, 7, 3, 8, 7, 8, 2, 2, 5, 9, 5, 5, 6, 9, 8}
 		matchResult.ExtraData = map[int64]protocols.T_Fight_Extra_Data{}
@@ -191,7 +196,7 @@ func (p *MatchDuelFightRouter) Handle(request iface.IRequest) {
 
 	var cMatchDuelFight protocols.C_Match_Duel_Fight
 	cMatchDuelFight.Decode(bytes.NewBuffer(request.GetData()), player.Key)
-	logrus.Info("房间匹配", cMatchDuelFight)
+	logrus.Info("房间匹配 cMatchDuelFight: ", cMatchDuelFight)
 
 	if cMatchDuelFight.RoomID != "" {
 		room := db.DbManager.FindRoomByRoomIDFightType(cMatchDuelFight.RoomID, cMatchDuelFight.FightType)
@@ -427,7 +432,6 @@ func (p *MatchDuelFightRouter) Handle(request iface.IRequest) {
 			RoleID:   player.PID,
 			ShowID:   player.ShowID,
 			BRobot:   false,
-			Aiid:     0,
 			NickName: player.Nickname,
 		}
 		sMatchDuelFight.RoleAbstract = roleAbstract

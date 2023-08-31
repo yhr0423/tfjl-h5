@@ -40,23 +40,9 @@ func (p *FightReportResultToLogicRouter) Handle(request iface.IRequest) {
 				RoleAbstract: cFightReportResultToLogic.ReportData.FightRoleInfo[player.PID].RoleAbstract,
 			},
 		},
-		Round:  cFightReportResultToLogic.ReportData.FightRoleInfo[player.PID].Round,
-		Battle: map[int32]protocols.T_FightBalance_Battle{},
-		Coopration: map[int32]protocols.T_FightBalance_CoopRation{
-			0: {
-				Prize: []protocols.T_Reward{
-					{DropType: 1, DropID: 1001, DropNum: 9999},
-					{DropType: 1, DropID: 1002, DropNum: 999},
-					{DropType: 2, DropID: 28, DropNum: 999},
-					{DropType: 2, DropID: 9, DropNum: 999},
-					{DropType: 2, DropID: 24, DropNum: 999},
-					{DropType: 1, DropID: 1006, DropNum: 999},
-					{DropType: 1, DropID: 1008, DropNum: 999},
-					{DropType: 2, DropID: 18, DropNum: 999},
-				},
-				Extraprize: []protocols.T_Reward{},
-			},
-		},
+		Round:              cFightReportResultToLogic.ReportData.FightRoleInfo[player.PID].Round,
+		Battle:             map[int32]protocols.T_FightBalance_Battle{},
+		Coopration:         map[int32]protocols.T_FightBalance_CoopRation{},
 		RandomArena:        map[int64]protocols.T_FightBalance_RandomArena{},
 		GoldenLeague:       map[int32]protocols.T_FightBlance_GoldenLeague{},
 		ActivityCoopration: map[int32]protocols.T_FightBalance_Activity_CoopRation{},
@@ -64,12 +50,34 @@ func (p *FightReportResultToLogicRouter) Handle(request iface.IRequest) {
 	}
 	if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_BATTLE {
 		// 对战结算数据
+		var sFightReportPhaseResultToLogic = protocols.S_Fight_Report_Result_To_Logic{Errorcode: 0}
+		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Fight_Report_Phase_Result_To_Logic, sFightReportPhaseResultToLogic.Encode())
+
+		sRoleFightBalance.Battle[0] = protocols.T_FightBalance_Battle{
+			Winner: protocols.T_FightBalance_Battle_Winner{},
+			Loster: protocols.T_FightBalance_Battle_Loster{},
+		}
 	} else if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_COOPERATION {
 		// 合作
 	} else if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_BATTLE_GREAT_SAILING {
 		// 大航海
 		var sFightReportPhaseResultToLogic = protocols.S_Fight_Report_Result_To_Logic{Errorcode: 0}
 		request.GetConnection().SendMessage(request.GetMsgType(), protocols.P_Fight_Report_Phase_Result_To_Logic, sFightReportPhaseResultToLogic.Encode())
+
+		// 结算奖励数据
+		sRoleFightBalance.Coopration[0] = protocols.T_FightBalance_CoopRation{
+			Prize: []protocols.T_Reward{
+				{DropType: 1, DropID: 1001, DropNum: 999999999},
+				{DropType: 1, DropID: 1002, DropNum: 999999999},
+				{DropType: 2, DropID: 28, DropNum: 999999999},
+				{DropType: 2, DropID: 9, DropNum: 999999999},
+				{DropType: 2, DropID: 24, DropNum: 999999999},
+				{DropType: 1, DropID: 1006, DropNum: 999999999},
+				{DropType: 1, DropID: 1008, DropNum: 999999999},
+				{DropType: 2, DropID: 18, DropNum: 999999999},
+			},
+			Extraprize: []protocols.T_Reward{},
+		}
 	} else if cFightReportResultToLogic.ReportData.FightType == constants.FIGHT_TYPE_WEEK_COOPERATION {
 		// 寒冰堡
 	}
