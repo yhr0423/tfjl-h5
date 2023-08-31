@@ -1,0 +1,2022 @@
+{
+    "1": {
+      "name": "buffer_init_load_role_num",
+      "value": "50",
+      "describe": "服务器初始化预加载role数量"
+    },
+    "2": {
+      "name": "buffer_load_role_max_num",
+      "value": "100",
+      "describe": "服务器加载的role最大数量"
+    },
+    "3": {
+      "name": "role_register_dropid",
+      "value": "1",
+      "describe": "新进玩家初始掉落ID"
+    },
+    "4": {
+      "name": "match_change_range_time",
+      "value": "5",
+      "describe": "扩大匹配范围时间(秒）备注：匹配时间=等待匹配玩家的最小时间与等待匹配玩家的最大时间的随机区间值+扩大匹配范围时间"
+    },
+    "5": {
+      "name": "match_ai_time",
+      "value": "9",
+      "describe": "检查是否要给匹配机器人时间(秒)"
+    },
+    "6": {
+      "name": "match_max_time_out",
+      "value": "3600",
+      "describe": "强制取消匹配超时时间(秒)"
+    },
+    "7": {
+      "name": "match_score_range_rate",
+      "value": "0",
+      "describe": "玩家真实胜率匹配修正系数"
+    },
+    "8": {
+      "name": "match_fight_wait_login_time",
+      "value": "5",
+      "describe": "战斗服等待双方连接的时间(秒)"
+    },
+    "9": {
+      "name": "match_fight_wait_report_time",
+      "value": "3",
+      "describe": "战斗服等待双方上报(秒)"
+    },
+    "10": {
+      "name": "match_fight_wait_loading_time",
+      "value": "32",
+      "describe": "战斗服等待双方加载好游戏场景时间(秒)"
+    },
+    "11": {
+      "name": "match_fight_kick_sync_scene_time",
+      "value": "99999",
+      "describe": "恢复战场多少次踢掉"
+    },
+    "12": {
+      "name": "match_cooperation_ai_num",
+      "value": "0",
+      "describe": "开始的几次合作一定给机器人"
+    },
+    "13": {
+      "name": "match_cooperation_day_num",
+      "value": "3",
+      "describe": "每天合作模式的次数上限"
+    },
+    "14": {
+      "name": "match_cooperation_day_add_num",
+      "value": "3",
+      "describe": "每天合作模式看广告增加次数上限"
+    },
+    "15": {
+      "name": "match_cooperation_day_max_num",
+      "value": "99",
+      "describe": "每天合作模式最多战斗次数99"
+    },
+    "16": {
+      "name": "match_cooperation_day_prize_num",
+      "value": "10",
+      "describe": "每天合作模式最多奖励次数10"
+    },
+    "17": {
+      "name": "match_duel_min_id",
+      "value": "1000",
+      "describe": "最小的切磋房间号"
+    },
+    "18": {
+      "name": "match_duel_first_range",
+      "value": "8999",
+      "describe": "初始分配多少个"
+    },
+    "19": {
+      "name": "match_duel_resize_range",
+      "value": "100",
+      "describe": "用完了每次分配多少个"
+    },
+    "20": {
+      "name": "match_cooperation_day_buy_num",
+      "value": "3",
+      "describe": "每天购买合作模式上限"
+    },
+    "21": {
+      "name": "match_history_check",
+      "value": "1",
+      "describe": "检查匹配历史1检查，0不检查"
+    },
+    "22": {
+      "name": "match_history_check_max_second",
+      "value": "600",
+      "describe": "600秒内匹配过不能匹配了"
+    },
+    "23": {
+      "name": "match_random_arena_history_check_max_second",
+      "value": "600",
+      "describe": "多少秒内匹配过不能匹配了"
+    },
+    "24": {
+      "name": "match_no_ai_win_num",
+      "value": "0",
+      "describe": "随机竞技场胜利几场之后不能匹配机器人了"
+    },
+    "25": {
+      "name": "match_rookie_robot_win_rate",
+      "value": "5000",
+      "describe": "新手匹配机器人胜率初始万分比"
+    },
+    "26": {
+      "name": "match_random_arena_change_range_time",
+      "value": "15",
+      "describe": "随机竞技场扩大匹配范围时间(秒)"
+    },
+    "27": {
+      "name": "match_random_arena_ai_time",
+      "value": "8",
+      "describe": "第一轮匹配机器人时间(秒)"
+    },
+    "28": {
+      "name": "match_random_arena_ai_add_time",
+      "value": "3",
+      "describe": "每一轮匹配机器人增加的时间"
+    },
+    "29": {
+      "name": "match_random_arena_check_ai_seriesLostNum",
+      "value": "1",
+      "describe": "每连输几场必须匹配机器人"
+    },
+    "30": {
+      "name": "match_random_arena_check_ai_win_num",
+      "value": "1",
+      "describe": "总胜场小于几场必须匹配机器人"
+    },
+    "31": {
+      "name": "randomArena_winIcon_0 ",
+      "value": "ui/icon/jingjichang/mutou.png",
+      "describe": "随机竞技场默认胜利底图"
+    },
+    "32": {
+      "name": "day_refresh_time",
+      "value": "0",
+      "describe": "每日刷新时间"
+    },
+    "33": {
+      "name": "day_refresh_time_2",
+      "value": "22",
+      "describe": "每日刷新时间2"
+    },
+    "34": {
+      "name": "month_refresh_time",
+      "value": "0",
+      "describe": "月刷新时间点（小时）"
+    },
+    "35": {
+      "name": "fight_battle_player_max_blood",
+      "value": "3",
+      "describe": "对战模式主公最大血量"
+    },
+    "36": {
+      "name": "monster_blood_check_param",
+      "value": "10000",
+      "describe": "怪物血量校验系数（万分比）"
+    },
+    "37": {
+      "name": "monster_blood_check_base",
+      "value": "150",
+      "describe": "怪物血量校验基数"
+    },
+    "38": {
+      "name": "coopration_mixround_noprize",
+      "value": "9",
+      "describe": "合作模式小于等于此回合数，不扣次数并不给奖励(合作模式、进击的首领)"
+    },
+    "39": {
+      "name": "ranklist_replace_time",
+      "value": "600",
+      "describe": "排行榜刷新替换间隔（秒）"
+    },
+    "40": {
+      "name": "hall_of_fame_time",
+      "value": "360",
+      "describe": "名人堂刷新时间(秒)"
+    },
+    "41": {
+      "name": "task_box_max_degree",
+      "value": "100",
+      "describe": "日常任务最大完成度"
+    },
+    "42": {
+      "name": "task_box_time",
+      "value": "0",
+      "describe": "日常任务每日刷新时间"
+    },
+    "43": {
+      "name": "task_rand_replace_num",
+      "value": "99",
+      "describe": "随机任务最大替换数量"
+    },
+    "44": {
+      "name": "role_mail_max_num",
+      "value": "100",
+      "describe": "用户邮件上限"
+    },
+    "45": {
+      "name": "role_mail_max_day",
+      "value": "7",
+      "describe": "邮件最大保留天数"
+    },
+    "46": {
+      "name": "friend_load_base_data_time",
+      "value": "604800",
+      "describe": "好友服务器加载基础数据时间（服务器维护）"
+    },
+    "47": {
+      "name": "friend_load_base_data_num",
+      "value": "1000000",
+      "describe": "好友服务器加载基础数据数量（服务器维护）"
+    },
+    "48": {
+      "name": "friend_unload_complete_data_time",
+      "value": "600",
+      "describe": "好友服务器卸载完整数据时间间隔（服务器维护）"
+    },
+    "49": {
+      "name": "friend_max_apply_list_num",
+      "value": "50",
+      "describe": "好友服务器申请列表最大数量"
+    },
+    "50": {
+      "name": "friend_max_friend_list_num",
+      "value": "50",
+      "describe": "好友服务器好友列表最大数量"
+    },
+    "51": {
+      "name": "friend_max_black_list_num",
+      "value": "50",
+      "describe": "好友服务器黑名单最大数量"
+    },
+    "52": {
+      "name": "friend_max_num",
+      "value": "50",
+      "describe": "好友数量上限（废弃误删）"
+    },
+    "53": {
+      "name": "friend_apply_max_num",
+      "value": "10",
+      "describe": "好友收到申请上限（废弃误删）"
+    },
+    "54": {
+      "name": "friend_apply_other_max_num",
+      "value": "10",
+      "describe": "好友发送申请上限（废弃误删）"
+    },
+    "55": {
+      "name": "friend_function_open_integral",
+      "value": "200",
+      "describe": "好友开启的杯数条件"
+    },
+    "56": {
+      "name": "friend_recommend_num1",
+      "value": "1",
+      "describe": "好友推荐数量"
+    },
+    "57": {
+      "name": "friend_maxnum",
+      "value": "6",
+      "describe": "好友数量"
+    },
+    "58": {
+      "name": "chat_define_rolename",
+      "value": "系统",
+      "describe": "聊天默认名字"
+    },
+    "59": {
+      "name": "chat_define_roleheadid",
+      "value": "",
+      "describe": "聊天默认头像"
+    },
+    "60": {
+      "name": "chat_define_rolelevel",
+      "value": "10",
+      "describe": "系统默认等级"
+    },
+    "61": {
+      "name": "chat_update_delay",
+      "value": "500",
+      "describe": "聊天信息刷新间隔(毫秒)"
+    },
+    "62": {
+      "name": "chat_limit_cup_count",
+      "value": "1000",
+      "describe": "聊天奖杯限制（大于等于才可以聊天）"
+    },
+    "63": {
+      "name": "chat_world_history_num",
+      "value": "8",
+      "describe": "世界聊天历史记录数量"
+    },
+    "64": {
+      "name": "chat_private_chat_delete_time",
+      "value": "604800",
+      "describe": "私聊删除指定时间前的数据，单位秒（删除7天前的所有私聊数据）"
+    },
+    "65": {
+      "name": "chat_private_role_num",
+      "value": "20",
+      "describe": "私聊人数"
+    },
+    "66": {
+      "name": "chat_private_role_chat_num",
+      "value": "20",
+      "describe": "私聊每人聊天数"
+    },
+    "67": {
+      "name": "fight_record_max_num",
+      "value": "10",
+      "describe": "战斗记录显示最大数量"
+    },
+    "68": {
+      "name": "first_recharge_id",
+      "value": "102",
+      "describe": "首充奖励rechargeid"
+    },
+    "69": {
+      "name": "fight_ad_max_num",
+      "value": "5",
+      "describe": "对战模式每日观看广告领取双倍次数"
+    },
+    "70": {
+      "name": "recharge_vipexp_numerator",
+      "value": "1",
+      "describe": "充值金额转VIP经验分子"
+    },
+    "71": {
+      "name": "recharge_vipexp_denominator",
+      "value": "10",
+      "describe": "充值金额转VIP经验分母"
+    },
+    "72": {
+      "name": "recharge_money_numerator",
+      "value": "1",
+      "describe": "货币换算分子(用于各国货币显示)"
+    },
+    "73": {
+      "name": "recharge_money_denominator",
+      "value": "10",
+      "describe": "货币换算分母（用于各国货币显示）"
+    },
+    "74": {
+      "name": "recharge_midas_money_pre",
+      "value": "1",
+      "describe": "米大师货币比例"
+    },
+    "75": {
+      "name": "day_bereport_base_num",
+      "value": "10",
+      "describe": "每日递减被举报次数的判断基准值"
+    },
+    "76": {
+      "name": "day_bereport_del_num",
+      "value": "1",
+      "describe": "每日递减被举报次数"
+    },
+    "77": {
+      "name": "day_report_refresh_num",
+      "value": "5",
+      "describe": "每日举报的有效次数，每天重置"
+    },
+    "78": {
+      "name": "checkfightdata_save_day",
+      "value": "30",
+      "describe": "战斗监测数据，起服监测，若大于30天没战斗过，直接清除历史监测数据（为了减少内存占用）"
+    },
+    "79": {
+      "name": "checkfightdata_base_weight",
+      "value": "100",
+      "describe": "基础权重100，低于该权重的不记录"
+    },
+    "80": {
+      "name": "checkfightdata_max_day",
+      "value": "15",
+      "describe": "记录数据，如果条数已满，优先删除大于该天数的任意一条数据"
+    },
+    "81": {
+      "name": "reportdata_max_num",
+      "value": "10",
+      "describe": "举报记录，被举报的玩家数据条数 "
+    },
+    "82": {
+      "name": "ranklist_bereport_update_base_num",
+      "value": "3",
+      "describe": "被举报次数上传排行榜的最低限制"
+    },
+    "83": {
+      "name": "privilege_week_card_day",
+      "value": "7",
+      "describe": "周卡特权时间（天）"
+    },
+    "84": {
+      "name": "week_card_add_match_cooperation_num",
+      "value": "0",
+      "describe": "周卡增加的合作模式次数"
+    },
+    "85": {
+      "name": "week_card_add_double_cooperation_prize_num",
+      "value": "3",
+      "describe": "周卡增加的双倍模式次数"
+    },
+    "86": {
+      "name": "privilege_month_card_day",
+      "value": "30",
+      "describe": "特权月卡时间（天）"
+    },
+    "87": {
+      "name": "privilege_month_card_prizeid",
+      "value": "20",
+      "describe": "特权月卡每日奖励掉落ID"
+    },
+    "88": {
+      "name": "fightwin_min_score",
+      "value": "40",
+      "describe": "精灵的赠礼最小弹出的杯数"
+    },
+    "89": {
+      "name": "fightloserprotect_min_score",
+      "value": "0",
+      "describe": "精灵的护佑最小弹出的杯数"
+    },
+    "90": {
+      "name": "cooper_ad_min_score",
+      "value": "0",
+      "describe": "国王的盛宴最小弹出的杯数"
+    },
+    "91": {
+      "name": "fightloserprotect_day_num",
+      "value": "10",
+      "describe": "精灵的护佑每日弹窗次数"
+    },
+    "92": {
+      "name": "fightwin_day_num",
+      "value": "10",
+      "describe": "精灵的赠礼每日弹窗次数"
+    },
+    "93": {
+      "name": "cooper_ad_maxnum",
+      "value": "5",
+      "describe": "国王的盛宴每日弹窗次数"
+    },
+    "94": {
+      "name": "fightwin_extra_prize",
+      "value": "9020",
+      "describe": "精灵的赠礼奖励id"
+    },
+    "95": {
+      "name": "total_watchadbox_round_num",
+      "value": "1095",
+      "describe": "累计广告宝箱轮数（总天数=7*轮次）21年"
+    },
+    "96": {
+      "name": "share_max_player_num",
+      "value": "1030",
+      "describe": "最大分享玩家"
+    },
+    "97": {
+      "name": "share_max_player_rank_num",
+      "value": "30",
+      "describe": "最大进入排行榜玩家（小于等于最大分享玩家）"
+    },
+    "98": {
+      "name": "share_prize_id",
+      "value": "11",
+      "describe": "分享基础奖励ID（掉落ID）"
+    },
+    "99": {
+      "name": "share_prize_day_num",
+      "value": "30",
+      "describe": "分享奖励每日领取次数"
+    },
+    "100": {
+      "name": "battle_pass_currency",
+      "value": "1006",
+      "describe": "通行证的货币ID"
+    },
+    "101": {
+      "name": "battle_pass_currency_day_maxnum",
+      "value": "60",
+      "describe": "通行证的货币每天可以获得的上限"
+    },
+    "102": {
+      "name": "battle_pass_rechargeid",
+      "value": "201",
+      "describe": "购买通行证的充值项"
+    },
+    "103": {
+      "name": "battle_pass_rich_rechargeid",
+      "value": "202",
+      "describe": "购买豪华通行证的充值项"
+    },
+    "104": {
+      "name": "battle_pass_mailid",
+      "value": "1002",
+      "describe": "通行证结束补发邮件"
+    },
+    "105": {
+      "name": "recruit_purple_box",
+      "value": "25",
+      "describe": "紫色宝箱招募次数"
+    },
+    "106": {
+      "name": "recruit_golden_box",
+      "value": "50",
+      "describe": "金色宝箱招募次数"
+    },
+    "107": {
+      "name": "battle_sp_init",
+      "value": "50",
+      "describe": "初始能量值"
+    },
+    "108": {
+      "name": "live_tv_activity_new_player_gift_need_time",
+      "value": "600",
+      "describe": "直播新人任务累计时长"
+    },
+    "109": {
+      "name": "live_time_max_change",
+      "value": "60",
+      "describe": "直播时长最大变化值（秒）"
+    },
+    "110": {
+      "name": "live_author_name_max_show_char",
+      "value": "5",
+      "describe": "直播主播名字最大显示字数"
+    },
+    "111": {
+      "name": "live_ID_text_x",
+      "value": "500",
+      "describe": "直播文本ID坐标X"
+    },
+    "112": {
+      "name": "live_ID_text_y",
+      "value": "30",
+      "describe": "直播文本ID坐标y 距离底部的距离"
+    },
+    "113": {
+      "name": "live_upload_interval",
+      "value": "60",
+      "describe": "直播上传数据刷新间隔（秒）"
+    },
+    "114": {
+      "name": "live_tv_activity_shop_exchange_group_id",
+      "value": "6",
+      "describe": "直播商店兑换组id"
+    },
+    "115": {
+      "name": "fight_max_damage_pvp",
+      "value": "200000000",
+      "describe": "对战单次伤害最大值"
+    },
+    "116": {
+      "name": "fight_max_damage_pve",
+      "value": "900000000",
+      "describe": "合作单次伤害最大值"
+    },
+    "117": {
+      "name": "indulge_time",
+      "value": "3600",
+      "describe": "防沉迷普通时间"
+    },
+    "118": {
+      "name": "indulge_begin_hour",
+      "value": "20",
+      "describe": "防沉迷可以上线开始时间"
+    },
+    "119": {
+      "name": "indulge_end_hour",
+      "value": "21",
+      "describe": "防沉迷可以上线结束时间"
+    },
+    "120": {
+      "name": "match_goldenleague_history_check_max_second",
+      "value": "60",
+      "describe": "60秒内匹配过不能匹配了"
+    },
+    "121": {
+      "name": "goldenleague_win_score",
+      "value": "30",
+      "describe": "武道会胜利积分"
+    },
+    "122": {
+      "name": "match_goldenleague_change_range_time",
+      "value": "10",
+      "describe": "武道会扩大匹配范围"
+    },
+    "123": {
+      "name": "vipService_open_rechargeNum_min",
+      "value": "1000",
+      "describe": "vip客服开启最低充值金额"
+    },
+    "124": {
+      "name": "vipService_qrCode_url_mengzuofang",
+      "value": "https://game-1252720922.file.myqcloud.com/aishen/kefu/vip_1.png",
+      "describe": "vip客服二维码地址梦作坊"
+    },
+    "125": {
+      "name": "vipService_qrCode_url_miya",
+      "value": "https://game-1252720922.file.myqcloud.com/aishen/kefu/vip_2.png",
+      "describe": "vip客服二维码地址米亚"
+    },
+    "126": {
+      "name": "vipService_qrCode_url_bigBlue",
+      "value": "https://game-1252720922.cos.ap-guangzhou.myqcloud.com/tfjlzc/kefu/vip_dalan_1.jpg",
+      "describe": "vip客服二维码地址大蓝"
+    },
+    "127": {
+      "name": "vipService_show_btn",
+      "value": "200000",
+      "describe": "累计充值超过多少显示VIP客服按钮"
+    },
+    "128": {
+      "name": "vipService_show_btn_bigBlue",
+      "value": "100000",
+      "describe": "累计充值超过多少显示VIP客服按钮（大蓝）"
+    },
+    "129": {
+      "name": "cooper_sweep_id",
+      "value": "1007",
+      "describe": "扫荡卷的物品ID"
+    },
+    "130": {
+      "name": "legend_worship_rank1",
+      "value": "1001",
+      "describe": "传奇殿堂膜拜排行1的CostGetTableData表ID"
+    },
+    "131": {
+      "name": "legend_worship_rank2",
+      "value": "1002",
+      "describe": "传奇殿堂膜拜排行2的CostGetTableData表ID"
+    },
+    "132": {
+      "name": "legend_worship_rank3",
+      "value": "1003",
+      "describe": "传奇殿堂膜拜排行3的CostGetTableData表ID"
+    },
+    "133": {
+      "name": "client_version",
+      "value": "74",
+      "describe": "客户端版本号"
+    },
+    "134": {
+      "name": "battle_batch_overtime",
+      "value": "120000",
+      "describe": "合作模式超时刷怪时间（毫秒）"
+    },
+    "135": {
+      "name": "battle_batch_navigation_overtime",
+      "value": "60000",
+      "describe": "大航海超时刷怪时间（毫秒）"
+    },
+    "136": {
+      "name": "chicken_max_role_num",
+      "value": "100",
+      "describe": "试炼场人数上限"
+    },
+    "137": {
+      "name": "chicken_max_fight_num",
+      "value": "2",
+      "describe": "试炼场每天次数（废弃）"
+    },
+    "138": {
+      "name": "chicken_max_kick_time",
+      "value": "60",
+      "describe": "试炼场玩家多长时间没有进行匹配，直接踢掉"
+    },
+    "139": {
+      "name": "chicken_rest_time",
+      "value": "10",
+      "describe": "试炼场休整时长，单位秒"
+    },
+    "140": {
+      "name": "pvp_boss_refresh_time",
+      "value": "300000",
+      "describe": "对战模式boss刷新时间（毫秒）"
+    },
+    "141": {
+      "name": "pvp_boss_refresh_time_eatchicken",
+      "value": "300000",
+      "describe": "试炼场模式boss刷新时间（毫秒）"
+    },
+    "142": {
+      "name": "pvp_boss_id",
+      "value": "10412",
+      "describe": "对战模式bossId"
+    },
+    "143": {
+      "name": "pvp_boss_star",
+      "value": "100",
+      "describe": "对战模式boss属性加成(对应star表里的id)"
+    },
+    "144": {
+      "name": "pvp_boss_id_eatchicken",
+      "value": "10412",
+      "describe": "试炼场模式bossId"
+    },
+    "145": {
+      "name": "pvp_boss_star_eatchicken",
+      "value": "100",
+      "describe": "试炼场模式boss属性加成(对应star表里的id)"
+    },
+    "146": {
+      "name": "sociaty_load_data_time",
+      "value": "2592000",
+      "describe": "预加载联盟的时间"
+    },
+    "147": {
+      "name": "sociaty_load_data_num",
+      "value": "30000",
+      "describe": "预加载联盟的数量"
+    },
+    "148": {
+      "name": "sociaty_unload_data_hour",
+      "value": "3",
+      "describe": "每天卸载数据的时间"
+    },
+    "149": {
+      "name": "sociaty_create_cost_id",
+      "value": "1002",
+      "describe": "创建联盟消耗物品id"
+    },
+    "150": {
+      "name": "sociaty_create_cost_num",
+      "value": "800",
+      "describe": "创建联盟消耗物品数量"
+    },
+    "151": {
+      "name": "sociaty_max_apply_num",
+      "value": "50",
+      "describe": "最大申请列表数量"
+    },
+    "152": {
+      "name": "sociaty_max_invite_num",
+      "value": "10",
+      "describe": "最大邀请列表数量"
+    },
+    "153": {
+      "name": "sociaty_recommend_sociaty_num",
+      "value": "8",
+      "describe": "推荐联盟数量"
+    },
+    "154": {
+      "name": "sociaty_active_leave_limit_time",
+      "value": "0",
+      "describe": "主动退出联盟限制加入新联盟时间"
+    },
+    "155": {
+      "name": "sociaty_passive_leave_limit_time",
+      "value": "0",
+      "describe": "被动退出联盟限制加入新联盟时间"
+    },
+    "156": {
+      "name": "sociaty_president_auto_change_day",
+      "value": "7",
+      "describe": "会长被自动转移需要的未登陆时间（天）"
+    },
+    "157": {
+      "name": "sociaty_change_player_day",
+      "value": "3",
+      "describe": "自动转移会长需要的会员几天内登陆（天）"
+    },
+    "158": {
+      "name": "sociaty_signin_player_max_num",
+      "value": "6",
+      "describe": "签到玩家保留数量"
+    },
+    "159": {
+      "name": "sociaty_log_max_num",
+      "value": "10",
+      "describe": "联盟日志最大条数"
+    },
+    "160": {
+      "name": "sociaty_chat_max_num",
+      "value": "20",
+      "describe": "联盟聊天最大条数"
+    },
+    "161": {
+      "name": "sociaty_player_be_kick_mail_id",
+      "value": "1005",
+      "describe": "被踢出联盟发送的邮件"
+    },
+    "162": {
+      "name": "sociaty_enter_season_box_max_grade",
+      "value": "3",
+      "describe": "赛季新进角色最高可领取公会宝箱的最大段位"
+    },
+    "163": {
+      "name": "sociaty_enter_season_box_max_grade_sub",
+      "value": "1",
+      "describe": "赛季新进角色最高可领取公会宝箱的最子段位（在段位达到最大段位后判断）"
+    },
+    "164": {
+      "name": "sociaty_day_max_convert_sociaty_medal",
+      "value": "100",
+      "describe": "每日转换公会勋章上限"
+    },
+    "165": {
+      "name": "sociaty_convert_sociaty_medal_mutiply",
+      "value": "1",
+      "describe": "转换公会勋章的倍数"
+    },
+    "166": {
+      "name": "cd_union_recommended_refresh_time",
+      "value": "10",
+      "describe": "联盟刷新推荐联盟倒计时"
+    },
+    "167": {
+      "name": "cd_union_chat",
+      "value": "5",
+      "describe": "联盟聊天倒计时刷新"
+    },
+    "168": {
+      "name": "cd_union_fight",
+      "value": "300",
+      "describe": "联盟战斗邀请等待最大时间"
+    },
+    "169": {
+      "name": "union_notice_number_words",
+      "value": "80",
+      "describe": "联盟宣言字数限制"
+    },
+    "170": {
+      "name": "union_name_number_words",
+      "value": "7",
+      "describe": "联盟宣言字数限制"
+    },
+    "171": {
+      "name": "union_dan_box_leave_a_message",
+      "value": "20",
+      "describe": "联盟段位宝箱留言字数限制"
+    },
+    "172": {
+      "name": "union_enterScore_min",
+      "value": "0",
+      "describe": "加入联盟杯数要求最低"
+    },
+    "173": {
+      "name": "union_enterScore_max",
+      "value": "20000",
+      "describe": "加入联盟杯数要求最高"
+    },
+    "174": {
+      "name": "union_enterScore_add",
+      "value": "2000",
+      "describe": "加入联盟杯数要求每次增加"
+    },
+    "175": {
+      "name": "activity_daily_chaozhi",
+      "value": "307",
+      "describe": "每日超值第7天的充值ID"
+    },
+    "176": {
+      "name": "battle_max_damage",
+      "value": "199999999",
+      "describe": "战斗伤害值上限"
+    },
+    "177": {
+      "name": "activity_daily_chaozhi_choose",
+      "value": "6008",
+      "describe": "每日超值第7天自选金卡关联LuckyGiftSelectTableData表的ID"
+    },
+    "178": {
+      "name": "battlePass_choose",
+      "value": "6007",
+      "describe": "通行证自选紫卡关联LuckyGiftSelectTableData表的ID"
+    },
+    "179": {
+      "name": "battlePass_choose_begin",
+      "value": "12",
+      "describe": "通行证自选紫卡功能开启的赛季ID"
+    },
+    "180": {
+      "name": "pet_level_max",
+      "value": "20",
+      "describe": "信使最大等级"
+    },
+    "181": {
+      "name": "season_rank_not",
+      "value": "5",
+      "describe": "赛季结算未上榜奖励掉落ID"
+    },
+    "182": {
+      "name": "sociaty_open_score",
+      "value": "500",
+      "describe": "开启联盟所需杯数"
+    },
+    "183": {
+      "name": "sociaty_create_score",
+      "value": "3000",
+      "describe": "创建联盟所需杯数、"
+    },
+    "184": {
+      "name": "sociaty_extraItem_score",
+      "value": "5000",
+      "describe": "联盟豪华版奖励领取所需杯数"
+    },
+    "185": {
+      "name": "sociaty_contribution_id",
+      "value": "1009",
+      "describe": "联盟贡献的id"
+    },
+    "186": {
+      "name": "load_scene_release_asset",
+      "value": "0",
+      "describe": "切场景释放资源开关0关闭1打开"
+    },
+    "187": {
+      "name": "item_id_define_mapskin",
+      "value": "701",
+      "describe": "默认的场景地图皮肤"
+    },
+    "188": {
+      "name": "sociatywar_win_score",
+      "value": "10",
+      "describe": "联盟战胜利积分"
+    },
+    "189": {
+      "name": "sociatywar_continuouwin_add_score",
+      "value": "1",
+      "describe": "联盟战每连胜一场增加的积分"
+    },
+    "190": {
+      "name": "sociatywar_continuouswin_max_score",
+      "value": "15",
+      "describe": "联盟战连胜最高获得的积分"
+    },
+    "191": {
+      "name": "sociatywar_change_range_time",
+      "value": "10",
+      "describe": "联盟战扩大匹配范围"
+    },
+    "192": {
+      "name": "match_sociatywar_history_check_max_second",
+      "value": "300",
+      "describe": "300秒内匹配过不能匹配了"
+    },
+    "193": {
+      "name": "advert_need_time",
+      "value": "10",
+      "describe": "开始看广告到领取奖励不能低于的时长"
+    },
+    "194": {
+      "name": "fight_frame_send_msg",
+      "value": "0",
+      "describe": "战斗分帧发送消息开关0关闭1打开"
+    },
+    "195": {
+      "name": "sociaty_auction_show_time",
+      "value": "300",
+      "describe": "联盟竞拍展示时间"
+    },
+    "196": {
+      "name": "sociaty_auction_continue_time",
+      "value": "900",
+      "describe": "联盟竞拍持续时间"
+    },
+    "197": {
+      "name": "sociaty_war_need_sociatylevel",
+      "value": "5",
+      "describe": "联盟战需要的联盟等级"
+    },
+    "198": {
+      "name": "sociaty_auction_open_playercount",
+      "value": "20",
+      "describe": "联盟竞拍开启需要的活跃玩家数"
+    },
+    "199": {
+      "name": "cheat_table_interval",
+      "value": "13",
+      "describe": "8090检测频率秒"
+    },
+    "200": {
+      "name": "car_skin_level_max",
+      "value": "15",
+      "describe": "战车皮肤最大等级"
+    },
+    "201": {
+      "name": "sociaty_auction_focus_cd",
+      "value": "2",
+      "describe": "联盟竞拍点击关注CD"
+    },
+    "202": {
+      "name": "coop_max_kill",
+      "value": "50",
+      "describe": "合作模式每10波最大击杀数"
+    },
+    "203": {
+      "name": "chat_push_cd_time",
+      "value": "1",
+      "describe": "客户端聊天框关闭状态信息推送cd时间"
+    },
+    "204": {
+      "name": "voucher_shop_need_recharge_num",
+      "value": "1000000",
+      "describe": "代金券商店开启需要充值的人名币数额(单位是分)"
+    },
+    "205": {
+      "name": "continuousrRecharge_id",
+      "value": "601",
+      "describe": "樱花特惠活动充值ID"
+    },
+    "206": {
+      "name": "continuousrRecharge_num",
+      "value": "15",
+      "describe": "樱花特惠活动领取战车需要的充值天数"
+    },
+    "207": {
+      "name": "continuousrRecharge_condition",
+      "value": "30",
+      "describe": "樱花特惠活动显示的累计充值金额（元）"
+    },
+    "208": {
+      "name": "continuousrRecharge_itemId",
+      "value": "803",
+      "describe": "樱花特惠活动领取战车的ID"
+    },
+    "209": {
+      "name": "battle_num_day",
+      "value": "120",
+      "describe": "对战模式每天可以进行的次数，超过此次数不给奖励"
+    },
+    "210": {
+      "name": "greatsailing_max_time",
+      "value": "2400",
+      "describe": "大航海战斗最长时间，超过判作弊"
+    },
+    "211": {
+      "name": "greatsailing_max_phase",
+      "value": "5",
+      "describe": "大航海上报波数误差"
+    },
+    "212": {
+      "name": "subgame_score_limit",
+      "value": "3000",
+      "describe": "小游戏入口杯数限制"
+    },
+    "213": {
+      "name": "coop_score_limit",
+      "value": "500",
+      "describe": "合作模式杯数限制"
+    },
+    "214": {
+      "name": "max_car_hp_limit",
+      "value": "50000000",
+      "describe": "战车最大血量上限"
+    },
+    "215": {
+      "name": "sociaty_change_declaration_limit",
+      "value": "6500",
+      "describe": "联盟修改宣言杯数限制"
+    },
+    "216": {
+      "name": "enter_battle_time_out_time",
+      "value": "15",
+      "describe": "匹配成功后未进入战斗超时的时间"
+    },
+    "217": {
+      "name": "douyin_desktop_id",
+      "value": "401",
+      "describe": "抖音添加到桌面任务ID"
+    },
+    "218": {
+      "name": "proficiency_rank_level",
+      "value": "2",
+      "describe": "参与熟练度排名需要的熟练度等级"
+    },
+    "219": {
+      "name": "proficiency_world_rank_max_num",
+      "value": "10",
+      "describe": "英雄熟练度国服排名数量"
+    },
+    "220": {
+      "name": "proficiency_local_rank_max_num",
+      "value": "100",
+      "describe": "英雄熟练度地区排名数量"
+    },
+    "221": {
+      "name": "proficiency_share_level_num",
+      "value": "2",
+      "describe": "英雄熟练度可分享等级"
+    },
+    "222": {
+      "name": "car_hp_local_rank_max_num",
+      "value": "1000",
+      "describe": "战车血量地区排名数量"
+    },
+    "223": {
+      "name": "skycastle_ai_max_time",
+      "value": "10",
+      "describe": "天空之城检查是否要给匹配机器人时间(秒)"
+    },
+    "224": {
+      "name": "skycastle_box_coin_itemId",
+      "value": "1014",
+      "describe": "天空之城战令道具id"
+    },
+    "225": {
+      "name": "skycastle_box_coin_day_max",
+      "value": "42",
+      "describe": "天空之城战令道具每日获取上限"
+    },
+    "226": {
+      "name": "skycastle_box_super_cup_limit",
+      "value": "10000",
+      "describe": "天空之城战令豪华版解锁杯数"
+    },
+    "227": {
+      "name": "rechargeProtectCounht",
+      "value": "10",
+      "describe": "充值保护次数"
+    },
+    "228": {
+      "name": "rechargeProtectTimeInterval",
+      "value": "1000",
+      "describe": "充值保护间隔(毫秒)"
+    },
+    "229": {
+      "name": "rechargeProtectClick",
+      "value": "3",
+      "describe": "充值防止连点间隔(秒)"
+    },
+    "230": {
+      "name": "appstroe_release_timestamp",
+      "value": "1669683600",
+      "describe": "苹果首次对外上线的时间点，之前的账号不互通，之后的互通"
+    },
+    "231": {
+      "name": "sociaty_changePlayerNotEnoughScore",
+      "value": "3000",
+      "describe": "转让会长时检测被转让者杯数"
+    },
+    "232": {
+      "name": "skyCastle_select_recharge_id",
+      "value": "32",
+      "describe": "神谕好礼198档充值ID"
+    },
+    "233": {
+      "name": "skyCastle_select_recharge_rewardNum",
+      "value": "4",
+      "describe": "神谕好礼198档自选金卡数量"
+    },
+    "234": {
+      "name": "battlePass_choose_gold",
+      "value": "6008",
+      "describe": "通行证自选金卡关联LuckyGiftSelectTableData表的ID"
+    },
+    "235": {
+      "name": "battlePass_gold_choose_begin",
+      "value": "24",
+      "describe": "通行证自选金卡功能开启的赛季ID"
+    },
+    "236": {
+      "name": "week_cooperation_need_wave",
+      "value": "300",
+      "describe": "开启周常合作需要通关的波数"
+    },
+    "237": {
+      "name": "task_box_time_count_down",
+      "value": "600",
+      "describe": "任务免费宝箱领取倒计时秒"
+    },
+    "238": {
+      "name": "christmas_gift_recharge",
+      "value": "611",
+      "describe": "圣诞礼包（冰女皮肤）的recharge表ID"
+    },
+    "239": {
+      "name": "SelfSelect_47",
+      "value": "1|6008|3|47",
+      "describe": "镖人礼包1recharge表ID（充值ID|自选金卡数量|幸运礼包表礼包ID|限购次数）"
+    },
+    "240": {
+      "name": "SelfSelect_48",
+      "value": "4|6008|3|48",
+      "describe": "镖人礼包2recharge表ID（充值ID|自选金卡数量|幸运礼包表礼包ID|限购次数）"
+    },
+    "241": {
+      "name": "SelfSelect_49",
+      "value": "12|6008|3|49",
+      "describe": "镖人礼包3recharge表ID（充值ID|自选金卡数量|幸运礼包表礼包ID|限购次数）"
+    },
+    "242": {
+      "name": "SelfSelect_50",
+      "value": "8|6008|0|50",
+      "describe": "镖人礼包4recharge表ID（充值ID|自选金卡数量|幸运礼包表礼包ID|限购次数）"
+    },
+    "243": {
+      "name": "royale_lucyboxkey_itemid",
+      "value": "1035",
+      "describe": "镖人抽卡许愿宝箱消耗道具"
+    },
+    "244": {
+      "name": "royale_battlepass_coin_itemid",
+      "value": "1032",
+      "describe": "虹猫蓝兔通行证战令道具id"
+    },
+    "245": {
+      "name": "royale_battlepass_rechargeid",
+      "value": "203",
+      "describe": "虹猫蓝兔开通豪华通行证充值id"
+    },
+    "246": {
+      "name": "royale_battlepass_coin_limited",
+      "value": "10",
+      "describe": "虹猫蓝兔通行证战令上限"
+    },
+    "247": {
+      "name": "royale_drawcard_itemid",
+      "value": "1033",
+      "describe": "镖人抽卡道具id"
+    },
+    "248": {
+      "name": "royale_baoyu_itemid",
+      "value": "1037",
+      "describe": "镖人许愿商店兑换道具id"
+    },
+    "249": {
+      "name": "hp_limit",
+      "value": "5",
+      "describe": "触发小野无敌血量百分比"
+    },
+    "250": {
+      "name": "newyeargift_gift_free",
+      "value": "201|202|203|204|205|206|207|208|209|210|211|212|213|214|215",
+      "describe": "春节登录礼包的cost表ID"
+    },
+    "251": {
+      "name": "newyeargift_gift_recharge",
+      "value": "701|702|703|704|705",
+      "describe": "春节阶段礼包的recharge表ID"
+    },
+    "252": {
+      "name": "newyeargift_skin_recharge",
+      "value": "751",
+      "describe": "春节礼包（悟空皮肤）的recharge表ID"
+    },
+    "253": {
+      "name": "newyeargift_gift_free_time",
+      "value": "1676304000|1677513599",
+      "describe": "周年登录礼包的活动时间"
+    },
+    "254": {
+      "name": "newyeargift_gift_recharge_time",
+      "value": "1673539200|1674230399",
+      "describe": "春节阶段礼包的活动时间"
+    },
+    "255": {
+      "name": "newyeargift_skin_recharge_time",
+      "value": "1674230400|1674835199",
+      "describe": "春节礼包（悟空皮肤）的活动时间"
+    },
+    "256": {
+      "name": "SelfSelect_701",
+      "value": "1",
+      "describe": "春节阶段礼包自选金卡的数量"
+    },
+    "257": {
+      "name": "SelfSelect_702",
+      "value": "3",
+      "describe": "春节阶段礼包自选金卡的数量"
+    },
+    "258": {
+      "name": "SelfSelect_703",
+      "value": "5",
+      "describe": "春节阶段礼包自选金卡的数量"
+    },
+    "259": {
+      "name": "SelfSelect_704",
+      "value": "8",
+      "describe": "春节阶段礼包自选金卡的数量"
+    },
+    "260": {
+      "name": "SelfSelect_705",
+      "value": "16",
+      "describe": "春节阶段礼包自选金卡的数量"
+    },
+    "261": {
+      "name": "royale_activity_end_time",
+      "value": "1689091199",
+      "describe": "镖人活动结束时间(未来时间戳)"
+    },
+    "262": {
+      "name": "cheat_table_memory_num",
+      "value": "2",
+      "describe": "8090修改内存容忍次数"
+    },
+    "263": {
+      "name": "anniversary_battlepass_coin_itemid",
+      "value": "1042",
+      "describe": "镖人杯赛通行证战令道具id"
+    },
+    "264": {
+      "name": "anniversary_battlepass_rechargeid",
+      "value": "210",
+      "describe": "镖人杯赛战令开通豪华通行证充值id"
+    },
+    "265": {
+      "name": "fight_res_fail_max_num",
+      "value": "10",
+      "describe": "战斗资源加载失败最大次数"
+    },
+    "266": {
+      "name": "changeWxPayRechargeNum",
+      "value": "200000",
+      "describe": "客服支付需要的最小充值金额(分)"
+    },
+    "267": {
+      "name": "help_servergroup",
+      "value": "22",
+      "describe": "助力新区的ID"
+    },
+    "268": {
+      "name": "help_servergroup_name",
+      "value": "噩梦之魇",
+      "describe": "助力新区的名字"
+    },
+    "269": {
+      "name": "help_servergroup_bigBlue",
+      "value": "13",
+      "describe": "助力新区的ID"
+    },
+    "270": {
+      "name": "help_servergroup_name_bigBlue",
+      "value": "周年盛景",
+      "describe": "助力新区的名字"
+    },
+    "271": {
+      "name": "help_recharge_diamond_rate",
+      "value": "8",
+      "describe": "新区助力充值兑换钻石比率"
+    },
+    "272": {
+      "name": "check_key_batch_delay_time",
+      "value": "1",
+      "describe": "校验关键波次延迟时间单位是秒"
+    },
+    "273": {
+      "name": "check_key_batch_start_Index",
+      "value": "7",
+      "describe": "寒冰堡校验关键波次开启波次"
+    },
+    "274": {
+      "name": "check_key_coop_batch_start_Index",
+      "value": "247",
+      "describe": "合作校验关键波次开启波次"
+    },
+    "275": {
+      "name": "anniversary_battlepass_coin_limited",
+      "value": "10",
+      "describe": "镖人杯赛通行证战令上限"
+    },
+    "276": {
+      "name": "SelfSelect_706",
+      "value": "1",
+      "describe": "回归礼包自选金卡的数量"
+    },
+    "277": {
+      "name": "SelfSelect_707",
+      "value": "3",
+      "describe": "回归礼包自选金卡的数量"
+    },
+    "278": {
+      "name": "SelfSelect_708",
+      "value": "5",
+      "describe": "回归礼包自选金卡的数量"
+    },
+    "279": {
+      "name": "SelfSelect_709",
+      "value": "8",
+      "describe": "回归礼包自选金卡的数量"
+    },
+    "280": {
+      "name": "SelfSelect_710",
+      "value": "16",
+      "describe": "回归礼包自选金卡的数量"
+    },
+    "281": {
+      "name": "SelfSelect_33",
+      "value": "1",
+      "describe": "50元周年礼包自选金卡的数量"
+    },
+    "282": {
+      "name": "SelfSelect_34",
+      "value": "4",
+      "describe": "198元周年礼包自选金卡的数量"
+    },
+    "283": {
+      "name": "SelfSelect_35",
+      "value": "13",
+      "describe": "648元周年礼包自选金卡的数量"
+    },
+    "284": {
+      "name": "anniversary_diamond_rate",
+      "value": "20",
+      "describe": "金锭兑换钻石比率"
+    },
+    "285": {
+      "name": "anniversary_exchange_mailid",
+      "value": "1035",
+      "describe": "镖人杯回收金锭兑换钻石比率邮件ID"
+    },
+    "286": {
+      "name": "springgift_skin_recharge_time",
+      "value": "1677513600|1678118399",
+      "describe": "春回大地礼包（酋长皮肤）的活动时间"
+    },
+    "287": {
+      "name": "springgift_gift_recharge_time",
+      "value": "1677513600|1678118399",
+      "describe": "暖春礼包的活动时间"
+    },
+    "288": {
+      "name": "SelfSelect_753",
+      "value": "30",
+      "describe": "暖春礼包自选紫卡的数量"
+    },
+    "289": {
+      "name": "summergift_gift_recharge_time",
+      "value": "1692028800|1694707199",
+      "describe": "盛夏礼包的活动时间"
+    },
+    "290": {
+      "name": "summergift_gift_limitTimeDay",
+      "value": "3",
+      "describe": "盛夏礼包的每天购买次数"
+    },
+    "291": {
+      "name": "SelfSelect_755",
+      "value": "30",
+      "describe": "盛夏礼包自选紫卡的数量"
+    },
+    "292": {
+      "name": "client_pvp_boss_refresh_time",
+      "value": "310",
+      "describe": "对战模式客户端强制召唤boss时间（秒）"
+    },
+    "293": {
+      "name": "FogHidden_box_super_cup_limit",
+      "value": "0",
+      "describe": "镖人通行证豪华版杯数限制"
+    },
+    "294": {
+      "name": "FogHidden_box_coin_itemId",
+      "value": "1036",
+      "describe": "镖人通行证战令道具id"
+    },
+    "295": {
+      "name": "FogHidden_box_coin_day_max",
+      "value": "10",
+      "describe": "镖人通行证战令每日上限"
+    },
+    "296": {
+      "name": "FogHidden_box_rechargeid",
+      "value": "203",
+      "describe": "镖人开通豪华通行证充值id"
+    },
+    "297": {
+      "name": "SelfSelect_36",
+      "value": "1",
+      "describe": "50元雾隐礼包自选金卡的数量"
+    },
+    "298": {
+      "name": "SelfSelect_37",
+      "value": "40",
+      "describe": "198元雾隐礼包自选紫卡的数量"
+    },
+    "299": {
+      "name": "SelfSelect_38",
+      "value": "12",
+      "describe": "648元雾隐礼包自选金卡的数量"
+    },
+    "300": {
+      "name": "fogHiddenBeginMoney",
+      "value": "20000",
+      "describe": "雾隐之境战斗初始银币"
+    },
+    "301": {
+      "name": "foghidden_diamond_rate",
+      "value": "20",
+      "describe": "镖人五铢钱兑换钻石比率"
+    },
+    "302": {
+      "name": "foghidden_exchange_mailid",
+      "value": "1027",
+      "describe": "镖人五铢钱兑换钻石比率邮件ID"
+    },
+    "303": {
+      "name": "foghidden_diamond_rate2",
+      "value": "20",
+      "describe": "镖人召唤卷轴兑换钻石比率"
+    },
+    "304": {
+      "name": "foghidden_exchange_mailid2",
+      "value": "1028",
+      "describe": "镖人召唤卷轴兑换钻石比率邮件ID"
+    },
+    "305": {
+      "name": "foghidden_min_totaltime",
+      "value": "60000",
+      "describe": "雾隐之境最小战斗时间，用于防作弊，毫秒"
+    },
+    "306": {
+      "name": "user_action_report",
+      "value": "2",
+      "describe": "用户关键行为上报：注册、创角、充值等"
+    },
+    "307": {
+      "name": "average_speed_max",
+      "value": "5.05",
+      "describe": "加速到多少判作弊"
+    },
+    "308": {
+      "name": "average_speed_need_round",
+      "value": "310",
+      "describe": "合作判加速需要的波数"
+    },
+    "309": {
+      "name": "average_speed_need_totaltime",
+      "value": "963",
+      "describe": "合作判加速低于的总时间"
+    },
+    "310": {
+      "name": "inner_dalan_channel",
+      "value": "0",
+      "describe": "是否是大蓝渠道，1大蓝，0小程序，在内网和体验服环境下有效，此值正式服无效。"
+    },
+    "311": {
+      "name": "newerThreeDaysGift_cupMin",
+      "value": "70",
+      "describe": "新人大神礼包触发最小杯数"
+    },
+    "312": {
+      "name": "newerThreeDaysGift_cupMax",
+      "value": "200000",
+      "describe": "新人大神礼包触发最大杯数"
+    },
+    "313": {
+      "name": "newerThreeDaysGift_dayNum",
+      "value": "3",
+      "describe": "新人大神礼包入口显示天数"
+    },
+    "314": {
+      "name": "scorefund_battlepass_rechargeid",
+      "value": "206",
+      "describe": "冲杯基金豪华版充值ID"
+    },
+    "315": {
+      "name": "help_recharge_diamond_max",
+      "value": "200000",
+      "describe": "新区助力充值返还上限"
+    },
+    "316": {
+      "name": "reloadtabledata_otherserver",
+      "value": "0",
+      "describe": "是否通知中心服热更表，一般逻辑服热更就行了"
+    },
+    "317": {
+      "name": "occupation_rotation_begintime",
+      "value": "1680105600",
+      "describe": "寒冰堡职业轮换开始时间截，会用该值与当前时间算出跨了几周"
+    },
+    "318": {
+      "name": "tanxian_skin_recharge_time",
+      "value": "1680105600|1680710399",
+      "describe": "迷城探险礼包（工匠皮肤）的活动时间"
+    },
+    "319": {
+      "name": "machinarium_rotation_begintime",
+      "value": "1680796800",
+      "describe": "机械迷城轮换开始时间截，会用该值与当前时间算出跨了几天，修正下时间为首次更新当前即可"
+    },
+    "320": {
+      "name": "cooperation_help_day_max_count",
+      "value": "20",
+      "describe": "合作模式每天前几场有助战奖励"
+    },
+    "321": {
+      "name": "FogHidden_box_super_cup_limit",
+      "value": "0",
+      "describe": "机械迷城通行证豪华版杯数限制"
+    },
+    "322": {
+      "name": "Machinarium_box_coin_itemId",
+      "value": "1026",
+      "describe": "机械迷城通行证战令道具id"
+    },
+    "323": {
+      "name": "Machinarium_box_coin_day_max",
+      "value": "10",
+      "describe": "机械迷城通行证战令每日上限"
+    },
+    "324": {
+      "name": "Machinarium_box_rechargeid",
+      "value": "207",
+      "describe": "机械迷城开通豪华通行证充值id"
+    },
+    "325": {
+      "name": "SelfSelect_39",
+      "value": "1",
+      "describe": "50元迷城礼包自选金卡的数量"
+    },
+    "326": {
+      "name": "SelfSelect_40",
+      "value": "4",
+      "describe": "198元迷城礼包自选金卡的数量"
+    },
+    "327": {
+      "name": "SelfSelect_41",
+      "value": "12",
+      "describe": "648元迷城礼包自选金卡的数量"
+    },
+    "328": {
+      "name": "SelfSelect_42",
+      "value": "8",
+      "describe": "648元迷城礼包2自选金卡的数量"
+    },
+    "329": {
+      "name": "Machinarium_diamond_rate",
+      "value": "20",
+      "describe": "机械迷城能量核心兑换钻石比率"
+    },
+    "330": {
+      "name": "Machinarium_exchange_mailid",
+      "value": "1022",
+      "describe": "机械迷城能量核心兑换钻石比率邮件ID"
+    },
+    "331": {
+      "name": "Machinarium_check_key_batch_start_Index",
+      "value": "8",
+      "describe": "机械迷城校验关键波次开启波次"
+    },
+    "332": {
+      "name": "Machinarium_gear_itemid",
+      "value": "1028",
+      "describe": "机械迷城齿轮itemid"
+    },
+    "333": {
+      "name": "Machinarium_gear_rate",
+      "value": "1000",
+      "describe": "机械迷城齿轮兑换钻石比率"
+    },
+    "334": {
+      "name": "Machinarium_gear_mailid",
+      "value": "1023",
+      "describe": "机械迷城齿轮兑换钻石比率邮件id"
+    },
+    "335": {
+      "name": "rechargezero_guard_machinarium_round",
+      "value": "150",
+      "describe": "双方0充时，机械迷城过150波判作弊"
+    },
+    "336": {
+      "name": "rechargezero_guard_weekcooperation_round",
+      "value": "130",
+      "describe": "双方0充时，寒冰堡过130波判作弊"
+    },
+    "337": {
+      "name": "continueRecharge2_rechargeid",
+      "value": "602",
+      "describe": "连续充值（5天）的充值id"
+    },
+    "338": {
+      "name": "continueRecharge2_recharge_time",
+      "value": "1682524800|1683215999",
+      "describe": "连续充值（5天）的活动时间"
+    },
+    "339": {
+      "name": "SelfSelect_602",
+      "value": "10",
+      "describe": "连续充值（5天）自选紫卡的数量"
+    },
+    "340": {
+      "name": "continueRecharge2_itemId",
+      "value": "311448",
+      "describe": "连续充值（5天）的奖励的道具id"
+    },
+    "341": {
+      "name": "continueRecharge2_maxDay",
+      "value": "5",
+      "describe": "连续充值（5天）最大充值天数"
+    },
+    "342": {
+      "name": "SelfSelect_43",
+      "value": "1|6008|1",
+      "describe": "50元炽火礼包自选金卡的数量"
+    },
+    "343": {
+      "name": "SelfSelect_44",
+      "value": "4|6008|1",
+      "describe": "198元炽火礼包自选金卡的数量"
+    },
+    "344": {
+      "name": "SelfSelect_45",
+      "value": "12|6008|1",
+      "describe": "648元炽火礼包自选金卡的数量"
+    },
+    "345": {
+      "name": "SelfSelect_46",
+      "value": "8|6008|0",
+      "describe": "648元炽火礼包2自选金卡的数量"
+    },
+    "346": {
+      "name": "average_speed_need_week_round",
+      "value": "140",
+      "describe": "寒冰堡判加速需要的波数"
+    },
+    "347": {
+      "name": "average_speed_need_week_totaltime",
+      "value": "1160",
+      "describe": "寒冰堡判加速低于的总时间"
+    },
+    "348": {
+      "name": "boss_hp_limit",
+      "value": "20",
+      "describe": "触发boss无敌血量百分比"
+    },
+    "349": {
+      "name": "npc_scale_duration",
+      "value": "500",
+      "describe": "npc缩放动作持续时间单位是毫秒ms"
+    },
+    "350": {
+      "name": "average_week_speed_max",
+      "value": "5.02",
+      "describe": "寒冰堡加速到多少判作弊"
+    },
+    "351": {
+      "name": "continueRecharge3_rechargeid",
+      "value": "603",
+      "describe": "连续充值（5天）的充值id"
+    },
+    "352": {
+      "name": "continueRecharge3_recharge_time",
+      "value": "1685030400|1685635199",
+      "describe": "连续充值（5天）的活动时间"
+    },
+    "353": {
+      "name": "SelfSelect_603",
+      "value": "10",
+      "describe": "连续充值（5天）自选紫卡的数量"
+    },
+    "354": {
+      "name": "continueRecharge3_itemId",
+      "value": "311754",
+      "describe": "连续充值（5天）的奖励的道具id"
+    },
+    "355": {
+      "name": "continueRecharge3_maxDay",
+      "value": "5",
+      "describe": "连续充值（5天）最大充值天数"
+    },
+    "356": {
+      "name": "activity_totalrecharge_max_voucher",
+      "value": "20000",
+      "describe": "充值返利最高返还代金券数量单位元"
+    },
+    "357": {
+      "name": "BladesOfTheGuardians_summon_npcid",
+      "value": "10173",
+      "describe": "镖人战斗召唤NPCID"
+    },
+    "358": {
+      "name": "blood_difference_percentage",
+      "value": "3",
+      "describe": "合作战车血量显示和check相差多少倍后纠正check数据"
+    },
+    "359": {
+      "name": "average_fog_hidden_speed_max",
+      "value": "5.5",
+      "describe": "镖人活动加速判定值"
+    },
+    "360": {
+      "name": "week_cooperation_blessing_rechargeid",
+      "value": "8",
+      "describe": "寒冰堡冰骑的祝福礼包充值ID"
+    },
+    "361": {
+      "name": "average_fog_hidden_slow_max",
+      "value": "4.5",
+      "describe": "镖人活动速度小于该值判定为减速作弊"
+    },
+    "362": {
+      "name": "average_fog_hidden_slow_needtime",
+      "value": "240",
+      "describe": "镖人活动判定减速需要的最小战斗时长单位秒"
+    },
+    "363": {
+      "name": "average_fog_hidden_maxtime",
+      "value": "480",
+      "describe": "镖人活动最长战斗时间"
+    },
+    "364": {
+      "name": "actualtime_fault_tolerant",
+      "value": "3",
+      "describe": "使用实际时长算速度的容错差值，配置为3秒，速度=包数/（实际时长+容错值）"
+    },
+    "365": {
+      "name": "remove_ads_rechargeid",
+      "value": "120",
+      "describe": "至尊卡的充值ID"
+    },
+    "366": {
+      "name": "remove_ads_diamond_rate",
+      "value": "10",
+      "describe": "回收广告卡的钻石兑换比率"
+    },
+    "367": {
+      "name": "remove_ads_mailid",
+      "value": "1030",
+      "describe": "回收广告卡发送的邮件id"
+    },
+    "368": {
+      "name": "season_gift_mailid",
+      "value": "1031",
+      "describe": "赛季豪礼未领取的邮件发放Id"
+    },
+    "369": {
+      "name": "Biaoren_three_box_super_cup_limit",
+      "value": "0",
+      "describe": "镖人第三话通行证豪华版杯数限制"
+    },
+    "370": {
+      "name": "Biaoren_three_coin_itemId",
+      "value": "1038",
+      "describe": "镖人第三话通行证战令道具id"
+    },
+    "371": {
+      "name": "Biaoren_three_box_coin_day_max",
+      "value": "10",
+      "describe": "镖人第三话通行证战令每日上限"
+    },
+    "372": {
+      "name": "Biaoren_three_box_rechargeid",
+      "value": "209",
+      "describe": "镖人第三话开通豪华通行证充值id"
+    },
+    "373": {
+      "name": "SelfSelect_51",
+      "value": "1",
+      "describe": "50元镖人礼包自选金卡的数量"
+    },
+    "374": {
+      "name": "SelfSelect_52",
+      "value": "4",
+      "describe": "198元镖人礼包自选金卡的数量"
+    },
+    "375": {
+      "name": "SelfSelect_53",
+      "value": "12",
+      "describe": "648元镖人礼包自选金卡的数量"
+    },
+    "376": {
+      "name": "SelfSelect_54",
+      "value": "6",
+      "describe": "648元镖人礼包2自选金卡的数量"
+    },
+    "377": {
+      "name": "Biaoren_three_diamond_rate",
+      "value": "20",
+      "describe": "镖人第三话龙纹玉璧兑换钻石比率"
+    },
+    "378": {
+      "name": "Biaoren_three_exchange_mailid",
+      "value": "1033",
+      "describe": "镖人第三话龙纹玉璧兑换钻石比率邮件ID"
+    },
+    "379": {
+      "name": "Fight_sync_blood_timeout",
+      "value": "5",
+      "describe": "战斗两次同步血量的超时时间(秒)"
+    },
+    "380": {
+      "name": "yan_min_level",
+      "value": "15",
+      "describe": "魇小于这个等级会判断攻速外挂"
+    },
+    "381": {
+      "name": "yan_min_attack_speed",
+      "value": "0.014",
+      "describe": "魇最小等级下的最小攻速"
+    },
+    "382": {
+      "name": "yan_coop_min_round",
+      "value": "300",
+      "describe": "魇合作大于波数判断攻速"
+    },
+    "383": {
+      "name": "yan_hanbing_min_round",
+      "value": "100",
+      "describe": "魇寒冰堡大于波数判断攻速"
+    },
+    "384": {
+      "name": "speed_per_over_count",
+      "value": "10",
+      "describe": "每秒传包超过这个值统计有多少次"
+    },
+    "385": {
+      "name": "yan_max_round_9001",
+      "value": "41",
+      "describe": "魇判断9001的最大回合"
+    },
+    "386": {
+      "name": "yan_min_attack_speed_9001",
+      "value": "0.011",
+      "describe": "魇判断9001的最小攻速"
+    },
+    "387": {
+      "name": "login_per_max_num",
+      "value": "2",
+      "describe": "限制同一个账号同一秒登录请求的次数"
+    },
+    "388": {
+      "name": "continueRecharge4_rechargeid",
+      "value": "604",
+      "describe": "连续充值（5天）的充值id（竖·剑客）"
+    },
+    "389": {
+      "name": "continueRecharge4_recharge_time",
+      "value": "1691078400|1691683199",
+      "describe": "连续充值（5天）的活动时间（竖·剑客）"
+    },
+    "390": {
+      "name": "SelfSelect_604",
+      "value": "10",
+      "describe": "连续充值（5天）自选紫卡的数量（竖·剑客）"
+    },
+    "391": {
+      "name": "continueRecharge4_itemId",
+      "value": "312604",
+      "describe": "连续充值（5天）的奖励的道具id（竖·剑客）"
+    },
+    "392": {
+      "name": "continueRecharge4_maxDay",
+      "value": "5",
+      "describe": "连续充值（5天）最大充值天数（竖·剑客）"
+    },
+    "393": {
+      "name": "cheat_speedup_max_num",
+      "value": "3",
+      "describe": "9002加速外挂容忍次数"
+    },
+    "394": {
+      "name": "cheat_speedup_max_time",
+      "value": "3000",
+      "describe": "9002加速外挂时间回退秒"
+    },
+    "395": {
+      "name": "SelfSelect_55",
+      "value": "1|6008|1",
+      "describe": "50元镖人礼包自选金卡的数量"
+    },
+    "396": {
+      "name": "SelfSelect_56",
+      "value": "4|6008|1",
+      "describe": "198元镖人礼包自选金卡的数量"
+    },
+    "397": {
+      "name": "SelfSelect_57",
+      "value": "12|6008|1",
+      "describe": "648元镖人礼包自选金卡的数量"
+    },
+    "398": {
+      "name": "SelfSelect_58",
+      "value": "7|6008|0",
+      "describe": "648元镖人礼包2自选金卡的数量"
+    },
+    "399": {
+      "name": "average_battle_speed_max",
+      "value": "6",
+      "describe": "PVP加速到多少判作弊"
+    },
+    "400": {
+      "name": "carlink_costItemId",
+      "value": "1044",
+      "describe": "战车超载消耗的物品ID"
+    },
+    "401": {
+      "name": "carlink_costItemNum",
+      "value": "1",
+      "describe": "战车超载消耗的物品数量"
+    },
+    "402": {
+      "name": "average_battle_need_totalTime",
+      "value": "10",
+      "describe": "PVP对局总时间超过多久才校验加速"
+    },
+    "403": {
+      "name": "fight_covered_time",
+      "value": "1",
+      "describe": "真人合作或对战被遮挡重连时间单位秒"
+    },
+    "404": {
+      "name": "carlink_mastercar_need_level",
+      "value": "10",
+      "describe": "主战车超载需要达到的等级"
+    }
+  }
